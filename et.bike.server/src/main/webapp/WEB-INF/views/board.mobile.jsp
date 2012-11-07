@@ -17,7 +17,6 @@ $(function(){
 	templateLoader.init({templateUrl : '<c:url value="/asset/template/" />'});
 	boardManager.init({
 		url : '<c:url value="/boards"/>'
-		, currentUserAccountId : ${empty userAccount.id ? 0 : userAccount.id }
 	});
 	
 	<c:forEach items="${boardCategories }" var="boardCategory">
@@ -31,7 +30,6 @@ $(function(){
 <div data-role="page" id="boardPage">
 	<div data-role="header" data-position="fixed">
 		<h1>E.T Bike</h1>	
-		<sec:authorize access="isAuthenticated()">
 			<a href="<c:url value="/signout" />" class="ui-btn-right" data-ajax="false">Sign out</a>
 			<div data-role="navbar">
 				<ul>
@@ -39,7 +37,6 @@ $(function(){
 					<li><a href="<c:url value="/board" />" data-ajax="false">Board</a></li>
 				</ul>
 			</div>
-		</sec:authorize>
 	</div>
 
 	<div data-role="content" id="boardContent">	

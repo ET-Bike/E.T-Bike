@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -19,8 +18,6 @@ import com.etbike.server.support.utils.TimeUtils;
 public class Board extends AbstractPersistable<Long>{
 	private static final long serialVersionUID = -3357089862684971998L;
 
-	@ManyToOne
-	private Account account;
 	private String title;
 	@Column(columnDefinition="LONGTEXT") 
 	private String content;
@@ -34,12 +31,6 @@ public class Board extends AbstractPersistable<Long>{
 	
 	public void setId(Long id){
 		super.setId(id);
-	}
-	public Account getAccount() {
-		return account;
-	}
-	public void setAccount(Account account) {
-		this.account = account;
 	}
 	public String getTitle() {
 		return title;

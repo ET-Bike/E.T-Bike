@@ -1,10 +1,6 @@
 package com.etbike.server.domain.model;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -20,12 +16,6 @@ public class Account extends AbstractPersistable<Long>{
 	private String firstName;
 	private String lastName;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
-    private Set<Board> boards;	
-
-    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
-    private Set<Reply> replies;	
-	
 	public Account(){}
 
 	public Account(String username, String password, String firstName, String lastName) {

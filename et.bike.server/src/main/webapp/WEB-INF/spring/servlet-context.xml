@@ -11,7 +11,6 @@
 	<annotation-driven>
 		<argument-resolvers>
 			<beans:bean class="org.springframework.mobile.device.DeviceWebArgumentResolver" />
-			<beans:bean class="com.etbike.server.support.spring.resolver.UserInfoWebArgumentResolver" />
 		</argument-resolvers>
 	</annotation-driven>
 
@@ -29,7 +28,6 @@
 			p:useCacheControlHeader="true"
 			p:useCacheControlNoStore="true"/>
 		<beans:bean class="org.springframework.mobile.device.DeviceResolverHandlerInterceptor" />
-		<beans:bean class="com.etbike.server.support.spring.interceptors.UserInfoHandlerInterceptor" />
 		<beans:bean class="com.etbike.server.support.spring.interceptors.AjaxCheckInterceptor" />
 	</interceptors>
 	

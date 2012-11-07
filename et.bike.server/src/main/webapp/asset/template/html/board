@@ -3,10 +3,8 @@
 		<span id="rowTitle_${id}">${title }</span> 
 		<span class="badge badge-info">${writer }</span>
 		<span class="badge">${updatedTimestamp }</span>
-		{{if account.id === $item.currentUserAccountId }}
 			<a class="icon-pencil update" boardId="${id}"></a>
 			<a class="close remove boardRemove" boardId="${id }">&times;</a>
-		{{/if}}
 		
 		<div id="boardContent_${id }" style="display:none">
 			<hr/>

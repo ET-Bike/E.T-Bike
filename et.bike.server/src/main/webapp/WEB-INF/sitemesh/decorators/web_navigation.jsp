@@ -17,28 +17,22 @@
 			<div class="nav-collapse collapse">
 				<ul class="nav">
 					<li><a class="brand" href="<c:url value="/"/>">E.T Bike</a></li>
-					<sec:authorize access="isAuthenticated()">
 						<li><a href="<c:url value="/board"/>">Board</a></li>
 						<c:if test="${fn:contains(requestURI, '/board') }">
 							<li><a href="#editor" id="editorBt" data-toggle="modal"><i class="icon-pencil icon-white"></i></a></li>
 						</c:if>
-					</sec:authorize>
 				</ul>
 				
-				<sec:authorize access="!isAuthenticated()">
 					<form class="navbar-form pull-right" action="<c:url value="/signin/facebook"/>" method="POST">
 				        <input type="hidden" name="scope" value="publish_stream,user_photos,offline_access" />
 						<button type="submit" class="btn btn-info">Facebook</button>
 					</form>&nbsp;
-					<form class="navbar-form pull-right" action="<c:url value="/signin/authenticate" />" method="post">
+					<form class="navbar-form pull-right">
 						<input type="text" name="j_username" placeholder="User id" class="span2">
 						<input type="password" name="j_password" placeholder="Password" class="span2">
-						<button class="btn" type="submit">Sign in</button>
+						<a href="<c:url value="/board" />" class="btn">Sign out</a>
 					</form>
-				</sec:authorize>
-				<sec:authorize access="isAuthenticated()">
-					<a href="<c:url value="/signout" />" class="btn btn-warning pull-right">Sign out</a>
-				</sec:authorize>
+					<a href="<c:url value="/home" />" class="btn btn-warning pull-right">Sign out</a>
 			</div>
 		</div>
 	</div>

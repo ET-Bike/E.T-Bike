@@ -34,13 +34,10 @@ $(function(){
 	boardManager.init({
 		url : '<c:url value="/boards"/>'
 		, imageUploadUrl : '<c:url value="/upload/img"/>'
-		, currentUserAccountId : ${empty userAccount.id ? 0 : userAccount.id }
 		, replyManager : replyManager
 	});
 	replyManager.init({
 		url : '<c:url value="/replies"/>'
-		, currentUserAccountId : ${empty userAccount.id ? 0 : userAccount.id }
-		, currentUsername : '${empty userAccount.username ? '' : userAccount.username }'
 	});
 });
 </script>
@@ -63,7 +60,7 @@ $(function(){
 	<div class="modal-body">
 		<form class="form-horizontal">
 			<input type="hidden" id="boardId" value="0" />
-			<input type="hidden" id="writer" value="${userAccount.username }" />
+			<input type="text" name="writer" id="writer" placeholder="작성자" /><br/>
 			<input type="text" name="title" id="title" placeholder="글제목을 입력하세요..." /><br/>
 			<textArea name="content" id="contentEditor" placeholder="내용을 입력하세요..."></textArea><br/>
 			<a class="btn btn-primary" id="saveBt">저장</a>

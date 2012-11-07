@@ -1,14 +1,9 @@
 var replyManager = {
 	url : '/'
-	, currentUserAccountId : 0
-	, currentUsername : ''
 	
 	, init : function(params){
 		var that = this;
 		that.url = params.url;
-		that.currentUserAccountId = params.currentUserAccountId;
-		that.currentUsername = params.currentUsername;
-		
 		that.bindEvents();
 	}
 	
@@ -34,7 +29,7 @@ var replyManager = {
 			url : that.url + '/' + boardId + '/' + page,
 			dataType : "json",
 			success : function(json){
-				$("#replies_"+boardId).html($.tmpl('html/reply', json.page.content, {'boardId':boardId,'page':json.page.number,'currentUserAccountId':that.currentUserAccountId}));
+				$("#replies_"+boardId).html($.tmpl('html/reply', json.page.content, {'boardId':boardId,'page':json.page.number}));
 				$("#repliesPagination_"+boardId).html($.tmpl('html/replyPagination', json.page, {'boardId':boardId}));
 			}
 		});
@@ -47,8 +42,8 @@ var replyManager = {
 		var params = {
 			'_method' : 'PUT',
 			'board.id' : boardId,
-			message : msgField.val(),
-			writer : that.currentUsername
+			writer : 'unknown',
+			message : msgField.val()
 		};
 		if(!$common.isEmpty(params.message)){
 			$.ajax({

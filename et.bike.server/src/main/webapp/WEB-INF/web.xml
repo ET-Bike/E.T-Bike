@@ -17,14 +17,6 @@
     </init-param>
   </filter>
   <filter>
-    <filter-name>securityFilter</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    <init-param>
-      <param-name>targetBeanName</param-name>
-      <param-value>springSecurityFilterChain</param-value>
-    </init-param>
-  </filter>
-  <filter>
     <filter-name>sitemesh</filter-name>
     <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
   </filter>
@@ -42,10 +34,6 @@
   </filter>
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>
-    <servlet-name>webServlet</servlet-name>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>securityFilter</filter-name>
     <servlet-name>webServlet</servlet-name>
   </filter-mapping>
   <filter-mapping>

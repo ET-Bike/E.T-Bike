@@ -17,8 +17,6 @@ import com.etbike.server.support.utils.TimeUtils;
 public class Reply extends AbstractPersistable<Long>{
 	private static final long serialVersionUID = 7250970238230831841L;
 	 
-	@ManyToOne
-	private Account account;
 	private String message;
 	private String writer;
 	@JsonIgnore
@@ -27,12 +25,6 @@ public class Reply extends AbstractPersistable<Long>{
 	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP") 
 	private Date updatedTime;
 	
-	public Account getAccount() {
-		return account;
-	}
-	public void setAccount(Account account) {
-		this.account = account;
-	}
 	public String getMessage() {
 		return message;
 	}

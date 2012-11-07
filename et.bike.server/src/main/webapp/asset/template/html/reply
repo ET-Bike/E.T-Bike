@@ -2,7 +2,5 @@
 	${message}
 	<span class="badge badge-info">${writer }</span>
 	<span class="badge">${updatedTimestamp }</span>
-	{{if account.id === $item.currentUserAccountId }}
 		<a class="close removeReply" replyId="${id }" page="${$item.page+1}" boardId="${$item.boardId}">&times;</a>
-	{{/if}}	
 </div>

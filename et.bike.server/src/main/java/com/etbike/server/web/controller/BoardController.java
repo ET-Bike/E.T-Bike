@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.etbike.server.domain.model.Account;
 import com.etbike.server.domain.model.Board;
 import com.etbike.server.domain.model.BoardCategory;
 import com.etbike.server.domain.model.Reply;
@@ -38,8 +37,7 @@ public class BoardController {
 
 
 	@RequestMapping(value = "/boards", method = RequestMethod.PUT)
-	public String add(Account account, Board model, ModelMap map) {
-		model.setAccount(account);
+	public String add(Board model, ModelMap map) {
 		boardService.saveBoard(model);
 		map.put("result", "success");
 
@@ -61,8 +59,7 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/replies", method = RequestMethod.PUT)
-	public String addReply(Account account, Reply model, ModelMap map) {
-		model.setAccount(account);
+	public String addReply(Reply model, ModelMap map) {
 		boardService.saveReply(model);
 		map.put("result", "success");
 

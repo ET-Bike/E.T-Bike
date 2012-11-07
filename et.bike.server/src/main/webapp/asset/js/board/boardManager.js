@@ -1,6 +1,5 @@
 var boardManager = {
 	url : '/'
-	, currentUserAccountId : 0
 	, currentPage : 0
 	, currentCategory : 'notice'
 	, totalPage : 1
@@ -14,7 +13,6 @@ var boardManager = {
 		var that = this;
 		that.url = params.url;
 		that.imageUploadUrl = params.imageUploadUrl;
-		that.currentUserAccountId = params.currentUserAccountId;
 		that.replyManager = params.replyManager;
 		
 		that.bindEvents();
@@ -109,7 +107,7 @@ var boardManager = {
 				url : that.url + '/' + category + '/' + page,
 				dataType : "json",
 				success : function(json){
-					$("#boardsSection").append($.tmpl('html/board', json.page.content, {'currentUserAccountId':that.currentUserAccountId}));
+					$("#boardsSection").append($.tmpl('html/board', json.page.content));
 					$('div#loadmoreajaxloader').hide();
 					
 					that.isFirstPage = json.page.firstPage;
@@ -159,7 +157,7 @@ var boardManager = {
 							$('#boardContentDetail_'+boardId).html($.tmpl('html/boardContent', json.board));
 						}else{
 							json.board.updatedTimestamp = '방금';
-							$('#topRow').after($.tmpl('html/board', json.board, {'currentUserAccountId':that.currentUserAccountId}));	
+							$('#topRow').after($.tmpl('html/board', json.board));	
 						}
 						
 						$('#btEditorClose').click();
