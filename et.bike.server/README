@@ -29,3 +29,5 @@ com.etbike.server.domain.* -> domain model
 
 com.etbike.server.support.spring.config.* -> spring configurations based on Java-file
 com.etbike.server.support.spring.interceptors.* -> interceptor
+
+
