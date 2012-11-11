@@ -1,1 +1,0 @@
-<li><a class="read" boardId="${id}">${title}</a></li>

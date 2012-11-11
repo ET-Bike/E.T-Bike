@@ -1,9 +1,0 @@
-<ul class="pager reply">
-	{{if !firstPage }}
-		<li class="previous"><a class="paging" page="${number}" boardId="${$item.boardId}">&larr; Older</a></li>
-	{{/if}}
-	
-	{{if !lastPage }}	
-		<li class="next"><a class="paging" page="${number+2}" boardId="${$item.boardId}">Newer &rarr;</a></li>
-	{{/if}}
-</ul>

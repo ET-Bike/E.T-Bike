@@ -1,8 +1,0 @@
-<div id="${dialogId}" class="modal hide fade">
-	<div class="modal-header">
-		{{html title}}
-	</div>
-	<div class="modal-body">
-		<p>{{html message}}</p>
-	</div>
-</div>
