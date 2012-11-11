@@ -1,29 +1,34 @@
 package com.etbike.server.domain.model;
 
 public enum BoardCategory {
-	NOTICE{
+	HOME{
 		@Override public String getDescription() {
-			return "공지사항";
+			return "HOME";
 		}
 	},
-	QNA{
+	SCENE{
 		@Override public String getDescription() {
-			return "QNA";
+			return "경치보기";
 		}
 	},
-	FREE{
+	SHARE{
 		@Override public String getDescription() {
-			return "자유게시판";
+			return "공유하기";
 		}
 	},
-	SELL{
+	DEALIST{
 		@Override public String getDescription() {
-			return "팝니다";
+			return "DEALIST";
 		}
 	},
-	BUY{
+	FALLOFFAME{
 		@Override public String getDescription() {
-			return "삽니다";
+			return "명예의 전당";
+		}
+	},
+	RIDEWITHME{
+		@Override public String getDescription() {
+			return "같이타기";
 		}
 	}
 	;

@@ -60,7 +60,7 @@ public class Board extends AbstractPersistable<Long>{
 		try {
 			this.category = BoardCategory.valueOf(value.toUpperCase());
 		} catch (Exception e) {
-			this.category = BoardCategory.NOTICE;
+			this.category = BoardCategory.HOME;
 		}
 	}
 	public Date getUpdatedTime() {

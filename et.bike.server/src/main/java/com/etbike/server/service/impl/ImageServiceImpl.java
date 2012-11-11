@@ -80,6 +80,7 @@ public class ImageServiceImpl implements ImageService {
 
 	    fileRepository.save(uploadedFileBean);
 	    
+	    
 		Map<String, String> fileInfo = new HashMap<String, String>();
 		fileInfo.put("name", originFileName);	
 		fileInfo.put("path", uploadedFileFullPath);	

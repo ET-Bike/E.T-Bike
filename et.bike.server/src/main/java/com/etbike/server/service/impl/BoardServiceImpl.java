@@ -45,7 +45,7 @@ public class BoardServiceImpl implements BoardService {
 		try {
 			boardCategory = BoardCategory.valueOf(category.toUpperCase());
 		} catch (Exception e) {
-			boardCategory = BoardCategory.NOTICE;
+			boardCategory = BoardCategory.HOME;
 		}
 		
 		return boardCategory;
@@ -72,8 +72,6 @@ public class BoardServiceImpl implements BoardService {
 	public Board readById(Long id) {
 		return boardRepository.findOne(id);
 	}
-
-	
 	
 	@Override
 	public Object getReplies(Long boardId, Integer page) {

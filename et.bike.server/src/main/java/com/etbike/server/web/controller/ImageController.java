@@ -1,13 +1,16 @@
 package com.etbike.server.web.controller;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -32,6 +35,7 @@ public class ImageController {
 		map.put("file", imageService.uploadImage(multipartFile));
 		return "uploadImage";
 	}
+	
 	
 	@RequestMapping(value="/img/{id}")
 	public ModelAndView image(@PathVariable Long id) {
