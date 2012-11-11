@@ -1,6 +1,0 @@
-<div class="alert alert-info reply" id="reply_${id}">
-	${message}
-	<span class="badge badge-info">${writer }</span>
-	<span class="badge">${updatedTimestamp }</span>
-		<a class="close removeReply" replyId="${id }" page="${$item.page+1}" boardId="${$item.boardId}">&times;</a>
-</div>

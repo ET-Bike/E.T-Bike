@@ -1,1 +1,1 @@
-E.T Bike is a platform to help sharing bikes.
+This Branch is Android Client branch for E.T Bike to help sharing bikes.

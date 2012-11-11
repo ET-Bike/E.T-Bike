@@ -1,5 +1,0 @@
-<span id="upFile${fileId}">
-	${fileName}
-	<a class="btn" onclick="javascript:$('upFile${fileId}').remove();">삭제</a>
-	<input type="hidden" name="${fileIdField}" value="${fileId}" />
-</span>
