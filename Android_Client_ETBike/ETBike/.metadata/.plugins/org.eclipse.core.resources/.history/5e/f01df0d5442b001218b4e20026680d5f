@@ -1,0 +1,81 @@
+package com.swemaestro.etbike.dao;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.swmaestro.etbike.activity.listview.object.MyBikeItem;
+import com.swmaestro.object.WorkVectors;
+import com.swmaestro.variable.Variable;
+
+public class DBManager {
+
+	Context context;
+	DBHelper myHelper;
+	
+	Cursor cursor;
+
+	SQLiteDatabase db;
+	
+
+	public DBManager(Context context) {
+		
+		this.context = context;
+		myHelper = new DBHelper(context);
+
+	}
+	/*
+	 * line, id, name, lati, longi
+	 */
+	
+	public void setALByMyBike(ArrayList<MyBikeItem> al) {
+		Cursor cursor;
+		int alIndex = 0;
+		for(int i = 0; i < Variable.SHARE_TYPE_NUM; i++) {
+			if(i == WorkVectors.SHARE_TYPE_DONATION) {
+				cursor = getMyBikeCursor(Variable.KOR_SHARE_TYPE_DONATION);
+				cursor.moveToFirst();
+				while(cursor.moveToNext()) {
+					al.add(object)
+				}
+			}else if(i == WorkVectors.SHARE_TYPE_RENT) {
+				cursor = getMyBikeCursor(Variable.KOR_SHARE_TYPE_RENT);
+			}else if(i == WorkVectors.SHARE_TYPE_SELL) {
+				cursor = getMyBikeCursor(Variable.KOR_SHARE_TYPE_SELL);
+			}
+		}
+	}
+
+	public Cursor getMyBikeCursor(String shareType)  {
+		
+		db = myHelper.getReadableDatabase();
+		cursor = db.rawQuery("select * from my where sharetype = " + "'" + shareType + "'" + ";" ,null);
+		
+		return cursor;
+	}
+
+	public Cursor testSelect() {
+		db = myHelper.getWritableDatabase();
+		cursor = db.rawQuery("select * from mybike;", null);
+		return cursor;
+
+	}
+	
+	/*
+	 * QL("CREATE TABLE myprofile (line TEXT, id int, name TEXT, lati TEXT ,longi TEXT);");
+		db.execSQL("CREATE TABLE mybike (myimagepath TEXT, bikeimagepath TEXT, biketype TEXT, tradetype TEXT ,sharetype TEXT, lati TEXT, " +
+				"longi TEXT, costpertime TEXT, costperday TEXT, costperweek TEXT, detail TEXT);");
+	 */
+	
+	public boolean insertMyBike(MyBikeItem mbi) {
+		String query  = "inset into mybike values(" + mbi.myImagePath + "," + mbi.imgPath + "," + mbi.bikeType + ","+mbi.tradeType + "," + mbi.shareType + "," + mbi.lati + "," + mbi.longi + "," + mbi.costPerTime + "," + mbi.costPerDay + "," + mbi.costPerWeek + "," + mbi.detail +");";
+		
+		cursor = db.rawQuery(query ,null);
+		 
+		return true;
+	}
+	
+
+}

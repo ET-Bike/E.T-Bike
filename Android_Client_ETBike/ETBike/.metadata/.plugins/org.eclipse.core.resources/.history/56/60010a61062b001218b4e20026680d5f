@@ -1,0 +1,625 @@
+package com.swmaestro.etbike.activity.listview;
+
+import java.util.ArrayList;
+
+import kr.ac.hufs.objects.MyItem;
+import kr.ac.hufs.objects.OneWayInfo;
+import kr.ac.hufs.objects.PathInfo;
+import kr.ac.hufs.objects.PathList;
+import kr.ac.hufs.objects.StationList;
+import kr.ac.hufs.objects.TableItem;
+import kr.ac.hufs.smartfinder.FeatureVectors;
+import kr.ac.hufs.smartfinder.R;
+import kr.ac.hufs.smartfinder.plan.PlanExecutor;
+import kr.ac.smartfinder.activity.SmartFinderActivity;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.OverlayItem;
+
+public class MyListAdapter extends BaseAdapter {
+
+	Context context;
+	LayoutInflater li;
+	ArrayList<MyItem> al;
+	MapView mv;
+	boolean mapScrollFlag;
+	String exQuery;
+	String TAG = "MyListAdapter";
+	MyDynamicLocationOverlay mdlo;
+
+	public MyListAdapter(Context context, ArrayList<MyItem> al) {
+		this.context = context;
+		this.al = al;
+		this.li = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mapScrollFlag = false;
+		exQuery = "";
+		mv = getMapViewInstance();
+		mdlo = getMDLOInstance();
+
+	}
+
+	private MapView getMapViewInstance() {
+		if (mv == null) {
+			mv = new MapView(context, "0e3rJkkM7g7E_onvhHsYGPxMAb733ARYdIkuNNg");
+		}
+		return mv;
+	}
+
+	private MyDynamicLocationOverlay getMDLOInstance() {
+		mv = getMapViewInstance();
+		if (mdlo == null) {
+			mdlo = new MyDynamicLocationOverlay(context, mv);
+		}
+		return mdlo;
+	}
+
+	public void changePathZoom(String query, FeatureVectors vecs) {
+
+		GeoPoint sgp = (GeoPoint) vecs
+				.getData(FeatureVectors.KEY_START_GEO_LOCATION);
+		GeoPoint egp = (GeoPoint) vecs
+				.getData(FeatureVectors.KEY_DEST_GEO_LOCATION);
+		Log.e(TAG + " chagePathZoom ", "query == " + query);
+
+		int zoomLevel = setZoomLevel(sgp, egp);
+		if (query.contains("Ï∂úÎ∞ú") || query.contains("?úÏûë")) {
+			Log.e(TAG, "start location command");
+
+			mv.getController().setZoom(17);
+			mv.getController().animateTo(sgp);
+		} else if (query.contains("Î™©Ï†Å") || query.contains("?ÑÏ∞©")) {
+			Log.e(TAG, "end location command");
+
+			mv.getController().setZoom(17);
+			mv.getController().animateTo(egp);
+		} else if (query.contains("?ÑÏû¨") || query.contains("??)
+				|| query.contains("?ÑÏ†ú") || query.contains("?ïÎ?")) {
+			Log.e(TAG, "my location command");
+
+			mv.getController().setZoom(17);
+			mv.getController().animateTo(mdlo.getMyLocation());
+		} else if (query.contains("?ÑÏ≤¥") || query.contains("Ï∂ïÏÜå")) {
+
+			setRouteView(zoomLevel, sgp, egp);
+		}
+	}
+
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return al.size();
+	}
+
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return al.get(position);
+	}
+
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	public int getItemViewType(int position) {
+		return al.get(position).viewType;
+	}
+
+	public int getViewTypeCount() {
+		return 6;
+	}
+
+	public void initMapDraw() {
+		mapScrollFlag = false;
+		if (mdlo != null) {
+			mdlo.disableCompass();
+			mdlo.disableMyLocation();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.Adapter#getView(int, android.view.View,
+	 * android.view.ViewGroup)
+	 */
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		String query = al.get(position).query;
+		String guideQuery = al.get(position).guideQuery;
+		int viewType = al.get(position).viewType;
+		FeatureVectors vecs = al.get(position).vecs;
+
+		if (convertView == null) {
+			Log.e(TAG, "convertview null");
+
+			int res = 0;
+			if (viewType == SmartFinderActivity.VIEW_GUIDE) {
+				res = R.layout.viewguide;
+			} else if (viewType == SmartFinderActivity.VIEW_QUERY) {
+				res = R.layout.viewquery;
+			} else if (viewType == SmartFinderActivity.VIEW_MAP) {
+				res = R.layout.viewmap;
+			} else if (viewType == SmartFinderActivity.VIEW_DETAIL) {
+				res = R.layout.viewdetail;
+			} else if (viewType == SmartFinderActivity.VIEW_STRUCTURE) {
+				res = R.layout.viewstructure;
+			} else if (viewType == SmartFinderActivity.VIEW_TABLE) {
+				res = R.layout.viewtable;
+			}
+			convertView = li.inflate(res, parent, false);
+		}
+
+		if (viewType == SmartFinderActivity.VIEW_GUIDE) {
+
+			TextView dialogueTV = (TextView) convertView
+					.findViewById(R.id.guideDialTV);
+			dialogueTV.setText(guideQuery);
+
+		} else if (viewType == SmartFinderActivity.VIEW_QUERY) {
+			TextView dialogueTV = (TextView) convertView
+					.findViewById(R.id.queryDialTV);
+			dialogueTV.setText(query);
+
+		} else if (viewType == SmartFinderActivity.VIEW_MAP) {
+			int type = (Integer) vecs.getData(FeatureVectors.KEY_PLAN_TYPE);
+
+			/*
+			 * exception handling
+			 */
+			// scroll ??Í≤ΩÏö∞ return
+
+			if (mapScrollFlag == true) {
+				Log.e(TAG, "mapScrollFalg == true");
+				return convertView;
+			}
+			// mapview???±Í???
+			mv = getMapViewInstance();
+
+			mv.getOverlays().clear();
+
+			if (type == PlanExecutor.TYPE_GET_NEAR_STATION
+					|| type == PlanExecutor.TYPE_GET_SPECIFIC_STATION
+					|| type == PlanExecutor.TYPE_GET_STATION_TO_SPECIFIC_BUS) {
+				drawNearestStation(vecs, convertView);
+			} else {
+				drawPath(vecs, query, convertView);
+			}
+
+		} else if (viewType == SmartFinderActivity.VIEW_STRUCTURE) {
+
+			// mapScrollFlag = true;
+
+			ImageView structureIV = (ImageView) convertView
+					.findViewById(R.id.structureIV);
+			LayoutParams lp = structureIV.getLayoutParams();
+			lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+			lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+			structureIV.setLayoutParams(lp);
+
+		} else if (viewType == SmartFinderActivity.VIEW_DETAIL) {
+
+			// mapScrollFlag = true;
+
+			PathList pl = (PathList) (vecs.getData(FeatureVectors.KEY_PATH));
+			PathInfo pi = pl.get(0);
+
+			String ride = (String) vecs
+					.getData(FeatureVectors.KEY_TRANSFORTATION_TYPE);
+			TextView startTV = (TextView) convertView
+					.findViewById(R.id.startTV);
+			TextView endTV = (TextView) convertView.findViewById(R.id.endTV);
+			TextView arrivalTimeTV = (TextView) convertView
+					.findViewById(R.id.arrivalTimeTV);
+			ImageView transportIV = (ImageView) convertView
+					.findViewById(R.id.transportIVViewDetail);
+
+			int transportIconResource = 0;
+			int transportIVResource = 0;
+
+			if (ride.equals(FeatureVectors.KEY_BUS)) {
+				//
+				// transportIcon=R.drawable.map;
+				// transportIconResource = R.drawable.map_detail_bus;
+				transportIVResource = R.drawable.map_detail_transport_bus;
+			} else if (ride.equals(FeatureVectors.KEY_SUBWAY)) {
+				// transportIconResource = R.drawable.map_detail_subway;
+				transportIVResource = R.drawable.map_detail_transport_metro;
+			} else if (ride.equals(FeatureVectors.KEY_ANY)) {
+				transportIVResource = R.drawable.map_detail_transport_bnm;
+			}
+			transportIV.setBackgroundResource(transportIVResource);
+			startTV.setText(vecs.getData(FeatureVectors.KEY_START_LOCATION)
+					.toString());
+			endTV.setText(vecs.getData(FeatureVectors.KEY_END_LOCATION)
+					.toString());
+			arrivalTimeTV.setText(pi.getTime() + "Î∂?);
+			ArrayList<TableItem> al = new ArrayList<TableItem>();
+			al.add(new TableItem(R.drawable.map_detail_icon, vecs
+					.getData(FeatureVectors.KEY_START_LOCATION) + " ?êÏÑú Ï∂úÎ∞ú", ""));
+
+			for (int i = 0; i < pi.getWayNums(); i++) {
+				OneWayInfo owi = pi.getWay(i);
+				String transType = owi.getTransType();
+
+				if (transType.equals(FeatureVectors.KEY_BUS)) {
+					transportIconResource = R.drawable.map_detail_bus;
+				} else if (transType.equals(FeatureVectors.KEY_SUBWAY)) {
+					transportIconResource = R.drawable.map_detail_subway;
+				}
+
+				al.add(new TableItem(transportIconResource, pi.getWay(i)
+						.getInfo(), ""));
+			}
+			ListView lv = (ListView) convertView
+					.findViewById(R.id.detailTransLV);
+			lv.setAdapter(new PathListAdapter(context,
+					R.layout.transportfeature, al));
+
+		} else if (viewType == SmartFinderActivity.VIEW_TABLE) {
+			int type = (Integer) vecs.getData(FeatureVectors.KEY_PLAN_TYPE);
+			PathList pl = (PathList) (vecs.getData(FeatureVectors.KEY_PATH));
+			ArrayList<TableItem> al = new ArrayList<TableItem>();
+			ImageView transportIV = (ImageView) convertView	.findViewById(R.id.transportIVViewTable);
+			if (type == PlanExecutor.TYPE_GET_SPECIFIC_BUS_ARRIVAL_TIME_BY_BUS_DIRECTION) {
+				String exlineNm = "";
+				transportIV
+						.setBackgroundResource(R.drawable.map_detail_transport_bus);
+				for (int i = 0; i < pl.size(); i++) {
+					PathInfo pi = pl.get(i);
+					String lineNm = pi.getWay(0).getLineNm();
+
+					String waitingTime = pi.getWay(0).getWaitingTime();
+					int minute = Integer.parseInt(waitingTime) / 60;
+					int second = Integer.parseInt(waitingTime) % 60;
+					// Log.e(exlineNm,lineNm);
+					if (!exlineNm.equals(lineNm)) {
+						al.add(new TableItem(R.drawable.map_detail_bus, lineNm,
+								minute + "Î∂? + second + "Ï¥?));
+						exlineNm = lineNm;
+					}
+				}
+
+			} else if (type == PlanExecutor.TYPE_GET_SPECIFIC_RIDE_ARRIVAL_TIME_BY_BUS_NUMBER) {
+
+				transportIV
+						.setBackgroundResource(R.drawable.map_detail_transport_bus);
+				PathInfo pi = pl.get(0);
+				String waitingTime = pi.getWay(0).getWaitingTime();
+				String busNum = (String) vecs
+						.getData(FeatureVectors.KEY_TRANSFORTATION_TYPE);
+				int minute = Integer.parseInt(waitingTime) / 60;
+				int second = Integer.parseInt(waitingTime) % 60;
+
+				al.add(new TableItem(R.drawable.map_detail_bus, busNum, minute
+						+ "Î∂? + second + "Ï¥?));
+
+			} else if (type == PlanExecutor.TYPE_COMPARE_BOTH_TRANSPORT) {
+
+				String[] travelTime = new String[2];
+				String[] rideNm = new String[2];
+				transportIV
+						.setBackgroundResource(R.drawable.map_detail_transport_bnm);
+				for (int i = 0; i < pl.size(); i++) {
+
+					PathInfo pi = pl.get(i);
+					travelTime[i] = pi.getTime();
+
+					int iconResource = 0;
+
+					if (i == 0) {
+						rideNm[i] = pi.getWay(0).getLineNm();
+						iconResource = R.drawable.map_detail_bus;
+					} else if (i == 1) {
+						rideNm[i] = pi.getWay(0).getStSttLocation() + "??;
+						iconResource = R.drawable.map_detail_subway;
+					}
+					al.add(new TableItem(iconResource, rideNm[i], "?åÏöî?úÍ∞Ñ:"
+							+ travelTime[i] + "Î∂?));
+				}
+				if (pl.size() != 2) {
+					al.add(new TableItem(R.drawable.map_arrow,
+							"?¥Îãπ Î∞©Ìñ•?ºÎ°ú  ÍµêÌÜµ ?òÎã®???ÜÏäµ?àÎã§.", ""));
+				} else {
+					int firstTravelTime = Integer.parseInt(travelTime[0]);
+					int secondTravelTime = Integer.parseInt(travelTime[1]);
+					int travelTimeDiffrence = firstTravelTime
+							- secondTravelTime;
+					int absTravelTimeDiffrence = Math.abs(travelTimeDiffrence);
+
+					if (travelTimeDiffrence > 0) {
+						al.add(new TableItem(R.drawable.map_arrow, "Î≤ÑÏä§Í∞?"
+								+ absTravelTimeDiffrence + "Î∂???Îπ†Î¶Ö?àÎã§.", ""));
+					} else if (travelTimeDiffrence < 0) {
+						al.add(new TableItem(R.drawable.map_arrow, "Ïß?ïòÏ≤†Ïù¥"
+								+ absTravelTimeDiffrence + "Î∂???Îπ†Î¶Ö?àÎã§.", ""));
+					} else {
+						al.add(new TableItem(R.drawable.map_arrow,
+								"?êÍ∞ú??ÍµêÌÜµ ?òÎã® ?úÍ∞Ñ??Í∞ôÏäµ?àÎã§.", ""));
+					}
+				}
+			} else if (type == PlanExecutor.TYPE_COMPARE_BOTH_LINE) {
+
+				String[] travelTime = new String[2];
+				String[] rideNm = new String[2];
+				transportIV
+						.setBackgroundResource(R.drawable.map_detail_transport_bus);
+
+				for (int i = 0; i < pl.size(); i++) {
+					PathInfo pi = pl.get(i);
+					travelTime[i] = pi.getTime();
+					rideNm[i] = pi.getWay(0).getLineNm();
+					al.add(new TableItem(R.drawable.map_detail_bus, rideNm[i],
+							"?åÏöî?úÍ∞Ñ:" + travelTime[i] + "Î∂?));
+				}
+				if (pl.size() != 2) {
+					al.add(new TableItem(R.drawable.map_arrow,
+							"?¥Îãπ Î∞©Ìñ•?ºÎ°ú  ?∏ÏÑ†???ÜÏäµ?àÎã§.", ""));
+				} else {
+					int firstTravelTime = Integer.parseInt(travelTime[0]);
+					int secondTravelTime = Integer.parseInt(travelTime[1]);
+					int travelTimeDiffrence = firstTravelTime
+							- secondTravelTime;
+					int absTravelTimeDiffrence = Math.abs(travelTimeDiffrence);
+					if (travelTimeDiffrence > 0) {
+						al.add(new TableItem(R.drawable.map_arrow, rideNm[0]
+								+ "Í∞? + absTravelTimeDiffrence + "??Îπ†Î¶Ö?àÎã§.", ""));
+					} else if (travelTimeDiffrence < 0) {
+						al.add(new TableItem(R.drawable.map_arrow, rideNm[1]
+								+ "Í∞? + absTravelTimeDiffrence + "??Îπ†Î¶Ö?àÎã§.", ""));
+					} else {
+						al.add(new TableItem(R.drawable.map_arrow,
+								"?êÍ∞ú???∏ÏÑ†?úÍ∞Ñ??Í∞ôÏäµ?àÎã§.", ""));
+					}
+
+				}
+			} else if (type == PlanExecutor.TYPE_GET_LAST_CAR_TIME_BY_DIRECTION) {
+				transportIV
+						.setBackgroundResource(R.drawable.map_detail_transport_bus);
+				for (int i = 0; i < pl.size(); i++) {
+					PathInfo pi = pl.get(i);
+					String lastBusDate = pi.getWay(0).getLastBusTm();
+					String hour = lastBusDate.substring(8, 10);
+					String minute = lastBusDate.substring(10, 12);
+
+					String rideNm = pi.getWay(0).getLineNm();
+					al.add(new TableItem(R.drawable.map_detail_bus, rideNm,
+							hour + "?? + minute + "Î∂?));
+
+				}
+			}
+
+			ListView lv = (ListView) convertView.findViewById(R.id.tableLV);
+			lv.setAdapter(new PathListAdapter(context, R.layout.tablefeature,
+					al));
+
+		}
+
+		return convertView;
+	}
+
+	private void drawNearestStation(FeatureVectors vecs, View convertView) {
+		/*
+		 * 
+		 */
+		mv.getOverlays().clear();
+
+		StationList sl = (StationList) vecs
+				.getData(FeatureVectors.KEY_STATION_LIST);
+		int index = sl.getNearestStationIndex();
+		Log.e(TAG, ",index in draw nearlistSTation" + index);
+		GeoPoint egp = sl.get(index).getStationGeo();
+
+		GeoPoint sgp = (GeoPoint) vecs
+				.getData(FeatureVectors.KEY_START_GEO_LOCATION);
+
+		int zoomLevel = setZoomLevel(sgp, egp);
+
+		setCenter(zoomLevel, sgp);
+		mv.setBuiltInZoomControls(true);
+
+		Drawable stDraw = context.getResources().getDrawable(
+				R.drawable.map_departure_icon);
+		stDraw.setBounds(0, 0, stDraw.getIntrinsicWidth(),
+				stDraw.getIntrinsicHeight());
+
+		Drawable eDraw = context.getResources().getDrawable(
+				R.drawable.map_destination_icon);
+		eDraw.setBounds(0, 0, eDraw.getIntrinsicWidth(),
+				eDraw.getIntrinsicHeight());
+
+		MyMapMarker mapMarker = new MyMapMarker(stDraw, context, vecs);
+
+		mapMarker.addOverlay(new OverlayItem(sgp, "", ""), stDraw, Color.BLACK);
+		mapMarker.addOverlay(new OverlayItem(egp, "", ""), eDraw, Color.BLACK);
+
+		mv.getOverlays().add(mapMarker);
+		/*
+		 * linear layout??Î∂áÏù¥??Î∂?∂Ñ
+		 */
+		LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.mapll);
+		ll.removeAllViews();
+
+		ll.addView(mv);
+
+		mapScrollFlag = true;
+
+	}
+
+	private int setZoomLevel(GeoPoint sgp, GeoPoint egp) {
+
+		int distance = Math.abs(sgp.getLatitudeE6() - egp.getLatitudeE6())
+				+ Math.abs(sgp.getLongitudeE6() - egp.getLongitudeE6());
+
+		// 74703 14
+		// Í∞?3
+		int zoomLevel = 0;
+		// if(distance > 250000) {
+		// zoomLevel = 12;
+		// }else if (distance > 130000) {
+		// zoomLevel = 13;
+		// } else if (distance >= 60121) {
+		// zoomLevel = 14;
+		// } else if (distance >= 25000) {
+		// zoomLevel = 15;
+		// } else if (distance >= 12500) {
+		// zoomLevel = 16;
+		// } else if (distance >= 6000) {
+		// zoomLevel = 17;
+		// } else if (distance >= 2500) {
+		// zoomLevel = 18;
+		// } else if (distance >= 1500) {
+		// zoomLevel = 19;
+		// } else if (distance >= 750) {
+		// zoomLevel = 20;
+		// } else if (distance >= 375) {
+		// zoomLevel = 21;
+		// } else {
+		// zoomLevel = 22;
+		// }
+		if (distance > 250000) {
+			zoomLevel = 12;
+		} else if (distance >= 74703) {
+			zoomLevel = 13;
+		} else if (distance >= 60121) {
+			zoomLevel = 14;
+		} else if (distance >= 25000) {
+			zoomLevel = 15;
+		} else if (distance >= 12500) {
+			zoomLevel = 16;
+		} else if (distance >= 6000) {
+			zoomLevel = 17;
+		} else if (distance >= 2500) {
+			zoomLevel = 18;
+		} else if (distance >= 1500) {
+			zoomLevel = 19;
+		} else if (distance >= 750) {
+			zoomLevel = 20;
+		} else if (distance >= 375) {
+			zoomLevel = 21;
+		} else {
+			zoomLevel = 22;
+		}
+		Log.e(TAG + " setZoomLevel ", "distance " + zoomLevel);
+		Log.e(TAG + " setZoomLevel ", "zoomLevel " + zoomLevel);
+		Toast.makeText(context,
+				"distance = " + distance + " zoomLevel = " + zoomLevel,
+				Toast.LENGTH_LONG).show();
+
+		// 298173 13
+		// System.out.println("zoomlevel" + zoomLevel);
+		// System.out.println("distance" + distance);
+		return zoomLevel;
+	}
+
+	private void drawPath(FeatureVectors vecs, String query, View convertView) {
+
+		// my position
+		Log.e(TAG + "in drawPath", "query = " + query);
+
+		GeoPoint sgp = (GeoPoint) vecs
+				.getData(FeatureVectors.KEY_START_GEO_LOCATION);
+		GeoPoint egp = (GeoPoint) vecs
+				.getData(FeatureVectors.KEY_DEST_GEO_LOCATION);
+
+		int zoomLevel = setZoomLevel(sgp, egp);
+
+		Log.e(TAG, "draw path command");
+		/*
+		 * if we already draw map, then return
+		 */
+		setRouteView(zoomLevel, sgp, egp);
+		mv.setBuiltInZoomControls(true);
+
+		Drawable stDraw = context.getResources().getDrawable(
+				R.drawable.map_departure_icon);
+		stDraw.setBounds(0, 0, stDraw.getIntrinsicWidth(),
+				stDraw.getIntrinsicHeight());
+
+		Drawable eDraw = context.getResources().getDrawable(
+				R.drawable.map_destination_icon);
+		eDraw.setBounds(0, 0, eDraw.getIntrinsicWidth(),
+				eDraw.getIntrinsicHeight());
+
+		Drawable transDraw = context.getResources().getDrawable(
+				R.drawable.map_icon_transfer);
+		transDraw.setBounds(0, 0, transDraw.getIntrinsicWidth(),
+				transDraw.getIntrinsicHeight());
+
+		MyMapMarker mapMarker = new MyMapMarker(stDraw, context, vecs);
+
+		mapMarker.addOverlay(new OverlayItem(sgp, "", ""), stDraw, Color.BLACK);
+		mapMarker.addOverlay(new OverlayItem(egp, "", ""), eDraw, Color.BLACK);
+		/*
+		 * location overlay Í∏∞Îä• ?ïÏùò
+		 */
+		mdlo = getMDLOInstance();
+
+		mdlo.enableMyLocation();
+		mdlo.enableCompass();
+
+		mdlo.runOnFirstFix(new Runnable() {
+
+			public void run() {
+				// TODO Auto-generated method stub
+				mv.getController().animateTo(mdlo.getMyLocation());
+
+			}
+		});
+		mv.getOverlays().add(mapMarker);
+		mv.getOverlays().add(mdlo);
+		/*
+		 * linear layout??Î∂áÏù¥??Î∂?∂Ñ
+		 */
+		LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.mapll);
+		ll.removeAllViews();
+		ll.addView(mv);
+		Log.e(TAG, "drawPathmethod end");
+		mapScrollFlag = true;
+
+	}
+
+	class MyDynamicLocationOverlay extends MyLocationOverlay {
+
+		public MyDynamicLocationOverlay(Context context, MapView mapView) {
+			super(context, mapView);
+		}
+
+		protected boolean dispatchTap() {
+			Toast.makeText(context, "?¨Í∏∞Í∞??ÑÏû¨ ?ÑÏπò ?ÖÎãà??", Toast.LENGTH_LONG).show();
+			return false;
+		}
+
+	}
+
+	private void setCenter(int zoomLevel, GeoPoint gp) {
+		mv.getController().setZoom(zoomLevel);
+		mv.getController().animateTo(gp);
+	}
+
+	private void setRouteView(int zoomLevel, GeoPoint sgp, GeoPoint egp) {
+
+		mv.getController().setZoom(zoomLevel);
+		mv.getController().animateTo(
+				new GeoPoint((sgp.getLatitudeE6() + egp.getLatitudeE6()) / 2,
+						(sgp.getLongitudeE6() + egp.getLongitudeE6()) / 2));
+
+	}
+}

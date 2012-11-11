@@ -1,0 +1,131 @@
+package com.swmaestro.etbike.activity;
+
+
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.sax.StartElementListener;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.FacebookError;
+
+@SuppressLint("NewApi")
+public class LoginActivity extends Activity {
+	
+	Context context;
+	public static final String FACEBOOK_APP_ID = "354574991265954";
+	Facebook mFaceBook;
+	String TAG = "MainActivity";
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = this;
+        //loading
+        startActivity(new Intent(context, LoadingActivity.class));
+        setContentView(R.layout.activity_main);
+        
+        /*
+         * init values
+         */
+        mFaceBook = new Facebook(FACEBOOK_APP_ID);
+        
+        findViewById(R.id.loginBtnMain).setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				login();
+				
+			}
+		});
+        
+        
+        
+        
+        
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+	  {
+	    super.onActivityResult(requestCode, resultCode, data);
+	    
+	    if (resultCode == RESULT_OK)
+	    {
+	      if (requestCode == 32665)
+	      {
+	        mFaceBook.authorizeCallback(requestCode, resultCode, data);
+	        Log.e(TAG + "onActivity result", "facebook result ok");
+	      }
+	    }
+	    else
+	    {
+	      if (requestCode == 32665)
+	      {
+	        mFaceBook.authorizeCallback(requestCode, resultCode, data);
+	      }      
+	    }
+	  }
+	
+    
+    
+    private void login()  {
+    	
+    	mFaceBook.authorize2(this, new String[] {"publish_stream, user_photos, email"}, new AuthorizeListener());
+    }
+
+ 
+
+    
+}
+
+
+class AuthorizeListener implements DialogListener {
+	String TAG = "AuthorizeListener";
+	Context context;
+	
+	public AuthorizeListener(Context context) {
+		// TODO Auto-generated constructor stub
+		this.context = context;
+	}
+	
+	
+	@Override
+	public void onComplete(Bundle values) {
+		// TODO Auto-generated method stub
+		Log.e(TAG  , "onCompelte start");
+		
+		
+		
+	}
+
+	@Override
+	public void onFacebookError(FacebookError e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(DialogError e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCancel() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	 
+	
+}
+
+
+

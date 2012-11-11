@@ -1,0 +1,1013 @@
+package kr.ac.hufs;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import kr.ac.hufs.dbmnager.DBManager;
+import kr.ac.hufs.sortmanager.CategoryManager;
+import kr.ac.hufs.sortmanager.ContextTimeManager;
+import kr.ac.hufs.sortmanager.SelectApp;
+import kr.ac.hufs.sortmanager.ToastViewManager;
+import kr.ac.hufs.sortmanager.TranslationManager;
+import kr.ac.hufs.var.Var;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
+import appDataClassifier.AndroidAppCategoryClassifier;
+
+import com.artfulbits.aiCharts.ChartView;
+import com.artfulbits.aiCharts.Base.ChartAxis;
+import com.artfulbits.aiCharts.Base.ChartAxis.LabelsMode;
+import com.artfulbits.aiCharts.Base.ChartPoint;
+import com.artfulbits.aiCharts.Base.ChartSeries;
+import com.artfulbits.aiCharts.Base.ChartTitle;
+
+
+public class StatisticsViewActivity extends Activity {
+
+	ChartView barChartView;
+	ChartView piChartView;
+	ChartView piChartView1;
+
+	ChartSeries dataSeries[];
+	// ���߰��
+	String time = Var.DAY;
+	String location = Var.NONE;
+	String action = Var.NONE;
+	
+	//������ String
+	String kTime;
+	String kLocation;
+	String kAction;
+
+	Cursor c[];
+	DBManager dBM;
+	
+	//카테고리를 위해서 sc를 만듬
+	SelectApp sa[];
+	SelectApp sc[];
+	
+	Toast toast;
+
+	
+	// prefenrence ���
+	SharedPreferences pref;
+	// time ���
+	Date today;
+	SimpleDateFormat sdf;
+	ContextTimeManager ctm;
+//	 public final OnTouchListener chartOnTouchListener = new OnTouchListener() {
+//			public boolean onTouch(View v, MotionEvent event) {
+//				
+//				for (int i = 0; i < subItems.length; i++) {
+//					Rect hitRect = new Rect();
+//					subItems[i].getHitRect(hitRect); //강제로 hitRect 를 확인함.
+//					if (hitRect.contains((int) event.getX(), (int) event.getY())) {
+//					btns[i].dispatchTouchEvent(event);
+//					
+//					return true;
+//					}
+//				
+//				return isMenuOpened;
+//				
+//			}
+//			
+//		}
+//	 };
+	
+
+	// timeimageView
+	ImageView selectIV;
+	ImageView aniIV;
+	
+	//����� �̹��� ��
+	ImageView timeIV;
+	ImageView timeIV1;
+	ImageView locationIV;
+	ImageView categoryIV;
+
+	boolean touchFlag = false;
+
+	int selectIVCase = Var.IV_NONE;
+	int pichartCase = 0;
+	int chartActState;
+	int fX;
+	int fY;
+	
+
+	// C��ư ���
+	// c��ư�� ó���� �ȴ��ȴٴ� ��
+	boolean cBtnFlag = false;
+
+	// ���̾�α� ���
+	Builder builder;
+	AlertDialog ad;
+	LinearLayout ll;
+
+	// animation ���
+	AlphaAnimation aa;
+	boolean drawFlag = false;
+	ViewFlipper vfl;
+	ViewFlipper vfr;
+	Animation ani;
+
+	// ī�װ?���
+	Button cBtn;
+	PackageManager pm;
+	
+	CategoryManager cm;
+
+	private final OnTouchListener chartOnTouchListener = new OnTouchListener() {
+		public boolean onTouch(View v, MotionEvent event) {
+			int x = (int) event.getX();
+			int y = (int) event.getY();
+
+			ToastViewManager tm = new ToastViewManager(StatisticsViewActivity.this);
+			
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				fX = x;
+				fY = y;
+				chartActState = Var.CLICK_ACTION;
+			}
+			if (event.getAction() == MotionEvent.ACTION_MOVE) {
+				// Log.e("here","here");
+				chartActState = Var.MOVE_ACTION;
+			}if(event.getAction() == MotionEvent.ACTION_UP) {
+				//여기서 토스트를 띄울것이므로 
+				if(chartActState == Var.CLICK_ACTION) {
+										
+					if (cBtnFlag == true) {
+						
+						Intent intent = new Intent();
+						intent.setClassName("ssu.mining.recommender","ssu.mining.recommender.recommender");
+						List<Object> hitObjects = ((ChartView)vfl.getCurrentView()).hitTest(x, y);
+						int q  = 0;
+						int d = 0;
+						
+						for (Object object : hitObjects) {
+							
+							if (object instanceof ChartPoint) {
+								for(int i = 0; i < Var.PICHART_APPNUM; i++) {
+									if (Var.COLOR[i] == ((ChartPoint) object).getBackColor()) {
+										intent.putExtra("category",	sc[0].selectedApp[i]);
+//										Toast.makeText(StatisticsViewActivity.this, sc[pichartCase].selectedApp[i], Toast.LENGTH_LONG).show();
+										for(int j = 0; j < sa[pichartCase].index;j++) {
+											if(cm.getCategory(sa[pichartCase].selectedApp[j]).equals(sc[pichartCase].selectedApp[i])) {
+												q++;
+												Log.e("app" + q + "Name", sa[pichartCase].selectedApp[j]);
+												intent.putExtra("app" + q + "Name", sa[pichartCase].selectedApp[j]);
+												intent.putExtra("app" + q + "Num", sa[pichartCase].appNum[j]);
+												
+											}
+										}
+										
+										Log.e("here ", "here");
+										intent.putExtra("numOfApp", q);
+										break;
+									}
+
+								}
+							}
+						}
+
+						hitObjects = barChartView.hitTest(x, y);
+						for (Object object : hitObjects) {
+							if (object instanceof ChartPoint) {
+								int i = 0;
+								if (x >= 100 && x <= 120)
+									i = 0;
+								else if (x >= 165 && x <= 185)
+									i = 1;
+								else if (x >= 222 && x <= 242)
+									i = 2;
+								else if (x >= 272 && x <= 292)
+									i = 3;
+								else if (x >= 310 && x <= 330)
+									i = 4;
+
+								for(int j = 0; j < Var.BARCHART_APPNUM; j++) {
+									if (Var.COLOR[j] == ((ChartPoint) object).getBackColor()) {
+										intent.putExtra("category",	sc[i].selectedApp[j]);
+										
+										for(q = 0; q < Var.BARCHART_APPNUM;q++) {
+											if(cm.getCategory(sa[i].selectedApp[q]).equals(sc[i].selectedApp[j])) {
+												d++;
+												intent.putExtra("app" + d + "Name", sa[i].selectedApp[q]);
+												intent.putExtra("app" + d + "Num", sa[i].appNum[q]);
+												
+											}
+										}
+										intent.putExtra("numOfApp", d);
+										break;
+									}
+								}
+
+							}
+						}
+						startActivity(intent);
+
+					} else if (cBtnFlag == false) {
+						ll = (LinearLayout) View.inflate(StatisticsViewActivity.this, R.layout.actiondialog, null);	
+						List<Object> hitObjects = ((ChartView)vfl.getCurrentView()).hitTest(x, y);
+						for (Object object : hitObjects) {
+							if (object instanceof ChartPoint) {
+								try {
+									for(int i = 0; i < Var.PICHART_APPNUM; i++) {
+										if (Var.COLOR[i] == ((ChartPoint) object).getBackColor()) {
+//											toast.setView(tm.getpiChartToastLayout(i,sa[0], kTime + " " + kLocation + " " + kAction));
+											builder.setView(tm.getpiChartToastLayout(i,sa[pichartCase], kTime + " " + kLocation + " " + kAction));
+											break;
+										}
+									}
+//									toast.show();
+								} catch (NameNotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+
+						hitObjects = barChartView.hitTest(x, y);
+						for (Object object : hitObjects) {
+							if (object instanceof ChartPoint) {
+								int i = 0;
+								if (x >= 100 && x <= 120)
+									i = 0;
+								else if (x >= 165 && x <= 185)
+									i = 1;
+								else if (x >= 222 && x <= 242)
+									i = 2;
+								else if (x >= 272 && x <= 292)
+									i = 3;
+								else if (x >= 310 && x <= 330)
+									i = 4;
+								try {
+									for(int j = 0; j < Var.BARCHART_APPNUM;j++) {
+										if (Var.COLOR[j] == ((ChartPoint) object).getBackColor()) {
+//											toast.setView(tm.getpiChartToastLayout(j,sa[i], kTime + " " + kLocation + " " + kAction));
+											builder.setView(tm.getpiChartToastLayout(j,sa[i], kTime + " " + kLocation + " " + kAction));
+											break;
+										}
+									}
+//									toast.show();
+								} catch (NameNotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+						
+						ad = builder.create();
+						ad.show();
+
+					}
+				}else if(chartActState == Var.MOVE_ACTION) {
+					if(cBtnFlag == false && (time.equals(Var.WEEK) || time.equals(Var.MONTH))) {
+						if(fX < x) { //����
+							
+							pichartCase = (pichartCase + 4) % 5;
+							vfl.setInAnimation(AnimationUtils.loadAnimation(StatisticsViewActivity.this, R.anim.rviewin));
+							vfl.setOutAnimation(AnimationUtils.loadAnimation(StatisticsViewActivity.this, R.anim.rviewout));
+							
+							
+						}else {//��
+							pichartCase = (pichartCase + 1) % 5;
+							vfl.setInAnimation(AnimationUtils.loadAnimation(StatisticsViewActivity.this, R.anim.lviewin));
+							vfl.setOutAnimation(AnimationUtils.loadAnimation(StatisticsViewActivity.this, R.anim.lviewout));
+							
+						}
+						setNextPieChart();
+						vfl.showPrevious();
+					}
+				}
+			}
+			return true;	
+		}
+		
+	};
+
+	private final OnTouchListener menuOnTouchListener = new OnTouchListener() {
+		public boolean onTouch(View v, MotionEvent event) {
+			int x = (int) event.getX();
+			int y = (int) event.getY();
+
+			if (touchFlag == true) {
+				touchFlag = false;
+				return true;
+			}
+			touchFlag = true;
+			
+//			Toast.makeText(StatisticsViewActivity.this, x + " " + y, Toast.LENGTH_SHORT).show();
+
+			// ��ǥ ������
+			if (selectIVCase == Var.LOCATIONIV) {
+				// Toast.makeText(StatisticsViewActivity.this, x + " " +
+				// y,Toast.LENGTH_SHORT).show();
+
+				if (30 < x && x < 200 && 20 < y && y < 145) {
+					location = Var.HOME;
+					aniIV.setBackgroundResource(R.drawable.home);
+				} else if (205 < x && x < 370 && 20 < y && y < 145) {
+					location = Var.COMPANY;
+					aniIV.setBackgroundResource(R.drawable.work);
+				} else if (270 < x && x < 380 && 170 < y && y < 255) {
+					location = Var.SHOP;
+					aniIV.setBackgroundResource(R.drawable.shopping);
+				} else if (160 < x && x < 245 && 250 < y && y < 340) {
+					location = Var.THEATER;
+					aniIV.setBackgroundResource(R.drawable.theater);
+				} else if (40 < x && x < 140 && 170 < y && y < 255) {
+					location = Var.RESTAURANT;
+					aniIV.setBackgroundResource(R.drawable.restraurant);
+				}else {
+					aniIV.setBackgroundResource(R.drawable.none);
+					location = Var.NONE;
+				}
+
+				drawFlag = true;
+				// drawChart(time, location, action);
+
+			} else {
+				if (selectIVCase == Var.TIMEIV1) {
+
+					if (210 < x && x < 390) {
+						if (15 < y && y < 175) {
+							aniIV.setBackgroundResource(R.drawable.week);
+							selectIV.setVisibility(Var.INVISIBLE);
+							time = Var.WEEK;
+							drawFlag = true;
+							selectIVCase = Var.TIMEIV1;
+
+						} else if (185 < y && y < 355) {
+							aniIV.setBackgroundResource(R.drawable.day);
+							selectIV.setVisibility(Var.INVISIBLE);
+							time = Var.DAY;
+							drawFlag = true;
+							selectIVCase = Var.TIMEIV1;
+						}
+					} else if (20 < x && x < 195) {
+						if (185 < y && y < 355) {
+							aniIV.setBackgroundResource(R.drawable.user);
+							selectIV.setBackgroundResource(R.drawable.timeimage2);
+							selectIVCase = Var.TIMEIV2;
+						} else if (15 < y && y < 175) {// all ����
+							aniIV.setBackgroundResource(R.drawable.month);
+							selectIV.setVisibility(Var.INVISIBLE);
+							time = Var.MONTH;
+							drawFlag = true;
+							selectIVCase = Var.TIMEIV1;
+
+						}
+					}
+				} else if (selectIVCase == Var.TIMEIV2) {
+
+					if (210 < x && x < 305 && 25 < y && y < 108) {
+						aniIV.setBackgroundResource(R.drawable.tuesday);
+						time = Var.TUESDAY;
+					} else if (300 < x && x < 387 && 105 < y && y < 210) {
+						aniIV.setBackgroundResource(R.drawable.wednesday);
+						time = Var.WEDNESDAY;
+					} else if (260 < x && x < 350 && 230 < y && y < 300) {
+						aniIV.setBackgroundResource(R.drawable.thursday);
+						time = Var.THURSDAY;
+					} else if (155 < x && x < 230 && 275 < y && y < 345) {
+						aniIV.setBackgroundResource(R.drawable.friday);
+						time = Var.FRIDAY;
+					} else if (45 < x && x < 125 && 215 < y && y < 300) {
+						aniIV.setBackgroundResource(R.drawable.saturday);
+						time = Var.SATURDAY;
+					} else if (15 < x && x < 110 && 125 < y && y < 190) {
+						aniIV.setBackgroundResource(R.drawable.sunday);
+						time = Var.SUNDAY;
+					} else if (95 < x && x < 190 && 20 < y && y < 100) {
+						aniIV.setBackgroundResource(R.drawable.monday);
+						time = Var.MONDAY;
+					}
+
+					selectIV.setBackgroundResource(R.drawable.timeimage3);
+					selectIVCase = Var.TIMEIV3;
+
+				} else if (selectIVCase == Var.TIMEIV3) {
+					if (0 < x && x < 140 && 3 < y && y < 205) {
+						aniIV.setBackgroundResource(R.drawable.morning);
+						time = time + " " + Var.MORNING;
+					} else if (210 < x && x < 400 && 0 < y && y < 200) {
+						aniIV.setBackgroundResource(R.drawable.afternoon);
+						time = time + " " + Var.AFTERNOON;
+					} else if (115 < x && x < 300 && 230 < y && y < 335) {
+						aniIV.setBackgroundResource(R.drawable.evening);
+						time = time + " " + Var.EVENING;
+					} else {
+						aniIV.setBackgroundResource(R.drawable.none);
+						
+//						Toast.makeText(StatisticsViewActivity.this, "NONE", Toast.LENGTH_SHORT).show();
+					}
+					selectIV.setVisibility(Var.INVISIBLE);
+					selectIVCase = Var.TIMEIV1;
+					drawFlag = true;
+				}
+			}
+			aniIV.startAnimation(aa);
+			return true;
+
+		}
+	};
+
+	Animation.AnimationListener aniListener = new Animation.AnimationListener() {
+
+		public void onAnimationStart(Animation animation) {
+
+		}
+
+		public void onAnimationRepeat(Animation animation) {
+
+		}
+
+		public void onAnimationEnd(Animation animation) {
+			// drawFlag �� true�϶��� �׸��� �׷���
+			if (drawFlag == true) {
+				drawFlag = false;
+				drawChart(time, location, action);
+			}
+		}
+	};
+
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.statistics);
+		/*
+		 * chart �κ�
+		 */
+		barChartView = (ChartView) findViewById(R.id.barChartView);
+		
+
+		piChartView = (ChartView) findViewById(R.id.piChartView);
+		piChartView1 = (ChartView) findViewById(R.id.piChartView1);
+		
+		piChartView1.setHitTestEnabled(true); // enable hit testing for series
+		piChartView1.setOnTouchListener(chartOnTouchListener); // set touch
+		
+		piChartView.setHitTestEnabled(true); // enable hit testing for series
+		piChartView.setOnTouchListener(chartOnTouchListener); // set touch
+
+		barChartView.setHitTestEnabled(true); // enable hit testing for series
+		barChartView.setOnTouchListener(chartOnTouchListener); // set touch
+
+		dataSeries = new ChartSeries[Var.PICHART_APPNUM];
+		/*
+		 * time ���
+		 */
+		today = new Date();
+		sdf = new SimpleDateFormat("yyyyMMdd");
+		ctm = new ContextTimeManager();
+		/*
+		 * prefenrence ���
+		 */
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		if (pref.getBoolean("now", true)) {
+			Var.LCURTIME = Long.parseLong(ctm.dateToLong(sdf.format(today)));
+		} else {
+			Var.LCURTIME = Long.parseLong(ctm.dateToLong(pref.getString(
+					"setup", "20120101")));
+		}
+		Var.LFIRTIME = Var.LCURTIME;
+
+		// animation ���
+
+		aa = new AlphaAnimation(0, 1);
+		aa.setDuration(500);
+		aa.setAnimationListener(aniListener);
+
+//		ani = new ScaleAnimation(0, 1, 0, 1);
+		ani = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF,0.5f, Animation.START_ON_FIRST_FRAME,0.5f);
+		ani.setDuration(1000);
+
+		/*
+		 * image���
+		 */
+		selectIV = (ImageView) findViewById(R.id.selectiv);
+		selectIV.setOnTouchListener(menuOnTouchListener);
+
+		aniIV = (ImageView) findViewById(R.id.aniiv);
+		aniIV.setAnimation(aa);
+		aniIV.setOnTouchListener(menuOnTouchListener);
+		
+		//��� �̹��� ���
+		timeIV = (ImageView)findViewById(R.id.timeiv);
+		timeIV1 = (ImageView)findViewById(R.id.timeiv1);
+		locationIV = (ImageView)findViewById(R.id.locationiv);
+		categoryIV = (ImageView)findViewById(R.id.categoryiv);
+
+		/*
+		 * toast �κ�
+		 */
+		toast = new Toast(this);
+		toast.setGravity(Gravity.TOP, 0, 0);
+		toast.setDuration(Var.TOAST_LENGTH);
+//		toast.setDuration(0);
+		/*
+		 * text �κ�
+		 */
+
+		c = new Cursor[Var.BARCHART_NUN];
+
+		// ���̾�α� ���
+		builder = new AlertDialog.Builder(this);
+		// ��ư���
+		cBtn = (Button) findViewById(R.id.category);
+		// View Fliper ���
+		vfl = (ViewFlipper) findViewById(R.id.viewflipper);
+		
+		
+//		vfr = (ViewFlipper) findViewById(R.id.viewflipper);
+//		vfr.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.rviewin));
+//		vfr.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.rviewout));
+
+		pm = this.getPackageManager();
+		
+		//카테고리 관련
+		cm = new CategoryManager();
+		
+		
+		//��Ʈ �ʱ�ȭ���
+		setNextPieChart();
+
+
+	}
+
+	// �ܺ��� ��ư�� ��������
+	public void mOnClick(View v) {
+		switch (v.getId()) {
+		
+		//category ��ư�� ��������
+		 
+		case R.id.category:
+			if (cBtnFlag == false) {
+				categoryIV.setBackgroundResource(R.drawable.tcategoryon);
+				cBtn.setBackgroundResource(R.drawable.c_button_on);
+				
+				if (barChartView.getVisibility() == Var.VISIBLE) {
+					barChartView.startAnimation(ani);
+					sc = cm.getBarCategory(sa);
+					for (int i = 0; i < Var.BARCHART_APPNUM; i++) {
+						dataSeries[i] = barChartView.getSeries().get(i);
+						double data[] = { sc[0].appNum[i], sc[1].appNum[i],
+								sc[2].appNum[i], sc[3].appNum[i],
+								sc[4].appNum[i] };
+						dataSeries[i].getPoints().setData(data);
+
+					}
+
+				} else if (vfl.getCurrentView().getVisibility() == Var.VISIBLE) {
+					
+					((ChartView) vfl.getCurrentView()).startAnimation(ani);
+					sc[0] = cm.getPiCategory(sa[pichartCase]);
+					double data[] = { sc[0].appNum[0],
+							sc[0].appNum[1], sc[0].appNum[2],
+							sc[0].appNum[3], sc[0].appNum[4],
+							sc[0].appNum[5], sc[0].appNum[6],
+							sc[0].appNum[7], sc[0].appNum[8],
+							sc[0].appNum[9], sc[0].appNum[10],
+							sc[0].appNum[11], sc[0].appNum[12],
+							sc[0].appNum[13], sc[0].appNum[14],
+							sc[0].appNum[15], sc[0].appNum[16],
+							sc[0].appNum[17], sc[0].appNum[18],
+							sc[0].appNum[19], sc[0].appNum[20],
+							sc[0].appNum[21], sc[0].appNum[22],
+							sc[0].appNum[23], sc[0].appNum[24],
+							sc[0].appNum[25], sc[0].appNum[26],
+							sc[0].appNum[27], sc[0].appNum[28],
+							sc[0].appNum[29], sc[0].appNum[30],
+							sc[0].appNum[31], };
+					
+					
+					((ChartView) vfl.getCurrentView()).getSeries().get(0).getPoints().setData(data);
+					
+					
+						
+
+					
+					for (int i = 0; i < Var.PICHART_APPNUM; i++) {
+						((ChartView) vfl.getCurrentView()).getSeries().get(0).getPoints().get(i).setBackColor(Var.COLOR[i]);
+						((ChartView) vfl.getCurrentView()).getSeries().get(0).getPoints().get(i).setLabel(sc[0].selectedApp[i]);
+//						Log.e("label",sa[0].selectedApp[i]);
+						if(sc[0].selectedApp[i] == null) 
+							((ChartView) vfl.getCurrentView()).getSeries().get(0).getPoints().get(i).setLabel("");
+					}
+
+				}
+				cBtnFlag = true;
+			} else {
+				if(barChartView.getVisibility() == Var.VISIBLE)
+					barChartView.startAnimation(ani);
+				else
+					((ChartView) vfl.getCurrentView()).startAnimation(ani);
+				
+				cBtn.setBackgroundResource(R.drawable.c_button);
+				drawChart(time, location, action);
+			}
+			break;
+		/*
+		 * time ��ư�� ��������
+		 */
+		case R.id.time_btn:
+			selectIVCase = Var.TIMEIV1;
+			barChartView.setVisibility(Var.INVISIBLE);
+//			piChartView.setVisibility(Var.INVISIBLE);
+			selectIV.setBackgroundResource(R.drawable.timeimage1);
+			selectIV.setVisibility(Var.VISIBLE);
+			// Log.e("in btn", "in btn");
+			break;
+		/*
+		 * location ��ư�� ��������
+		 */
+		case R.id.location_btn:
+			selectIVCase = Var.LOCATIONIV;
+			barChartView.setVisibility(Var.INVISIBLE);
+//			piChartView.setVisibility(Var.INVISIBLE);
+			selectIV.setBackgroundResource(R.drawable.locationimage);
+			selectIV.setVisibility(Var.VISIBLE);
+			break;
+		case R.id.action_btn:
+			ll = (LinearLayout) View.inflate(this, R.layout.actiondialog, null);
+			builder.setView(ll);
+			ad = builder.create();
+			ad.show();
+			break;
+		}
+	}
+
+	// action dialog�� ��m����
+	public void actionButtonHandler(View v) {
+		// TODO Auto-generated method stub
+
+		switch (v.getId()) {
+		case R.id.nonebtn:
+			action = Var.NONE;
+			break;
+		case R.id.walkingbtn:
+			action = Var.WALKING;
+			break;
+		case R.id.joggingbtn:
+			action = Var.JOGGING;
+			break;
+		case R.id.busbtn:
+			action = Var.BUS;
+			break;
+		case R.id.subwaybtn:
+			action = Var.SUBWAY;
+			break;
+		case R.id.otherbtn:
+			action = Var.OTHER_ACTION;
+			break;
+		}
+		ad.dismiss();
+		drawChart(time, location, action);
+	}
+
+	private void drawChart(String time, String location, String action) {
+
+		cBtnFlag = false;
+		sa = new SelectApp[Var.BARCHART_NUN];
+		sc = new SelectApp[Var.BARCHART_NUN];
+		// ChartSeries dataSeries[] = new ChartSeries[Var.APP_NUN];
+		
+		TranslationManager tm = new TranslationManager();
+		dBM = new DBManager(this);
+
+		for (int j = 0; j < Var.BARCHART_NUN; j++) {
+			sa[j] = new SelectApp();
+			sc[j] = new SelectApp();
+		}
+		/*
+		 * ��� context textView �����κ�
+		 */
+		kTime = tm.getKoreanDay(tm.timeToDay(time)) + " "+ tm.getKoreanSlot(tm.timeToSlot(time));
+		kLocation = tm.getKoreanPOI(location);
+		kAction = tm.getKoreanAction(action);
+
+		// imageView ����
+		selectIV.setVisibility(Var.INVISIBLE);
+		//��� �̹��� �並 �׷��ִ� �Լ�
+		setContextImageView();
+
+		if (time.equals(Var.DAY) || time.equals(Var.WEEK)
+				|| time.equals(Var.MONTH)) {
+			// mSelect�� ���� �����͸� set�ϴ� �κ�
+
+			barChartView.getAreas().get(0).getDefaultXAxis()
+					.setLabelsMode(LabelsMode.NoLabels);
+			barChartView.getAreas().get(0).getDefaultXAxis().getLabelPaint()
+					.setTextSize(20);
+			barChartView.getAreas().get(0).getDefaultYAxis().getLabelPaint()
+					.setTextSize(20);
+
+			// DB���� �������ºκ�
+			c = dBM.mSelect(time, location, action);
+
+			for (int q = 0; q < Var.BARCHART_NUN; q++) {
+				int temp;
+				
+				if(time.equals(Var.WEEK) || time.equals(Var.MONTH)) 
+					temp = Var.PICHART_APPNUM;
+				else
+					temp = Var.BARCHART_APPNUM;
+				
+					for (int i = 0; i < temp; i++) {
+						if (c[q].moveToNext() == false) {
+							c[q].close();
+							break;
+						}
+						sa[q].put(c[q].getString(0), c[q].getInt(1));
+					}
+			}
+		}
+
+		else {
+			// sSelect�� ���� �����͸� set�ϴ� �κ�
+			pichartCase = 0;
+			c[pichartCase] = dBM.sSelect(time, location, action);
+			for (int i = 0; i < Var.PICHART_APPNUM; i++) {
+				if (c[pichartCase].moveToNext() == false) {
+					c[pichartCase].close();
+					break;
+				}
+				sa[pichartCase].put(c[pichartCase].getString(0),c[pichartCase].getInt(1));
+			}
+		}
+
+		// �Ϻ��ϰ�� barchart�� �׸��� �׸���.
+		if (time.equals(Var.DAY)) {
+			sdf = new SimpleDateFormat("M/dd");
+
+			for (int i = 0; i < Var.BARCHART_APPNUM; i++) {
+				dataSeries[i] = barChartView.getSeries().get(i);
+				double data[] = { sa[0].appNum[i], sa[1].appNum[i],
+						sa[2].appNum[i], sa[3].appNum[i], sa[4].appNum[i] };
+				dataSeries[i].getPoints().setData(data);
+			}
+			barChartView.getAreas().get(0).getDefaultXAxis().getCustomLabels()
+					.clear();
+			for (int i = 0; i < Var.BARCHART_NUN; i++)
+				barChartView
+						.getAreas()
+						.get(0)
+						.getDefaultXAxis()
+						.getCustomLabels()
+						.add(new ChartAxis.Label(sdf.format(dBM.dTemp[i]),
+								i));
+
+			((ChartView) vfl.getCurrentView()).setVisibility(Var.INVISIBLE);
+			barChartView.setVisibility(Var.VISIBLE);
+		}
+		// �� ��� �׸���.
+
+		// �Ϻ��� ��츦 ������ ������ ���⼭ �׸��� �׷��ش� pie chart
+		else {
+
+			
+			ChartSeries series = ((ChartView) vfl.getCurrentView()).getSeries().get(0);
+			//�ֺ��� ���
+			if (time.equals(Var.MONTH)) {
+				sdf = new SimpleDateFormat("M월");
+				
+				((ChartView) vfl.getCurrentView()).getTitles().get(0)
+						.setText(sdf.format(dBM.dTemp[pichartCase]));
+				
+			}else if(time.equals(Var.WEEK)) {
+				sdf = new SimpleDateFormat("M월dd일");
+				
+				((ChartView) vfl.getCurrentView()).getTitles().get(0)
+						.setText(sdf.format(dBM.dTemp[pichartCase]));
+				
+			}
+			else {
+				((ChartView) vfl.getCurrentView()).getTitles().get(0).setText(" ");
+			}
+			((ChartView) vfl.getCurrentView()).getTitles().get(0).getTextPaint().setTextSize(30);
+			double data[] = { sa[pichartCase].appNum[0],
+					sa[pichartCase].appNum[1], sa[pichartCase].appNum[2],
+					sa[pichartCase].appNum[3], sa[pichartCase].appNum[4],
+					sa[pichartCase].appNum[5], sa[pichartCase].appNum[6],
+					sa[pichartCase].appNum[7], sa[pichartCase].appNum[8],
+					sa[pichartCase].appNum[9], sa[pichartCase].appNum[10],
+					sa[pichartCase].appNum[11], sa[pichartCase].appNum[12],
+					sa[pichartCase].appNum[13], sa[pichartCase].appNum[14],
+					sa[pichartCase].appNum[15], sa[pichartCase].appNum[16],
+					sa[pichartCase].appNum[17], sa[pichartCase].appNum[18],
+					sa[pichartCase].appNum[19], sa[pichartCase].appNum[20],
+					sa[pichartCase].appNum[21], sa[pichartCase].appNum[22],
+					sa[pichartCase].appNum[23], sa[pichartCase].appNum[24],
+					sa[pichartCase].appNum[25], sa[pichartCase].appNum[26],
+					sa[pichartCase].appNum[27], sa[pichartCase].appNum[28],
+					sa[pichartCase].appNum[29], sa[pichartCase].appNum[30],
+					sa[pichartCase].appNum[31], };
+
+			series.getPoints().setData(data);
+
+			for (int i = 0; i < Var.PICHART_APPNUM; i++) {
+				try {
+					series.getPoints()
+							.get(i)
+							.setLabel(
+									(String) pm.getApplicationLabel(pm
+											.getApplicationInfo(sa[pichartCase].selectedApp[i],	pm.GET_META_DATA)));
+				} catch (NameNotFoundException e) {
+					series.getPoints().get(i).setLabel("");
+//					 e.printStackTrace();
+				}
+			}
+			for(int i = 0; i < Var.PICHART_APPNUM; i++) {
+				series.getPoints().get(i).setBackColor(Var.COLOR[i]);
+			}
+			
+
+			barChartView.setVisibility(Var.INVISIBLE);
+			((ChartView) vfl.getCurrentView()).setVisibility(Var.VISIBLE);
+
+		}
+		dBM.close();
+		return;
+
+	}
+	
+	private void setContextImageView() {
+		//����� ��ħ���� ���
+		if(time.contains(" ")) {
+			
+			String day = time.substring(0, time.indexOf(" ") );
+			String slot = time.substring(time.indexOf(" ") + 1,	time.length());
+			
+			timeIV.setVisibility(Var.VISIBLE);
+			timeIV1.setVisibility(Var.VISIBLE);
+			
+			if(day.equals(Var.MONDAY)){
+				timeIV.setBackgroundResource(R.drawable.tmonday);
+			}else if(day.equals(Var.TUESDAY)){
+				timeIV.setBackgroundResource(R.drawable.ttuesday);
+			}else if(day.equals(Var.WEDNESDAY)){
+				timeIV.setBackgroundResource(R.drawable.twednesday);
+			}else if(day.equals(Var.THURSDAY)){
+				timeIV.setBackgroundResource(R.drawable.tthursday);
+			}else if(day.equals(Var.FRIDAY)){
+				timeIV.setBackgroundResource(R.drawable.tfriday);
+			}else if(day.equals(Var.SATURDAY)){
+				timeIV.setBackgroundResource(R.drawable.tsaturday);
+			}else if(day.equals(Var.SUNDAY)){
+				timeIV.setBackgroundResource(R.drawable.tsunday);
+			}
+			
+			if(slot.equals(Var.MORNING)){
+				timeIV1.setBackgroundResource(R.drawable.tmorning);
+			}else if(slot.equals(Var.AFTERNOON)){
+				timeIV1.setBackgroundResource(R.drawable.tafternoon);
+			}else if(slot.equals(Var.EVENING)){
+				timeIV1.setBackgroundResource(R.drawable.tevening);
+			}
+			
+			
+		}
+		//������ΰ��
+		else {//�ѱ����� ��� �ֳ� ���̳� ���� �ƴѰ��
+			if(time.equals(Var.WEEK) || time.equals(Var.DAY) || time.equals(Var.MONTH)) {
+				
+				timeIV1.setVisibility(Var.INVISIBLE);
+				timeIV.setVisibility(Var.INVISIBLE);
+				
+			}
+			else {
+				
+			
+				timeIV1.setVisibility(Var.INVISIBLE);
+				timeIV.setVisibility(Var.VISIBLE);
+				
+				if(time.equals(Var.MONDAY)){
+					timeIV.setBackgroundResource(R.drawable.tlmonday);
+				}else if(time.equals(Var.TUESDAY)){
+					timeIV.setBackgroundResource(R.drawable.tltuesday);
+				}else if(time.equals(Var.WEDNESDAY)){
+					timeIV.setBackgroundResource(R.drawable.tlwednesday);
+				}else if(time.equals(Var.THURSDAY)){
+					timeIV.setBackgroundResource(R.drawable.tlthursday);
+				}else if(time.equals(Var.FRIDAY)){
+					timeIV.setBackgroundResource(R.drawable.tlfriday);
+				}else if(time.equals(Var.SATURDAY)){
+					timeIV.setBackgroundResource(R.drawable.tlsaturday);
+				}else if(time.equals(Var.SUNDAY)){
+					timeIV.setBackgroundResource(R.drawable.tlsunday);
+				}
+				
+			}
+		}	
+			locationIV.setVisibility(Var.VISIBLE);
+			if(location.equals(Var.HOME)){
+				locationIV.setBackgroundResource(R.drawable.thome);
+			}else if(location.equals(Var.COMPANY)){
+				locationIV.setBackgroundResource(R.drawable.tcompany);
+			}else if(location.equals(Var.SHOP)){
+				locationIV.setBackgroundResource(R.drawable.tshop);
+			}else if(location.equals(Var.THEATER)){
+				locationIV.setBackgroundResource(R.drawable.ttheater);
+			}else if(location.equals(Var.RESTAURANT)){
+				locationIV.setBackgroundResource(R.drawable.trestaurant);
+			}else {
+				locationIV.setVisibility(Var.INVISIBLE);
+			}
+		
+		
+		
+		categoryIV.setBackgroundResource(R.drawable.tcategoryoff);
+		
+	}
+	
+	private void setNextPieChart() {		
+		
+		ChartSeries series = null;
+		ChartTitle titles = null;
+		
+		if(selectIVCase == Var.IV_NONE) {
+			double data[] = {10};
+			piChartView.getTitles().get(0).setText("");
+			piChartView.getTitles().get(0).getTextPaint().setTextSize(30);
+			piChartView.getSeries().get(0).getPoints().setData(data);
+			piChartView.setVisibility(Var.INVISIBLE);
+			return;
+		}
+		
+		if(((ChartView) vfl.getCurrentView()) == piChartView){
+			
+			series = piChartView1.getSeries().get(0);
+			titles = piChartView1.getTitles().get(0);
+			
+		}else if(((ChartView) vfl.getCurrentView()) == piChartView1){
+			
+			series = piChartView.getSeries().get(0);
+			titles = piChartView.getTitles().get(0);
+			
+		}
+			titles.setText(sdf.format(dBM.dTemp[pichartCase]));
+			titles.getTextPaint().setTextSize(30);
+			
+			double data[] = { sa[pichartCase].appNum[0],
+					sa[pichartCase].appNum[1], sa[pichartCase].appNum[2],
+					sa[pichartCase].appNum[3], sa[pichartCase].appNum[4],
+					sa[pichartCase].appNum[5], sa[pichartCase].appNum[6],
+					sa[pichartCase].appNum[7], sa[pichartCase].appNum[8],
+					sa[pichartCase].appNum[9], sa[pichartCase].appNum[10],
+					sa[pichartCase].appNum[11], sa[pichartCase].appNum[12],
+					sa[pichartCase].appNum[13], sa[pichartCase].appNum[14],
+					sa[pichartCase].appNum[15], sa[pichartCase].appNum[16],
+					sa[pichartCase].appNum[17], sa[pichartCase].appNum[18],
+					sa[pichartCase].appNum[19], sa[pichartCase].appNum[20],
+					sa[pichartCase].appNum[21], sa[pichartCase].appNum[22],
+					sa[pichartCase].appNum[23], sa[pichartCase].appNum[24],
+					sa[pichartCase].appNum[25], sa[pichartCase].appNum[26],
+					sa[pichartCase].appNum[27], sa[pichartCase].appNum[28],
+					sa[pichartCase].appNum[29], sa[pichartCase].appNum[30],
+					sa[pichartCase].appNum[31], };
+
+			series.getPoints().setData(data);
+
+			for (int i = 0; i < Var.PICHART_APPNUM; i++) {
+				try {
+					series.getPoints()
+							.get(i)
+							.setLabel(
+									(String) pm.getApplicationLabel(pm
+											.getApplicationInfo(sa[pichartCase].selectedApp[i],	pm.GET_META_DATA)));
+				} catch (NameNotFoundException e) {
+					series.getPoints().get(i).setLabel("");
+//					 e.printStackTrace();
+				}
+			}
+			for(int i = 0; i < Var.PICHART_APPNUM; i++) 
+				series.getPoints().get(i).setBackColor(Var.COLOR[i]);
+					
+
+			
+		}
+	
+}

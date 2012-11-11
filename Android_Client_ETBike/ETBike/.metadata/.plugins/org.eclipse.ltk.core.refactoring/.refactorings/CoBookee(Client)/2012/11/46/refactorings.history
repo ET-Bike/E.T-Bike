@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;PageStreamer.java&apos; to &apos;ETBike/src/com.swmaestro.etbike.network&apos;&#x0D;&#x0A;- Original project: &apos;CoBookee(Client)&apos;&#x0D;&#x0A;- Destination element: &apos;ETBike/src/com.swmaestro.etbike.network&apos;&#x0D;&#x0A;- Original element: &apos;kr.swmaestro.cobookee.utils.PageStreamer.java&apos;" description="Copy compilation unit" destination="=ETBike/src&lt;com.swmaestro.etbike.network" element1="/src&lt;kr.swmaestro.cobookee.utils{PageStreamer.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1352610096632" units="1" version="1.0"/>
+</session>

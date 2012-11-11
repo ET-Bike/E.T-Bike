@@ -1,0 +1,15 @@
+<resources>
+ <style name="CustomTitleTheme" parent="android:Theme">
+  <item name="android:windowTitleSize">50dip</item>
+  <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+ </style>
+
+ <style name="WindowTitleBackground" parent="android:WindowTitleBackground">
+  <item name="android:background">@android:color/transparent</item>
+ </style>
+ 
+ <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
+</resources>
+
+
+

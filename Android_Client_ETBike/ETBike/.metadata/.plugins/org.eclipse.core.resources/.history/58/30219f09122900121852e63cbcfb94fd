@@ -1,0 +1,16 @@
+package com.swmaestro.etbike.activity;
+
+import android.app.Activity;
+import android.app.TabActivity;
+import android.os.Bundle;
+import android.widget.TabHost;
+
+public class MyProfileActivity extends TabActivity {
+	
+	TabHost mTab;
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+	}
+
+}

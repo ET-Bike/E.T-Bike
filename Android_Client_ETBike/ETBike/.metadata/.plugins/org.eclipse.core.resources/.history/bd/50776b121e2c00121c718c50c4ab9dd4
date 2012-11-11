@@ -1,0 +1,193 @@
+package com.swmaestro.etbike.network;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
+import com.facebook.android.FHaloManager;
+import com.swmaestro.object.WorkVectors;
+import com.swmaestro.variable.Variable;
+
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+import android.widget.AutoCompleteTextView.Validator;
+
+public class NetworkManager extends Thread {
+	String TAG = "NetworkManager";
+
+	public static final int ZERO = 0;
+	public static final int COMM_DOWN_LOAD_HOME_IMAGE = 1;
+	public static final int COMM_DOWN_LOAD_MY_PROFILE_IMAGE = 2;
+	public static final int COMM_SEND_MY_ACCOUNT_INFO = 3;
+	public static final int COMM_UPLOAD_BIKE_IMG = 4;
+	public static final int COMM_UPLOAD_MY_BIKE_INFOS = 5;
+	public static final int COMM_GET_MY_BIKE_LIST_INFOS = 6;
+//	public static final int COMM_UPLOAD_MY_BIKE_INFOS = 5;
+
+	int commandState = -1;
+
+	WorkVectors wv;
+	Handler mHandler;
+	NetworkHelper nh;
+	FHaloManager fhm;
+
+	public NetworkManager(WorkVectors wv, Handler mHandler, int commandState) {
+		// TODO Auto-generated constructor stub
+		this.wv = wv;
+		this.mHandler = mHandler;
+		this.commandState = commandState;
+		nh = new NetworkHelper();
+//		fhm =FHaloManager.getInstance();
+
+	}
+	
+	public void setCommand(int commandState) {
+		this.commandState = commandState;
+	}
+
+	public void run() {
+		Looper.prepare();
+		Log.e(TAG, "commstate ==" +commandState);
+
+		if (commandState == COMM_DOWN_LOAD_MY_PROFILE_IMAGE) {
+			Log.e(TAG + " start", "commstate == "
+					+ COMM_DOWN_LOAD_MY_PROFILE_IMAGE);
+			downLoadmyProfile(wv);
+		}else if(commandState == COMM_SEND_MY_ACCOUNT_INFO) {
+			uploadMyAccout(wv);
+		}else if(commandState == COMM_UPLOAD_MY_BIKE_INFOS) {
+			uploadMyBikeInfos();
+		}else if(commandState == COMM_DOWN_LOAD_HOME_IMAGE) {
+//			down
+		}else if(commandState == COMM_GET_MY_BIKE_LIST_INFOS) {
+			getMyBikeListInfos();
+		}
+//		else if(commandState == )
+		Looper.loop();
+
+	}
+	
+	private void getMyBikeListInfos() {
+		
+		
+		
+	}
+	
+	
+
+	private void downLoadmyProfile(WorkVectors wv) {
+
+		fhm = FHaloManager.getInstance();
+		Log.e(TAG + " download MY profile", "start");
+		Log.e(TAG, "downlaod image url = " + fhm.getMyProfilePic());
+		String downloadUrl = fhm.getMyProfilePic();
+		String path = Variable.MY_PROFILE_DIR + nh.getFileName(downloadUrl);
+		
+		if (nh.downloadImage(downloadUrl, path)) {
+			wv.put(WorkVectors.MY_PROFLE_IMG_PATH, path);
+			mHandler.sendEmptyMessage(COMM_DOWN_LOAD_MY_PROFILE_IMAGE);
+		}
+
+	}
+	
+	private void uploadMyBikeInfos() {
+		Boolean uploadFacebookFlag = (Boolean)wv.getData(WorkVectors.UPLOAD_FACEBOOK_FLAG);
+		uploadMyBikePic(wv);
+		uploadMyProfilePic(wv);
+		uploadMyBikeInfo(wv);
+		if(uploadFacebookFlag)
+			uploadMyBikePicAtFeed(wv);
+		
+	}
+	
+	private void uploadMyAccout(WorkVectors wv) {
+		fhm = FHaloManager.getInstance();
+		nh.setGetServUrl(Variable.SERVER_URL);
+		nh.addGetParameter("username", fhm.getUserName());
+		nh.addGetParameter("firstName", fhm.getMyFirstName());
+		nh.addGetParameter("lastName", fhm.getMyLastName());
+		nh.addGetParameter("password", "password");
+		nh.executeGet();
+	}
+	
+	private void uploadMyBikeInfo(WorkVectors wv) {
+		fhm = FHaloManager.getInstance();
+		
+		String category = "SHARE";
+		String title = "sell";
+		String writer = fhm.getUserName();
+		
+		String myImagePath = nh.getFileName(wv.getData(WorkVectors.MY_PROFLE_IMG_PATH) +"");
+		String bikeImagePath = nh.getFileName(wv.getData(WorkVectors.BIKE_IMG_PATH) + "");
+		
+		String bikeType = wv.getData(WorkVectors.BIKE_TYPE) + "";
+		String tradeType = wv.getData(WorkVectors.TRADE_TYPE) + "";
+		String shareType = wv.getData(WorkVectors.SHARE_TYPE) + "";
+		
+		String lati = wv.getData(WorkVectors.BIKE_LATITUDE) + "";		
+		String longi = wv.getData(WorkVectors.BIKE_LONGITUDE) + "";
+		
+//		String costPerTime = wv.getData(WorkVectors.COST_TIME) + "";
+//		String costPerDay = wv.getData(WorkVectors.COST_DAY) + "";
+//		String costPerWeek = wv.getData(WorkVectors.COST_WEEK) + "";
+		String content = wv.getData(WorkVectors.BIKE_INFO_CONTENT) + "";
+		
+		
+		nh.setMethodType("get");
+		nh.setGetServUrl(Variable.SERVER_BIKE_INFO_URL);
+		nh.addGetParameter("category", category);
+		nh.addGetParameter("title", title);
+		nh.addGetParameter("writer", writer);
+		nh.addGetParameter("myImagePath", myImagePath);
+		nh.addGetParameter("bikeImagePath", bikeImagePath);
+		nh.addGetParameter("bikeType", bikeType);
+		nh.addGetParameter("tradeType", tradeType);
+		nh.addGetParameter("shareType", shareType);
+		nh.addGetParameter("lati", lati);
+		nh.addGetParameter("longi", longi);
+		nh.addGetParameter("costPerTime", "");
+		nh.addGetParameter("costPerDay", "");
+		nh.addGetParameter("costPerWeek", "");
+		nh.addGetParameter("content", content);
+		nh.executeHttpMethod();
+	}
+	
+	private void uploadMyBikePic(WorkVectors wv) {
+		Log.e(TAG, "uploadmypic");
+		String strPath = wv.getData(WorkVectors.BIKE_IMG_PATH) + "";
+		Log.e(TAG + " uploadMypic",strPath);
+//		nh.doFileUpload(strPath, Variable.SERVER_IMG_URL);
+		uploadMyImage(strPath, Variable.SERVER_IMG_URL);
+		
+		
+	}
+	
+	private void uploadMyProfilePic(WorkVectors wv) {
+		String strPath = wv.getData(WorkVectors.MY_PROFLE_IMG_PATH) + "";
+		uploadMyImage(strPath, Variable.SERVER_IMG_URL);
+	}
+	private void uploadMyImage(String strPath,String serverUrl) {
+		nh.doFileUpload(strPath, serverUrl);
+	}
+			
+	
+	private void uploadMyBikePicAtFeed(WorkVectors wv) {
+		Log.e(TAG, "uploadpic at facebook");
+		fhm = FHaloManager.getInstance();
+		String strImgPath = wv.getData(WorkVectors.BIKE_IMG_PATH) + "";
+		String detail = wv.getData(WorkVectors.BIKE_INFO_CONTENT) + "";
+		String fileName = nh.getFileName(strImgPath);
+//		String 
+		fhm.updatePhote(detail, strImgPath, fileName);
+		
+		
+	}
+
+
+
+}

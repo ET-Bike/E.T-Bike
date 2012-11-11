@@ -1,0 +1,84 @@
+package kr.ac.hufs.smartfinder.dao;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+import kr.ac.hufs.smartfinder.R;
+import kr.ac.hufs.smartfinder.utils.Other;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class DBHelper extends SQLiteOpenHelper {
+	public static final String ROOT = Other.SD_DIR + Other.FOLDER;
+	Context context;
+	public static int DB_VERSION = 19;
+	public DBHelper(Context context) {	
+		
+		super(context, "subway.db", null, DB_VERSION);
+		this.context = context;
+
+	}
+
+	@Override//day weekday slot POI action app
+	public void onCreate(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+
+		db.execSQL("CREATE TABLE subway (line TEXT, id int, name TEXT, lati TEXT ,longi TEXT);");
+		
+		StringTokenizer st;
+		String line;		
+		String lineNo;
+		String id;
+		String name;
+		String lati;
+		String longi;
+		
+		try {
+			Log.e("insert subway data in dbhelper","insert subway data in dbhelper");
+			// br = new BufferedReader(new InputStreamReader(System.in));
+			//BufferedReader br = new BufferedReader(new FileReader(ROOT + "/" +Other.SUBWAY_FILE));
+			BufferedReader br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.subway)));
+			while( (line=br.readLine()) != null ) {	
+				st = new StringTokenizer(line, "\t");
+				Log.e("line : in dbhelper",line);
+				lineNo = st.nextToken();
+				id = st.nextToken();
+				name = st.nextToken();
+				lati = st.nextToken();
+				longi = st.nextToken();
+				//Log.e("Token : in dbhelper",lineNo + " "+ id + " " + name + " " + lati + " " + longi);
+				//Log.e("Query : in dbhelper","INSERT INTO subway VALUES(" + "'" + lineNo + "'" + "," + id + "," + "'" + name + "'" + "," +"'" + lati + "'" + "," + "'" + longi + "'" + ");");
+				if(id.equals("Id")){
+					continue;
+				}
+				//db.execSQL("INSERT INTO log VALUES("+lineNo+" " +"," +"'"+id+"'," +"'"+name+"','"+lati+"','"+lati+"','"+longi+"');");	
+				db.execSQL("INSERT INTO subway VALUES(" + "'" + lineNo + "'" + "," + id + "," + "'" + name + "'" + "," +"'" + lati + "'" + "," + "'" + longi + "'" + ");");
+			}
+			
+			br.close();					
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		
+		
+		
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
+		db.execSQL("DROP TABLE IF EXISTS subway");
+		onCreate(db);
+	}
+	
+
+}

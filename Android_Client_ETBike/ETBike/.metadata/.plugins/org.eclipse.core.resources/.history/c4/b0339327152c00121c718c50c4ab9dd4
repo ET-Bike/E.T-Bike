@@ -1,0 +1,22 @@
+package com.swmaestro.etbike.utils.location;
+
+
+
+import android.content.Context;
+
+public class LocationManager {
+	
+	Context context;
+	LocationManager lm;
+	GPSProvider gProvider;
+	GeoProvider geoPrivider;
+	
+	public LocationManager(Context context) {
+		
+		lm = (LocationManager)context.getSystemService(context.LOCATION_SERVICE);
+		gProvider = new GPSProvider(lm);
+		geoPrivider = new GeoProvider(context);
+		
+	}
+
+}

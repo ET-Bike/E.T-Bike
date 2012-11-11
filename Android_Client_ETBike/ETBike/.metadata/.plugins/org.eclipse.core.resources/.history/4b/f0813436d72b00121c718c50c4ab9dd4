@@ -1,0 +1,174 @@
+package com.swmaestro.etbike.network;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.util.Log;
+
+import com.swmaestro.variable.Variable;
+
+public class NetworkHelper {
+	String TAG = "NetworkHelper";
+	PageStreamer ps;
+
+	public NetworkHelper() {
+		// TODO Auto-generated constructor stub
+		ps = new PageStreamer();
+	}
+
+	public boolean downloadImage(String downloadUrl, String path) {
+
+		int read;
+
+		String sFolderPath = path.substring(0, path.lastIndexOf("/"));
+		makeDir(sFolderPath);
+
+		File fPath = new File(path);
+
+		if (fPath.exists())
+			return true;
+
+		try {
+			URL url = new URL(downloadUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			int len = conn.getContentLength();
+			byte[] bt = new byte[len];
+			InputStream is = conn.getInputStream();
+			FileOutputStream fos = new FileOutputStream(fPath);
+
+			while (true) {
+				read = is.read(bt);
+				if (read <= 0)
+					break;
+				fos.write(bt, 0, read);
+			}
+
+			is.close();
+			fos.close();
+			conn.disconnect();
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+
+	public void makeDir(String folderPath) {
+		File sFolderFile = new File(folderPath);
+		sFolderFile.mkdir();
+	}
+
+	public String getFileName(String downloadUrl) {
+		int index = downloadUrl.lastIndexOf('/');
+		String fileName = downloadUrl.substring(index + 1);
+		return fileName;
+
+	}
+
+	public File getStrPathByFile(String downloadUrl) {
+		String fileName = getFileName(downloadUrl);
+		String strPath = Variable.ROOT_DIR + fileName;
+		return new File(strPath);
+	}
+
+	public String getStrPathByString(String downloadUrl) {
+		String fileName = getFileName(downloadUrl);
+		String strPath = Variable.ROOT_DIR + fileName;
+		return strPath;
+	}
+
+	public void setGetServUrl(String rootURL) {
+		ps.setServURL(rootURL);
+	}
+
+	public void addGetParameter(String key, String value) {
+		ps.add(key, value);
+	}
+
+	public String executeGet() {
+		return ps.executeGet();
+	}
+
+	public void doFileUpload(String strPath, String serverUrl) {
+		try {
+			HttpClient httpClient = new DefaultHttpClient();
+			// String url = "http://172.20.11.235:8080/web1/file.jsp";
+			String url = serverUrl;
+			HttpPost post = new HttpPost(url);
+			File saveFile = new File(strPath);
+			if (saveFile.exists())
+				System.out.println("있");
+
+			FileBody bin = new FileBody(saveFile);
+			MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE);
+			multipart.addPart("upload", bin);
+			
+			post.setEntity(multipart);
+			
+			
+			HttpResponse response = httpClient.execute(post);
+			HttpEntity resEntity = response.getEntity();
+			InputStream stream = resEntity.getContent();
+			Scanner sc = new Scanner(stream);
+
+			while (sc.hasNextLine()) {
+				System.out.println(sc.nextLine());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void PUT(String strPath, String serverUrl) {
+		try {
+			HttpClient httpClient = new DefaultHttpClient();
+			// String url = "http://172.20.11.235:8080/web1/file.jsp";
+			String url = serverUrl;
+			HttpPost post = new HttpPost("http://125.209.193.11:8080/etbike/boards");
+			File saveFile = new File(strPath);
+			if (saveFile.exists())
+				System.out.println("있");
+
+			FileBody bin = new FileBody(saveFile);
+			MultipartEntity multipart = new MultipartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE);
+//			multipart.addPart("upload", bin);
+			
+//			post.setEntity(multipart);
+			post.addHeader("title", value);
+			post.addHeader("writer", value);
+			post.addHeader("ceonter", value);
+			post.addHeader("title", value);
+			
+			
+			HttpResponse response = httpClient.execute(post);
+			HttpEntity resEntity = response.getEntity();
+			InputStream stream = resEntity.getContent();
+			Scanner sc = new Scanner(stream);
+
+			while (sc.hasNextLine()) {
+				System.out.println(sc.nextLine());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+
+}

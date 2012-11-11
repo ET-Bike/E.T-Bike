@@ -1,0 +1,66 @@
+package com.swmaestro.etbike.activity.listview.object;
+
+
+
+import android.graphics.Bitmap;
+
+public class MyBikeItem {
+
+	public Bitmap bitmap;
+
+	
+	public int viewType;
+	public String separatorContent;
+
+	public String myImagePath;
+	public String bikeImagePath;
+	public String bikeType;
+	public String tradeType;
+	public String shareType;
+	public String lati;
+	public String longi;
+
+	public String costPerTime;
+	public String costPerDay;
+	public String costPerWeek;
+	public String detail;
+
+	public MyBikeItem(String imgPath, Bitmap bitmap, String strItem2,
+			String strItem3, int viewType) {
+
+		this.bikeImagePath = imgPath;
+		this.bitmap = bitmap;
+		this.tradeType = strItem2;
+		this.detail = strItem3;
+		this.viewType = viewType;
+
+	}
+
+	public MyBikeItem(String myImagePath, String bikeImagePath, String bikeType, String tradeType,
+			String shareType, String lati, String longi, String costPerTime,
+			String costPerDay, String costPerWeek, String detail, int viewType) {
+		
+		this.myImagePath = myImagePath;
+		
+		this.bikeImagePath = bikeImagePath;		
+		this.bikeType = bikeType;
+		this.shareType = shareType;
+		this.tradeType = tradeType;		
+		this.lati = lati;
+		this.longi = longi;
+		this.costPerTime = costPerTime;
+		this.costPerDay = costPerDay;
+		this.costPerWeek = costPerWeek;
+		this.detail = detail;
+		
+		
+		this.viewType = viewType;
+
+	}
+	
+	public MyBikeItem(String separatorContent, int viewType) {
+		this.separatorContent = separatorContent;
+		this.viewType = viewType;	
+	}
+
+}

@@ -1,0 +1,55 @@
+package com.swmaestro.etbike.serverobject;
+
+import java.util.Date;
+import java.util.Set;
+
+
+public class Board{
+
+	private String title;
+	private String content;
+	private String writer;
+	private BoardCategory category;
+	private Date updatedTime;
+	
+    private Set<Reply> replies;
+	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	public BoardCategory getCategory() {
+		return category;
+	}
+	public void setCategory(BoardCategory category) {
+		this.category = category;
+	}
+	public void setCategoryValue(String value) {
+		try {
+			this.category = BoardCategory.valueOf(value.toUpperCase());
+		} catch (Exception e) {
+			this.category = BoardCategory.HOME;
+		}
+	}
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
+}

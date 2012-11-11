@@ -1,0 +1,10 @@
+<div data-role="page" id="boardViewPage_${id}" data-dom-cache="false">
+	<div data-role="header" data-position="fixed">
+		<h1>${title }</h1>	
+		<a data-rel="back">back</a>
+	</div>
+	
+	<div data-role="content">	
+		{{html content }}
+	</div>
+</div>

@@ -1,0 +1,54 @@
+package com.swmaestro.etbike.activity;
+
+import android.content.Context;
+import android.location.Address;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
+
+class MyDynamicLocationOverlay extends MyLocationOverlay {
+	
+	Context context;
+	String TAG = "MyDynamicLocationOverlay";
+	
+	public MyDynamicLocationOverlay(Context context, MapView mapView) {
+		super(context, mapView);
+		this.context = context;
+	}
+
+	protected boolean dispatchTap() {
+		Toast.makeText(context, "여기가 현재 위치 입니다.", Toast.LENGTH_LONG).show();
+		return false;
+	}
+	
+	public String getLocationDetail() {
+		GeoPoint gp = getMyLocation();
+		Double lat = gp.getLatitudeE6();
+		addr = geocoder.getFromLocation(Double.parseDouble(lat),
+				Double.parseDouble(lon), 5);
+		detailLocation = composeAddressLine(addr.get(0));
+	}
+	
+	
+	
+	private String composeAddressLine(Address addr) {
+		StringBuilder sb = new StringBuilder();
+
+		if (addr.getLocality() != null)
+			sb.append(addr.getLocality() + " ");
+		if (addr.getSubLocality() != null)
+			sb.append(addr.getSubLocality() + " ");
+		if (addr.getThoroughfare() != null)
+			sb.append(addr.getThoroughfare() + " ");
+		// if(addr.getLocality() != null)
+		// sb.append(addr.getSubThoroughfare());
+		Log.e(TAG, sb.toString());
+		return sb.toString();
+	}
+	
+	
+
+}

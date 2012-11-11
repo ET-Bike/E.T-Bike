@@ -1,0 +1,257 @@
+package kr.ac.hufs.smartfinder.worker;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import kr.ac.hufs.objects.OneWayInfo;
+import kr.ac.hufs.objects.PathInfo;
+import kr.ac.hufs.objects.PathList;
+import kr.ac.hufs.smartfinder.FeatureVectors;
+import kr.ac.hufs.smartfinder.dao.DBManager;
+import kr.ac.hufs.smartfinder.plan.Plan;
+import kr.ac.hufs.smartfinder.plan.PlanExecutor;
+import kr.ac.hufs.smartfinder.plan.Worker;
+import kr.ac.hufs.smartfinder.utils.Other;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.google.android.maps.GeoPoint;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.graphics.Color;
+import android.os.Message;
+import android.util.Log;
+
+public class StationRouteWorker extends Worker {
+	Context context;
+	String TAG = "StationRouteWorker";
+	DBManager dbm;
+
+	public StationRouteWorker(Plan plan, Context context) {
+		
+		super(plan);
+		this.context = context;
+		dbm = new DBManager(context);
+		
+	}
+
+	@Override
+	public void onExecute() {
+		Log.e("StationRouteWorker START", "StationRouteWorker START");
+
+		if (Other.workerFlag == false)
+			return;
+
+		FeatureVectors vec = getFeatures();
+		String transferType = vec.getData(FeatureVectors.KEY_TRANSFORTATION_TYPE) + "";
+		
+		if (transferType.equals(FeatureVectors.KEY_BUS)) {
+			getBusStationRoute(vec);
+		} else if (transferType.equals(FeatureVectors.KEY_SUBWAY)) {
+			getSubwayStationRoute(vec);
+		}else if(transferType.equals(FeatureVectors.KEY_ANY)) {
+			getTransferStationRoute(vec);
+		}
+
+		Log.e("StationRouteWorker END", "StationRouteWorker END");
+
+	}
+	
+	private void getTransferStationRoute(FeatureVectors vec) {
+		
+		Log.e(TAG + " getTransferStationRoute " , "method start" );
+		PathList pl = (PathList)vec.getData(FeatureVectors.KEY_PATH);
+		PathInfo pi = pl.get(0);
+		for(int i = 0 ; i < pi.getWayNums(); i++) {
+			OneWayInfo owi = pi.getWay(i);
+			if(owi.getTransType().equals(FeatureVectors.KEY_BUS)) {
+				setBusOneWayInfo(owi);
+			}else {
+				setSubwayOneWayInfo(owi);
+			}
+		}
+		
+		
+	}
+
+	private void getSubwayStationRoute(FeatureVectors vec) {
+		Log.e(TAG, "subway in route worker start");
+		dbm = new DBManager(context);
+		PathList pl = (PathList) vec.getData(FeatureVectors.KEY_PATH);
+		PathInfo pi = pl.get(0);
+		for (int i = 0; i < pi.getWayNums(); i++) {
+			OneWayInfo owi = pi.getWay(i);
+			setSubwayOneWayInfo(owi);
+		}
+		Log.e(TAG, "subway in route worker end");
+		
+	}
+	
+	
+
+	private void getBusStationRoute(FeatureVectors vec) {
+
+		
+		PathList pl = (PathList) vec.getData(FeatureVectors.KEY_PATH);
+		PathInfo pi = pl.get(0);
+
+		for (int j = 0; j < pi.getWayNums(); j++) {
+			OneWayInfo owi = pi.getWay(j);
+			setBusOneWayInfo(owi);
+		}
+
+		 // ArrayList 占쏙옙체占쏙옙 占쏙옙환
+	}
+	
+	private boolean setSubwayOneWayInfo(OneWayInfo owi){
+		//onewayinfo type set
+		owi.setTransType(FeatureVectors.KEY_SUBWAY);
+		owi.setLineColor(Color.rgb(152, 0, 122));
+		String startStation = owi.getStSttLocation();
+		String endStation = owi.getEndSttLocation();
+		String line = owi.getLineId();
+		
+		Cursor cursor = null;
+		
+			cursor = dbm.getSubwayRoute(startStation, endStation,	line);
+			if(Other.workerFlag == false) 
+				return false;
+		while (cursor.moveToNext()) {
+
+			int bLati = (int) ((cursor.getDouble(1)) * 1E6);
+			int bLongi = (int) ((cursor.getDouble(2)) * 1E6);
+
+			owi.addStationGeo(new GeoPoint(bLati, bLongi));
+
+		}
+		return true;
+	}
+	
+	private boolean setBusOneWayInfo(OneWayInfo owi) {
+		//onewayinfo type set
+		//paint.setColor(Color.rgb(0, 166, 127));
+		owi.setTransType(FeatureVectors.KEY_BUS);
+		owi.setLineColor(Color.rgb(0, 166, 127));
+		String serviceUrl = "http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute";
+		Double startLati = Double.parseDouble(owi.getStSttLati());
+		Double startLongi = Double.parseDouble(owi.getStSttLongi());
+
+		Double endLati = Double.parseDouble(owi.getEndSttLati());
+		Double endLongi = Double.parseDouble(owi.getEndSttLongi());
+
+		String stSrch = owi.getLineId();
+
+		Double startDistance = 1000000000000.0;
+		Double endDistance = 1000000000000.0;
+
+		int startNum = 0;
+		int endNum = 0;
+		int swapNum = 0;
+
+		ArrayList<String> stationCacheLati = new ArrayList<String>();
+		ArrayList<String> stationCacheLongi = new ArrayList<String>();
+
+		try {
+			HttpClient httpClient = new DefaultHttpClient();
+
+			HttpGet httpGet = new HttpGet(serviceUrl + "?ServiceKey="
+					+ Other.SERV_KEY + "&busRouteId=" + stSrch);
+			HttpResponse httpResponse = httpClient.execute(httpGet);
+			HttpEntity httpEntity = httpResponse.getEntity();
+
+			DocumentBuilderFactory factory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(httpEntity.getContent());
+			doc.getDocumentElement().normalize();
+
+			NodeList headNodeList = doc.getElementsByTagName("itemList");
+
+			for (int i = 0; i < headNodeList.getLength(); i++) {
+				Node headNode = headNodeList.item(i);
+
+				if (headNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element headLineElement = (Element) headNode;
+
+					NodeList gpsXElement = headLineElement
+							.getElementsByTagName("gpsX");
+					Element subItem = (Element) gpsXElement.item(0);
+					NodeList subElement1 = subItem.getChildNodes();
+					Double longi = Double.parseDouble(subElement1.item(0)
+							.getNodeValue());
+
+					NodeList gpsYElement = headLineElement
+							.getElementsByTagName("gpsY");
+					subItem = (Element) gpsYElement.item(0);
+					NodeList subElement2 = subItem.getChildNodes();
+					Double lati = Double.parseDouble(subElement2.item(0)
+							.getNodeValue());
+
+					stationCacheLati.add(lati + "");
+					stationCacheLongi.add(longi + "");
+
+					if (Math.pow(lati - startLati, 2)	+ Math.pow(longi - startLongi, 2) < startDistance) {
+						startDistance = Math.pow(lati - startLati, 2)	+ Math.pow(longi - startLongi, 2);
+						startNum = i;
+
+					}
+					if (Math.pow(lati - endLati, 2)	+ Math.pow(longi - endLongi, 2) < endDistance) {
+						endDistance = Math.pow(lati - endLati, 2)+ Math.pow(longi - endLongi, 2);
+						endNum = i;
+					}
+
+				}
+
+			}
+
+			if (startNum > endNum) {
+
+				swapNum = startNum;
+				startNum = endNum;
+				endNum = swapNum;
+			}
+
+			for (int k = startNum; k <= endNum; k++) {
+				if (startNum == endNum)
+					break;
+
+				int bLati = (int) (Double.parseDouble(stationCacheLati
+						.get(k)) * 1E6);
+				int bLongi = (int) (Double.parseDouble(stationCacheLongi
+						.get(k)) * 1E6);
+
+				owi.addStationGeo(new GeoPoint(bLati, bLongi));
+			}
+
+			Log.e(TAG, owi.getStationGeoSize() + "");
+			Log.e(TAG, endNum + "");
+
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+}

@@ -1,0 +1,13 @@
+<div id="${dialogId}" class="modal hide fade">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		{{html title}}
+	</div>
+	<div class="modal-body">
+		<p>{{html message}}</p>
+	</div>
+	<div class="modal-footer">
+		<a class="btn" data-dismiss="modal" id="btConfirm-${dialogId}">확인</a>
+		<a class="btn" data-dismiss="modal" id="btCancle-${dialogId}">취소</a>
+	</div>
+</div>

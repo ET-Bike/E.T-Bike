@@ -1,0 +1,113 @@
+package com.swmaestro.etbike.serverobject;
+
+
+
+/**
+ * @author user
+ *
+ */
+public class Board {
+	
+	public BoardCategory category;
+	public String title;
+	public String writer;
+	
+	public String myImagePath;
+	public String bikeImagePath;
+	
+	public String bikeType;
+	public String tradeType;
+	public String shareType;
+	
+	public String lati;
+	public String longi;
+	
+	public String costPerTime;
+	public String costPerDay;
+	public String costPerWeek;
+	public String content;	
+
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	public String getMyImagePath() {
+		return myImagePath;
+	}
+	public void setMyImagePath(String myImagePath) {
+		this.myImagePath = myImagePath;
+	}
+	public String getBikeImagePath() {
+		return bikeImagePath;
+	}
+	public void setBikeImagePath(String bikeImagePath) {
+		this.bikeImagePath = bikeImagePath;
+	}
+	public String getBikeType() {
+		return bikeType;
+	}
+	public void setBikeType(String bikeType) {
+		this.bikeType = bikeType;
+	}
+	public String getTradeType() {
+		return tradeType;
+	}
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+	public String getShareType() {
+		return shareType;
+	}
+	public void setShareType(String shareType) {
+		this.shareType = shareType;
+	}
+	public String getLati() {
+		return lati;
+	}
+	public void setLati(String lati) {
+		this.lati = lati;
+	}
+	public String getLongi() {
+		return longi;
+	}
+	public void setLongi(String longi) {
+		this.longi = longi;
+	}
+	public String getCostPerTime() {
+		return costPerTime;
+	}
+	public void setCostPerTime(String costPerTime) {
+		this.costPerTime = costPerTime;
+	}
+	public String getCostPerDay() {
+		return costPerDay;
+	}
+	public void setCostPerDay(String costPerDay) {
+		this.costPerDay = costPerDay;
+	}
+	public String getCostPerWeek() {
+		return costPerWeek;
+	}
+	public void setCostPerWeek(String costPerWeek) {
+		this.costPerWeek = costPerWeek;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+
+
+	
+
+}

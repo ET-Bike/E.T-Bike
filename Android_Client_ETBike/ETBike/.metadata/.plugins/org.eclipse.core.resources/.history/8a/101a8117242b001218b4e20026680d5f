@@ -1,0 +1,33 @@
+package com.swmaestro.variable;
+
+import com.swmaestro.object.WorkVectors;
+
+import android.os.Environment;
+
+public class Variable {
+	public static final String LOG_TAG = "FacebookCon";
+	  public static boolean D = true;
+	  
+	  public static final int FACEBOOK_AUTH_CODE = 32665;
+	  
+	  public static final String ET_BIKE_FOLDER = "/ETBike/";
+		public static final String SD_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
+		public static final String ROOT_DIR = SD_DIR + ET_BIKE_FOLDER;
+		public static final String MY_PROFILE_DIR  = WORKING_DIR + "myprofile/"
+
+		public static final String KOR_TRADE_TYPE_DELIEVERY = "택배";
+		public static final String KOR_TRADE_TYPE_DIRECT_DEAL = "직거래";
+		
+		public static final String KOR_SHARE_TYPE_RENT = "렌트";
+		public static final String KOR_SHARE_TYPE_DONATION = "기부";
+		public static final String KOR_SHARE_TYPE_SELL = "판매";		
+		
+		public static final String KOR_COST_TIME = "시간당 비용";
+		public static final String KOR_COST_DAY = "일당 비용";
+		public static final String KOR_COST_WEEK = "주당 비용";
+		
+		public static final String KOR_BIKE_TYPE_MOUNTAIN = "산악용";
+		public static final String KOR_BIKE_TYPE_COMMUTE = "통근용";
+		public static final String KOR_BIKE_TYPE_PLAYER = "선수용";
+
+}

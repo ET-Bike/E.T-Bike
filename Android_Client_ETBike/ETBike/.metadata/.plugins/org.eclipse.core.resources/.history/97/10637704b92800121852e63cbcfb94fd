@@ -1,0 +1,14 @@
+package com.fhalo.main;
+
+import com.facebook.halo.framework.common.AccessToken;
+
+
+public class Main {
+	
+	public static void main(String args[]) {
+		//AAACEdEose0cBAHtHXiPTzM7JAFCG8qSd3BKy1hKk2KcZBQZACYX9lR1dvZA12wjygXORCNviXUMQISDQyZC4wqWZCpGCKZBq56j0y4YxZA6hyLta0ZAOWIvm
+		AccessToken.setAccessToken("AAACEdEose0cBAHtHXiPTzM7JAFCG8qSd3BKy1hKk2KcZBQZACYX9lR1dvZA12wjygXORCNviXUMQISDQyZC4wqWZCpGCKZBq56j0y4YxZA6hyLta0ZAOWIvm");
+	}
+
+}
+//354574991265954

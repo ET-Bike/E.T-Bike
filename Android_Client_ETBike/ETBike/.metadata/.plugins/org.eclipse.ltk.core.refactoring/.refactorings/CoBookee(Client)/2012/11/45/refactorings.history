@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;MyListAdapter.java&apos; to &apos;ETBike/src/com.swmaestro.etbike.activity&apos;&#x0D;&#x0A;- Original project: &apos;CoBookee(Client)&apos;&#x0D;&#x0A;- Destination element: &apos;ETBike/src/com.swmaestro.etbike.activity&apos;&#x0D;&#x0A;- Original element: &apos;kr.swmaestro.cobookee.utils.MyListAdapter.java&apos;" description="Copy compilation unit" destination="=ETBike/src&lt;com.swmaestro.etbike.activity" element1="/src&lt;kr.swmaestro.cobookee.utils{MyListAdapter.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1352335964499" units="1" version="1.0"/>
+</session>

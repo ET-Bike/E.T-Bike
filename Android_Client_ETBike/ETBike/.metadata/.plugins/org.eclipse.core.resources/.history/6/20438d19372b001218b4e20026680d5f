@@ -1,0 +1,53 @@
+package com.swmaestro.etbike.activity.listview;
+
+import com.swmaestro.object.WorkVectors;
+
+import android.graphics.Bitmap;
+
+public class MyBikeItem {
+
+	public Bitmap bitmap;
+
+	public String detail;
+	public int viewType;
+
+	public String myImagePath;
+	public String imgPath;
+	public String bikeType;
+	public String tradeType;
+	public String shareType;
+	public String lati;
+	public String longi;
+
+	public String costPerTime;
+	public String costPerDay;
+	public String costPerWeek;
+
+	public MyBikeItem(String imgPath, Bitmap bitmap, String strItem2,
+			String strItem3, int viewType) {
+
+		this.imgPath = imgPath;
+		this.bitmap = bitmap;
+		this.tradeType = strItem2;
+		this.detail = strItem3;
+		this.viewType = viewType;
+
+	}
+
+	public MyBikeItem(String myImagePath, String imgPath, String bikeType,
+			String shareType, String lati, String longi, String costPerTime,
+			String costPerDay, String costPerWeek, String detail) {
+		this.myImagePath = myImagePath;
+		this.imgPath = imgPath;
+		this.bikeType = bikeType;
+		this.shareType = shareType;
+		this.lati = lati;
+		this.longi = longi;
+		this.costPerTime = costPerTime;
+		this.costPerDay = costPerDay;
+		this.costPerWeek = costPerWeek;
+		this.detail = detail;
+
+	}
+
+}

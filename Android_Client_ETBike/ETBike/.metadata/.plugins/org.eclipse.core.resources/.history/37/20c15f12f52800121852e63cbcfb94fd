@@ -1,0 +1,6 @@
+package com.facebook.android;
+
+public class FaceBookInstaceFactory {
+	public static final String "STATE_NULL";
+
+}

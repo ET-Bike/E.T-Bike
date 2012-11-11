@@ -1,0 +1,39 @@
+1352213015770	Rename package 'com.example.etbike'
+1352281864792	Rename package 'com.swmaestro.etbike.activity'
+1352281932798	Rename package 'swmaestro.etbike.activity'
+1352300269250	Delete element
+1352306856280	Rename local variable 'file'
+1352307610061	Rename type 'MainActivity'
+1352308341558	Rename package 'com.swmaestro.var'
+1352308589040	Rename field 'DOWN_LOAD_IMAGE'
+1352308944530	Rename type 'FeatureVectors'
+1352310933572	Rename field 'FOLDER'
+1352311116940	Rename field 'DOWN_LOAD_HOME_IMAGE'
+1352315307306	Rename field 'peopkeIV'
+1352336382079	Move compilation unit
+1352345587333	Rename resource 'titlebarregister.xml'
+1352383741158	Rename resource 'cameradialog.xml'
+1352385601909	Rename local variable 'linear'
+1352390483405	Move compilation units
+1352392123623	Move compilation unit
+1352392135120	Move compilation unit
+1352531424816	Delete element
+1352542777380	Rename local variable 'path'
+1352544403409	Rename field 'WORKING_DIR'
+1352546681204	Rename resource 'myprofilelistviewitem.xml'
+1352547054340	Rename resource 'mdlaviewmybike.xml'
+1352547073201	Rename resource 'mdlaviewseparator.xml'
+1352547163875	Rename resource 'separatoritem.xml'
+1352547183336	Rename resource 'mybikeitem.xml'
+1352548175065	Rename type 'MyItem'
+1352548346699	Rename type 'registerItem'
+1352550120073	Rename package 'com.swemaestro.etbike.dato'
+1352552165607	Rename field 'strItem3'
+1352552175487	Rename field 'strItem2'
+1352556008711	Rename type 'LocationObject'
+1352556036255	Move compilation unit
+1352556040887	Move compilation unit
+1352556044441	Move compilation unit
+1352561717746	Rename local variable 'imgPath'
+1352561748342	Rename field 'imgPath'
+1352571795863	Move file

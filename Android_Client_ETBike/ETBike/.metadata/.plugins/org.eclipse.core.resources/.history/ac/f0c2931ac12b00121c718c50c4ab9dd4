@@ -1,0 +1,43 @@
+package com.facebook.android;
+
+import com.facebook.halo.application.types.User;
+import com.facebook.halo.framework.common.AccessToken;
+
+public class FHaloManager {
+
+	Facebook mFacebook;
+
+	public FHaloManager() {
+		// TODO Auto-generated constructor stub
+		this.mFacebook = FaceBookInstaceFactory.getInstance();
+		AccessToken.setAccessToken(mFacebook.getAccessToken());
+	}
+
+	public String getMyProfilePic() {
+
+		User user = new User();
+		user = user.createInstance("me");
+		return user.getPicture();
+	}
+
+	public String getMyLastName() {
+		
+		User user = new User();
+		user = user.createInstance("me");
+		return user.getLastName();
+
+	}
+	
+	public String getMyLastName() {
+		
+		User user = new User();
+		user = user.createInstance("me");
+		return user.getLastName();
+
+	}
+
+	public boolean publishFeed() {
+		return true;
+	}
+
+}

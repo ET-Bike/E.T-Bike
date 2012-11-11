@@ -1,0 +1,73 @@
+package com.swmaestro.etbike.activity.listview;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.swmaestro.etbike.activity.R;
+import com.swmaestro.etbike.activity.listview.object.RegisterItem;
+
+public class MyListAdapter extends BaseAdapter {
+
+	Context context;
+	LayoutInflater li;
+	ArrayList<RegisterItem> al;
+	PackageManager pm;
+	int layout;
+
+	public MyListAdapter(Context context, int layout, ArrayList<RegisterItem> al) {
+		this.context = context;
+		this.layout = layout;
+		this.al = al;
+		this.li = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		pm = context.getPackageManager();
+
+	}
+
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return al.size();
+	}
+
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return al.get(position).key;
+	}
+
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+
+		if (convertView == null) {
+			convertView = li.inflate(layout, parent, false);
+		}
+
+		if (R.layout.registerfeatureitem == layout) {
+
+			TextView ttv1 = (TextView) convertView
+					.findViewById(R.id.keyTVregisterFeature);
+			ttv1.setText(al.get(position).key);
+
+			TextView ttv2 = (TextView) convertView
+					.findViewById(R.id.valueTVregisterFeature);
+			ttv2.setText(al.get(position).value);
+
+		}
+
+		return convertView;
+
+	}
+
+}

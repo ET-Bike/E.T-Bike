@@ -1,0 +1,11 @@
+package com.swmaestro.etbike.activity.listview;
+
+public class LocationObject {
+	
+	String location;
+	Double latitude;
+	Double longitude;
+	
+	
+
+}

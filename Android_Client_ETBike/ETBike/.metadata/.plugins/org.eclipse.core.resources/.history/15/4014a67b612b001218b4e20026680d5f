@@ -1,0 +1,51 @@
+
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.Scanner;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+
+public class UploadToServer {
+
+	
+	  public void doFileUpload(String path,String serverUrl) {
+          try {
+           HttpClient httpClient = new DefaultHttpClient();  
+           //String url = "http://172.20.11.235:8080/web1/file.jsp";
+           String url = serverUrl;
+           HttpPost post = new HttpPost(url); 
+           File saveFile = new File(path);
+           if(saveFile.exists())
+        	   System.out.println("있");
+           
+           FileBody bin = new FileBody(saveFile);
+           MultipartEntity multipart = 
+            new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);  
+              multipart.addPart("images", bin);
+//              multipart.addPart("id", "doo871128");
+          
+           post.setEntity(multipart);  
+           HttpResponse response = httpClient.execute(post);  
+           HttpEntity resEntity = response.getEntity(); 
+           InputStream stream = resEntity.getContent();
+           Scanner sc = new Scanner(stream);
+           
+           while(sc.hasNextLine()){
+        	   System.out.println(sc.nextLine());
+           }
+          }
+          
+          catch(Exception e){e.printStackTrace();}
+    }  
+		
+}
+;

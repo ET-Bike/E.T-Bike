@@ -1,0 +1,175 @@
+package com.swmaestro.etbike.activity.listview;
+
+import java.util.ArrayList;
+
+import kr.ac.hufs.objects.PathInfo;
+import kr.ac.hufs.objects.PathList;
+import kr.ac.hufs.smartfinder.FeatureVectors;
+import kr.ac.hufs.smartfinder.plan.PlanExecutor;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
+import com.google.android.maps.Projection;
+
+public class MyMapMarker extends ItemizedOverlay {
+
+	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+	private Context mContext;
+	private int color;
+	String TAG = "MyMapMarker";
+
+	public MyMapMarker(Drawable defaultMarker) {
+		super(boundCenterBottom(defaultMarker));
+		// TODO Auto-generated constructor stub
+	}
+
+	public MyMapMarker(Drawable defaultMarker, Context context) {
+		this(defaultMarker);
+		mContext = context;
+		
+
+	}
+
+	public int getColor() {
+		return color;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
+	}
+
+	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+		super.draw(canvas, mapView, shadow);
+		
+
+		int type = (Integer) vec.getData(FeatureVectors.KEY_PLAN_TYPE);
+
+		if (type == PlanExecutor.TYPE_GET_NEAR_STATION
+				|| type == PlanExecutor.TYPE_GET_SPECIFIC_STATION
+				|| type == PlanExecutor.TYPE_GET_STATION_TO_SPECIFIC_BUS) {
+			return;
+		} else {
+			drawPath(vec, canvas, mapView);
+		}
+
+		// Log.e("draw in my map marker end","draw in my map marker end");
+
+	}
+
+	private void drawPath(FeatureVectors vec, Canvas canvas, MapView mapView) {
+		Paint paint = new Paint();
+		paint.setStrokeWidth(8);
+		paint.setAlpha(80);
+
+		PathList pl = (PathList) vec.getData(FeatureVectors.KEY_PATH);
+		PathInfo pi = pl.get(0);
+
+		Projection projection = mapView.getProjection();
+		Point sPoint = new Point();
+		Point ePoint = new Point();
+		String transType = (String) (vec)
+				.getData(FeatureVectors.KEY_TRANSFORTATION_TYPE);
+//		Log.e(TAG + " drawPath ", "wayNum  = " + pi.getWayNums());
+		for (int i = 0; i < pi.getWayNums(); i++) {
+			/*
+			 * 마을버스 ?�경??
+			 */
+			if (pi.getWay(i).getStationGeoSize() == 0) {
+//				Log.e(TAG + "drawPath", "town bus");
+
+				paint.setColor(Color.rgb(0, 166, 127));
+				int bLati = (int) (Double.parseDouble(pi.getWay(i)
+						.getStSttLati()) * 1E6);
+				int bLongi = (int) (Double.parseDouble(pi.getWay(i)
+						.getStSttLongi()) * 1E6);
+
+				int aLati = (int) (Double.parseDouble(pi.getWay(i)
+						.getEndSttLati()) * 1E6);
+				int aLongi = (int) (Double.parseDouble(pi.getWay(i)
+						.getEndSttLongi()) * 1E6);
+
+				projection.toPixels(new GeoPoint(bLati, bLongi), sPoint);
+				projection.toPixels(new GeoPoint(aLati, aLongi), ePoint);
+
+				canvas.drawLine(sPoint.x, sPoint.y, ePoint.x, ePoint.y, paint);
+			}
+
+			else {
+				for (int j = 0; j < pi.getWay(i).getStationGeoSize(); j++) {
+
+					
+//					Log.e(TAG + " drawPath ", "stationGeoSize == "
+//							+ pi.getWay(i).getStationGeoSize() + "");
+
+					if (j == pi.getWay(i).getStationGeoSize() - 1) {
+						break;
+					}
+
+					paint.setColor(pi.getWay(i).getLineColor());
+
+					projection.toPixels(pi.getWay(i).getStationGeo(j), sPoint);
+					projection.toPixels(pi.getWay(i).getStationGeo(j + 1), ePoint);
+
+					canvas.drawPoint(sPoint.x, sPoint.y, paint);
+					canvas.drawLine(sPoint.x, sPoint.y, ePoint.x, ePoint.y, paint);
+
+				}
+			}
+			
+		}
+
+		paint.setColor(Color.BLUE);
+
+		projection.toPixels(
+				(GeoPoint) vec.getData(FeatureVectors.KEY_START_GEO_LOCATION),
+				sPoint);
+		projection.toPixels(pi.getsStationGeo(), ePoint);
+
+		canvas.drawLine(sPoint.x, sPoint.y, ePoint.x, ePoint.y, paint);
+
+		projection.toPixels((GeoPoint) vec.getData(FeatureVectors.KEY_DEST_GEO_LOCATION),	sPoint);
+		projection.toPixels(pi.geteStationGeo(), ePoint);
+
+		canvas.drawLine(sPoint.x, sPoint.y, ePoint.x, ePoint.y, paint);
+
+	}
+
+	public void addOverlay(OverlayItem item, Drawable draw, int color) {
+
+		setColor(color);
+		item.setMarker(draw);
+		mOverlays.add(item);
+		populate();
+	}
+
+	@Override
+	protected OverlayItem createItem(int i) {
+		return mOverlays.get(i);
+	}
+
+	@Override
+	public int size() {
+		return mOverlays.size();
+	}
+
+	@Override
+	protected boolean onTap(int index) {
+		OverlayItem item = mOverlays.get(index);
+		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+		dialog.setTitle(item.getTitle());
+		dialog.setMessage(item.getSnippet());
+		dialog.setPositiveButton("?�인", null);
+		dialog.show();
+		return true;
+	}
+}

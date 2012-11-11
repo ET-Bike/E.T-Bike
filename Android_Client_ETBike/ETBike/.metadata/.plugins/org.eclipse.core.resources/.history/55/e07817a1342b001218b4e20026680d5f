@@ -1,0 +1,50 @@
+package kr.ac.hufs.smartfinder.dao;
+
+import kr.ac.hufs.smartfinder.utils.Other;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
+
+public class DBManager {
+
+	Context context;
+	DBHelper myHelper;
+	
+	Cursor cursor;
+
+	SQLiteDatabase db;
+	
+
+	public DBManager(Context context) {
+		
+		this.context = context;
+		myHelper = new DBHelper(context);
+
+	}
+	/*
+	 * line, id, name, lati, longi
+	 */
+
+	public Cursor getSubwayRoute(String shareType)  {
+		
+		
+		int endID = 0;
+		
+		
+		
+	}
+
+	public Cursor testSelect() {
+		db = myHelper.getWritableDatabase();
+		cursor = db.rawQuery("select * from subway;", null);
+		return cursor;
+
+	}
+	
+
+}

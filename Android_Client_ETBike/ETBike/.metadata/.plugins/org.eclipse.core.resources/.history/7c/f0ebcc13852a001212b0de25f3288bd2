@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="WindowTitleBackground">
+        <!-- 
+        <item name="android:background">@drawable/title_bar</item>
+         -->
+        <item name="android:paddingLeft">8px</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+</resources>

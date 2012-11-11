@@ -1,0 +1,27 @@
+package com.swmaestro.etbike.activity.listview.object;
+
+import android.graphics.Bitmap;
+
+public class MyBikeGsonObject {
+	
+	
+	
+
+	public String myImagePath;
+	public String bikeImagePath;
+	public String bikeType;
+	public String tradeType;
+	public String shareType;
+	public String lati;
+	public String longi;
+
+	public String costPerTime;
+	public String costPerDay;
+	public String costPerWeek;
+	public String content;
+
+
+
+	
+
+}

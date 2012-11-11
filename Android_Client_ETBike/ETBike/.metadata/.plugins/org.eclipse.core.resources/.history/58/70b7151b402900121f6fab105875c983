@@ -1,0 +1,71 @@
+package com.swmaestro.etbike.activity.listview;
+
+import java.util.ArrayList;
+
+import com.swmaestro.etbike.activity.R.id;
+import com.swmaestro.etbike.activity.R.layout;
+
+import kr.swmaestro.cobookee.R;
+import kr.swmaestro.cobookee.activity.BooklistActivity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
+
+public class MyListAdapter extends BaseAdapter {
+
+	Context context;
+	LayoutInflater li;
+	ArrayList<MyItem> al;
+	PackageManager pm;
+	int layout;
+
+	public MyListAdapter(Context context, int layout, ArrayList<MyItem> al) {
+		this.context = context;
+		this.layout = layout;
+		this.al = al;
+		this.li = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		pm = context.getPackageManager();
+
+	}
+
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return al.size();
+	}
+
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return al.get(position).bmItem1;
+	}
+
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+	
+	public String getItemKey(int position) {
+		return al.get(position).strItem3;
+	}
+
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+
+		if (convertView == null) {
+			convertView = li.inflate(layout, parent, false);
+		}
+		
+
+		return null;
+
+	}
+
+}

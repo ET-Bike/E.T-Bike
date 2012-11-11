@@ -1,0 +1,59 @@
+package kr.ac.hufs.smartfinder.dao;
+
+import kr.ac.hufs.smartfinder.utils.Other;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
+
+public class DBManager {
+
+	Context context;
+	DBHelper myHelper;
+	
+	Cursor cursor;
+
+	SQLiteDatabase db;
+	
+
+	public DBManager(Context context) {
+		
+		this.context = context;
+		myHelper = new DBHelper(context);
+
+	}
+	/*
+	 * line, id, name, lati, longi
+	 */
+
+	public Cursor getMyBikeCursor(String shareType)  {
+		
+		db = myHelper.getReadableDatabase();
+		cursor = db.rawQuery("select * from my where sharetype = " + "'" + shareType + "'" + ";" ,null);
+		
+		return cursor;
+	}
+
+	public Cursor testSelect() {
+		db = myHelper.getWritableDatabase();
+		cursor = db.rawQuery("select * from mybike;", null);
+		return cursor;
+
+	}
+	
+	/*
+	 * QL("CREATE TABLE myprofile (line TEXT, id int, name TEXT, lati TEXT ,longi TEXT);");
+		db.execSQL("CREATE TABLE mybike (myimagepath TEXT, bikeimagepath TEXT, biketype TEXT, tradetype TEXT ,sharetype TEXT, lati TEXT, " +
+				"longi TEXT, costpertime TEXT, costperday TEXT, costperweek TEXT, detail TEXT);");
+	 */
+	
+	public boolean insertMyBike(MyBikeItem bmi) {
+		
+	}
+	
+
+}

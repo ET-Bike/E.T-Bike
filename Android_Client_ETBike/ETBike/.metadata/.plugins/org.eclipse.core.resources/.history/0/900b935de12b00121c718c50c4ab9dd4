@@ -1,0 +1,44 @@
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+
+public class Main {
+	public static void main(String args[]) {
+		PUT("", "");
+	}
+	
+	public static void PUT(String strPath, String serverUrl) throws IOException {
+//		try {
+//
+//			 
+//			  HttpClient http = new DefaultHttpClient();
+//			    HttpPut putmethod = new HttpPut("http://125.209.193.11:8080/etbike/boards");
+//			    
+//			    
+//			    HttpResponse response = http.execute(putmethod);
+//			    HttpEntity resEntity = response.getEntity();
+//				InputStream stream = resEntity.getContent();
+//				Scanner sc = new Scanner(stream);
+//
+//				while (sc.hasNextLine()) {
+//					System.out.println(sc.nextLine());
+//				}
+//			
+//   
+//			    
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		
+		URL url = new URL("http://www.example.com/resource");
+		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+		httpCon.setDoOutput(true);
+		httpCon.setRequestProperty(
+		    "Content-Type", "application/x-www-form-urlencoded" );
+		httpCon.setRequestMethod("PUT");
+		httpCon.connect();
+	}
+	
+}

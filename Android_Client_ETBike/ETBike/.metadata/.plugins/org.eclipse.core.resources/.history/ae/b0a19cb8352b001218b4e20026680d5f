@@ -1,0 +1,25 @@
+package com.swmaestro.etbike.activity.listview;
+
+import com.swmaestro.object.WorkVectors;
+
+import android.graphics.Bitmap;
+
+public class MyBikeItem {
+
+	public String imgPath;
+	public Bitmap bitmap;
+	public String strItem2;
+	public String strItem3;
+	public int viewType;
+
+	public MyBikeItem(String imgPath, Bitmap bitmap, String strItem2, String strItem3,int viewType) {
+
+		this.imgPath = imgPath;
+		this.bitmap = bitmap;
+		this.strItem2 = strItem2;
+		this.strItem3 = strItem3;
+		this.viewType = viewType;
+
+	}
+
+}

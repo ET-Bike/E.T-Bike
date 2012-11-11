@@ -1,0 +1,72 @@
+package com.swmaestro.etbike.activity.listview;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class MyListAdapter extends BaseAdapter {
+
+	Context context;
+	LayoutInflater li;
+	ArrayList<MyItem> al;
+	PackageManager pm;
+	int layout;
+
+	public MyListAdapter(Context context, int layout, ArrayList<MyItem> al) {
+		this.context = context;
+		this.layout = layout;
+		this.al = al;
+		this.li = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		pm = context.getPackageManager();
+
+	}
+
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return al.size();
+	}
+
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return al.get(position).bmItem1;
+	}
+
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+	
+	public String getItemKey(int position) {
+		return al.get(position).strItem3;
+	}
+
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+
+		if (convertView == null) {
+			convertView = li.inflate(layout, parent, false);
+		}
+		
+		
+		ImageView iv = (ImageView)convertView.findViewById(com.swmaestro.etbike.activity.R.id.item1IVMyProfileViewItem);
+		TextView tv1 = (TextView)convertView.findViewById(com.swmaestro.etbike.activity.R.id.item2TVMyProfileViewItem);
+		TextView tv2 = (TextView)convertView.findViewById(com.swmaestro.etbike.activity.R.id.item3TVMyProfileViewItem);
+		
+		iv.setImageBitmap(al.get(position).bmItem1);
+		iv.setImageBitmap(al.get(position).strItem2);
+
+		
+
+		return convertView;
+
+	}
+
+}

@@ -1,0 +1,59 @@
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
+
+import javax.swing.text.html.parser.Entity;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+
+public class Main {
+	public static void main(String args[]) {
+		PUT("", "");
+	}
+	
+	public static void PUT(String strPath, String serverUrl) {
+		try {
+			 URL u = new URL("https://api.bitbucket.org/1.0/repositories/myname/myproject/issues/1/");
+//		        HttpURLConnection c = (HttpURLConnection) u.openConnection();
+//		        c.addRequestProperty("Authorization", "Basic "+Base64.encodeToString(("user:password").getBytes(), false));
+//		        c.setRequestMethod("PUT");
+//		        
+//		        c.setDoOutput(true);
+//		        c.
+//		        OutputStreamWriter out = new OutputStreamWriter(c.getOutputStream());
+//		        out.write("title=hello+world");
+//		        out.close();
+//		        c.connect();
+//		        System.out.println(c.getResponseCode()+" "+c.getResponseMessage());
+			 
+			  HttpClient http = new DefaultHttpClient();
+			    HttpPut putmethod = new HttpPut("http://125.209.193.11:8080/etbike/boards");
+//			    putmethod.setEntity(new StringEntity(data));
+//			    putmethod.addHeader("title", "조영국");
+//			    putmethod.addHeader("writer", "방구");
+//			    putmethod.addHeader("content", "영궈");
+//			    putmethod.addHeader("categoryValue", "home");
+			    
+
+			    putmethod.setEntity(entity)
+			    HttpResponse response = http.execute(putmethod);
+			    HttpEntity resEntity = response.getEntity();
+				InputStream stream = resEntity.getContent();
+				Scanner sc = new Scanner(stream);
+
+				while (sc.hasNextLine()) {
+					System.out.println(sc.nextLine());
+				}
+			    
+			    
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+}

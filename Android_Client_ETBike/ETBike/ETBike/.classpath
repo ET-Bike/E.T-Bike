@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/user/Desktop/개발프로그램/jar/fHalo.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Desktop/개발프로그램/jar/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Desktop/개발프로그램/jar/httpclient-4.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Desktop/개발프로그램/jar/httpcore-4.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Desktop/개발프로그램/jar/httpmime-4.2.1.jar"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

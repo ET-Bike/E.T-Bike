@@ -1,0 +1,9 @@
+package com.swmaestro.etbike.activity;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public class LoadingActivity extends Activity {
+
+	public void onCreate(Bundle )
+}

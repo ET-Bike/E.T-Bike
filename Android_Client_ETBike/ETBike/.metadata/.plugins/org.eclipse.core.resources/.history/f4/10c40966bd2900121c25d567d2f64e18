@@ -1,0 +1,163 @@
+package kr.ac.hufs.smartfinder.worker;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.google.android.maps.GeoPoint;
+
+import kr.ac.hufs.smartfinder.FeatureVectors;
+import kr.ac.hufs.smartfinder.plan.Plan;
+import kr.ac.hufs.smartfinder.plan.Worker;
+import kr.ac.hufs.smartfinder.utils.Other;
+import kr.ac.hufs.smartfinder.utils.VarCompareManager;
+import kr.ac.hufs.smartfinder.utils.locationutil.GPSProvider;
+import kr.ac.smartfinder.activity.POIListPref;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
+
+public class LocationWorker extends Worker {
+
+	GPSProvider gProvider;
+	Context mContext;
+	Message msg;
+	Geocoder geocoder;
+	List<Address> addr;
+	LocationManager lm;
+
+	// public GPSProvider(LocationManager mLocMan) {
+	public LocationWorker(Plan plan, Context context) {
+		super(plan);
+		this.mContext = context;
+		msg = new Message();
+		geocoder = new Geocoder(context);
+		Log.e("location manager", "location manager");
+		lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		try {
+
+			gProvider = new GPSProvider(lm);
+
+		} catch (IllegalArgumentException e) {
+
+			msg.what = 0;
+			mHandler.sendMessage(msg);
+			Log.e("gprovider illegalexeption", "gprovider illegalexeption");
+
+		}
+	}
+
+	@Override
+	public void onExecute() { // current location finder
+		// Get GPS data from GPS Provider
+
+		Log.e("LocationWorker start", "LocationWorker start");
+
+		if (Other.workerFlag == false)
+			return;
+		FeatureVectors vec = getFeatures();
+		String startLocation = vec.getData(FeatureVectors.KEY_START_LOCATION) + "";
+		String startLati = null;
+		String startLongi = null;
+		boolean poiFlag = false;
+		VarCompareManager vcm = new VarCompareManager();
+
+		try {
+			if (vcm.compareMsg(VarCompareManager.LOCATION_MSG, startLocation)) {
+				Log.e("use GPS in locationworker", "use GPS in locationworker");
+				//Looper.prepare();
+
+				startLocation = "현재 위치";
+				Looper.prepare();
+				
+				startLati = gProvider.getSLatitude();
+				startLongi = gProvider.getSLongitude();
+				//127.027703&tmY=37.497978
+				
+				//startLati = "37.497978";
+				//startLongi = "127.027703";
+				//Looper.loop();
+				//Log.e("admin area", addr.get(0).toString());
+
+			} else {
+				SharedPreferences sr = mContext.getSharedPreferences("PrefLoc",Activity.MODE_PRIVATE);
+				for (int i = 0; i <= POIListPref.POI_SIZE; i++) {
+					String poi = sr.getString("poiName" + i, "");
+					String lati = sr.getString("poiLat" + i, "");
+					String longi = sr.getString("poiLon" + i, "");
+					if (vec.getData(FeatureVectors.KEY_START_LOCATION).equals(poi)) {
+						startLocation = poi;
+						startLati = lati;
+						startLongi = longi;
+						poiFlag = true;
+						break;
+					}
+				}
+				if (poiFlag == false) {
+					Log.e("use GEO in locationworker",
+							"use GEO in locationworker");
+
+					addr = geocoder.getFromLocationName(
+							vec.getData(FeatureVectors.KEY_START_LOCATION)
+									.toString(), 5);
+					startLocation = vec.getData(FeatureVectors.KEY_START_LOCATION) + "";
+					startLati = addr.get(0).getLatitude() + "";
+					startLongi = addr.get(0).getLongitude() + "";
+					System.out.println("start" + startLati + startLongi);
+
+				}
+
+			}
+			
+//			//http://ws.bus.go.kr/api/rest/pathinfo/getPathInfoByBus?ServiceKey=zNKCKTmS6sFwl3Mj%2FcbokZlW8L9sGFgucmlAeBLzHlyS7LBtco2X82mfiP%2Fg3lA8nCCy1AB%2Bx6MiitfLpHNOLw%3D%3D&startX=127.0015708&startY=37.5066192&endX=-86.3998714&endY=31.3190164
+
+			vec.put(FeatureVectors.KEY_START_LATITUDE, startLati);
+			vec.put(FeatureVectors.KEY_START_LONGITUDE, startLongi);
+			vec.put(FeatureVectors.KEY_START_LOCATION, startLocation);
+			
+			int bLati = (int) (Double.parseDouble(startLati) * 1E6);
+			int bLongi = (int) (Double.parseDouble(startLongi) * 1E6);
+
+			vec.put(FeatureVectors.KEY_START_GEO_LOCATION, "GeoPoint",
+					new GeoPoint(bLati, bLongi));
+			Log.e("LocationWorker end", "LocationWorker end");
+
+		} catch (NullPointerException e) {
+
+			msg.what = 1;
+			mHandler.sendMessage(msg);
+
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			Other.workerFlag = false;
+			if (msg.what == 0) {
+				Toast.makeText(mContext, "gps 활성화 실패 in location worker", Toast.LENGTH_LONG)
+						.show();
+				return;
+			} else if (msg.what == 1) {
+				Toast.makeText(mContext, "nullpointer exception이 발생 in locationworker.", Toast.LENGTH_LONG)
+						.show();
+				return;
+			}
+		}
+	};
+
+}

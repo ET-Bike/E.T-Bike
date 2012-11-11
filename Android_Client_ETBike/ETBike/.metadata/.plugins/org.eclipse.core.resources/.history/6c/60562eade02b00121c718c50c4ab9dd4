@@ -1,0 +1,42 @@
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
+
+import javax.swing.text.html.parser.Entity;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+
+public class Main {
+	public static void main(String args[]) {
+		PUT("", "");
+	}
+	
+	public static void PUT(String strPath, String serverUrl) {
+		try {
+
+			 
+			  HttpClient http = new DefaultHttpClient();
+			    HttpPut putmethod = new HttpPut("http://125.209.193.11:8080/etbike/boards");
+			    
+			    
+			    HttpResponse response = http.execute(putmethod);
+			    HttpEntity resEntity = response.getEntity();
+				InputStream stream = resEntity.getContent();
+				Scanner sc = new Scanner(stream);
+
+				while (sc.hasNextLine()) {
+					System.out.println(sc.nextLine());
+				}
+			    
+			    
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+}

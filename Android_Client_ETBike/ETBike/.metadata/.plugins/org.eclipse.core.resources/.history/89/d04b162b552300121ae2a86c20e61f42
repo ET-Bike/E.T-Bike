@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<decorators defaultdir="/WEB-INF/sitemesh/decorators">
+    <decorator name="null" />
+    <decorator name="printable" />
+    
+    <decorator name="web_common" page="web_common.jsp" />
+    <decorator name="web_board" page="web_board.jsp" />
+    <decorator name="mobile_common" page="mobile_common.jsp" />
+</decorators>

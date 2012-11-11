@@ -1,0 +1,8 @@
+package com.swmaestro.etbike.activity.listview;
+
+public class registerItem {
+	
+	String key;
+	String value;
+
+}

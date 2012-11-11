@@ -1,0 +1,28 @@
+package com.facebook.android;
+
+public class FaceBookInstaceFactory {
+	public static final String STATE_NULL = "STATE_NULL";
+	public static final String STATE_NORMAL = "STATE_NORMAL";
+	
+	private String state = null;
+	
+	private Facebook mFacebook;
+	
+	public void setFaceBook(Facebook fb) {
+		state = STATE_NORMAL;
+		mFacebook = fb;
+	}
+	
+	public Facebook getInstance() {
+		NullPointerException npe;
+		if(state.equals(STATE_NULL)) {
+			throw npe;
+		}
+		
+	}
+	
+	
+	
+
+}
+

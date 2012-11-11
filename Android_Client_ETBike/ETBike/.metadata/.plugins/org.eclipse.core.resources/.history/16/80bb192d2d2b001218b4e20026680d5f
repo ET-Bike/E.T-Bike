@@ -1,0 +1,12 @@
+package com.swmaestro.etbike.activity.listview;
+
+public class RegisterItem {
+	
+	String key;
+	String value;
+	
+	public RegisterItem() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

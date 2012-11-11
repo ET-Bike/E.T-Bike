@@ -1,0 +1,9 @@
+package com.swmaestro.etbike.network;
+
+public class DownLoadThread extends Thread {
+	
+	public void run() {
+		
+	}
+
+}

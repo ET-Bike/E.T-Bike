@@ -1,0 +1,5 @@
+package com.swmaestro.etbike.activity;
+
+public class LoadingActivity {
+
+}

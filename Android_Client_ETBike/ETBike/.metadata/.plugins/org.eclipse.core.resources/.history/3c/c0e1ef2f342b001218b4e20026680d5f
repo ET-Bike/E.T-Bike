@@ -1,0 +1,107 @@
+package kr.ac.hufs.smartfinder.dao;
+
+import kr.ac.hufs.smartfinder.utils.Other;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
+
+public class DBManager {
+
+	Context context;
+	DBHelper myHelper;
+	
+
+
+	public DBManager(Context context) {
+		
+		this.context = context;
+		myHelper = new DBHelper(context);
+
+	}
+	/*
+	 * line, id, name, lati, longi
+	 */
+
+	public Cursor getSubwayRoute(String startStation, String endStation, String line)  {
+		
+		
+		int endID = 0;
+		int sNearLine = 0;
+		int lNearLine = 0;
+		int startID = 0;
+		db = myHelper.getReadableDatabase();
+		
+		startCursor = db.rawQuery("select id from subway where line = " + "'" + line + "'" + " and " + "name " + "=" + "'" + startStation + "'" + ";" ,null);
+		Log.e("start cursor query in subwayroute","select id from subway where line = " + "'" + line + "'" + " and " + "name " + "=" + "'" + startStation + "'" + ";");
+		startCursor.moveToFirst();
+		try {
+			String lineN = startCursor.getString(0);
+			sNearLine = Integer.parseInt(lineN.substring(0, 1)) * 1000;
+			lNearLine = Integer.parseInt(lineN.substring(0, 1)) * 1000 + 999;
+			startID = startCursor.getInt(0);
+		} catch (CursorIndexOutOfBoundsException e) {
+			errMsg = "노선도 " + line + "에 " + startStation + "이 없습니다.";
+			handler.sendEmptyMessage(0);
+		}
+		
+		try {
+		endCursor = db.rawQuery("select id from subway where line = " + "'" + line + "'" + " and " + "name " + "=" + "'" + endStation + "'" + " and " + "id between " + sNearLine + " and " + lNearLine + ";", null);
+		Log.e("end cursor query in subwayroute","select id from subway where line = " + "'" + line + "'" + " and " + "name " + "=" + "'" + endStation + "'" + " and " + "id between " + sNearLine + " and " + lNearLine + ";");
+		
+		endCursor.moveToFirst();
+		endID = endCursor.getInt(0);
+		} catch (CursorIndexOutOfBoundsException e) {
+			// TODO: handle exception
+			errMsg = "노선도 line " + line + "호선 이름 " + endStation + "이 없습니다.";
+			handler.sendEmptyMessage(0);
+			
+		}
+		//08-08 05:14:57.705: E/end cursor query in subwayroute(5486): select id from subway where line = '2호선' and name ='합정' and id between 4000 and 4999;
+		
+		
+		Log.e("start ID endID in subway query", startID + " " + endID);
+		
+		
+		String query = "select line, lati, longi from subway where line = " + "'" +line + "'"+ " and " + "id " + " between " + startID + " and " + endID + ";";
+		resultCursor = db.rawQuery(query, null);
+		
+		Log.e("result query in subway query ","select line, lati, longi from subway where line = " + "'" +line + "'"+ " and " + "id " + " between " + startID + " and " + endID + ";");
+		
+		if(startID > endID) {
+			Log.e("start id > endID","start id > endID");
+			query = "select line, lati, longi from subway where line = " + "'" +line + "'"+ " and " + "id " + " between " + endID + " and " + startID + ";";
+			resultCursor = db.rawQuery(query, null);
+			
+		}
+		Log.e("result cursor query", query);
+		Log.e("result cursor's count num : ", resultCursor.getCount() + "");
+		
+		return resultCursor;
+
+	}
+
+	public Cursor testSelect() {
+		db = myHelper.getWritableDatabase();
+		startCursor = db.rawQuery("select * from subway;", null);
+		return startCursor;
+
+	}
+	
+	Handler handler = new Handler(){ 
+		public void handleMessage(Message msg) {
+			Log.e(TAG,"handler");
+			if(msg.what == 0) {
+				Toast.makeText(context, errMsg, Toast.LENGTH_LONG).show();
+				Other.workerFlag = false;
+				return;
+			}
+			
+		}
+	};
+
+}
