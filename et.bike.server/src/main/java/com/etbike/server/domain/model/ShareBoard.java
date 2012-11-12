@@ -4,27 +4,15 @@ import java.util.Date;
 
 import java.util.Set;
 
-
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-
 import com.etbike.server.support.utils.TimeUtils;
-
-
-
-
 
 public class ShareBoard {
 
 	private static final long serialVersionUID = -3357089862684971998L;
 
-
-
 	private String title;
-
-	
 
 	private String content;
 
@@ -32,11 +20,7 @@ public class ShareBoard {
 
 	private BoardCategory category;
 
-
-
 	private Date updatedTime;
-
-	
 
 	private String myImagePath;
 
@@ -58,15 +42,18 @@ public class ShareBoard {
 
 	private String costPerWeek;
 
-	public ShareBoard() {}
+	public ShareBoard() {
+	}
 
-	public ShareBoard(String title, String content,String writer,BoardCategory category
+	public ShareBoard(String title, String content, String writer,
+			BoardCategory category
 
-			 ,Date updatedTime,String myImagePath,String bikeImagePath
+			, Date updatedTime, String myImagePath, String bikeImagePath
 
-			 ,String bikeType,String tradeType,String shareType,String lati,String longi,String costPerTime
+			, String bikeType, String tradeType, String shareType, String lati,
+			String longi, String costPerTime
 
-			 ,String costPerDay,String costPerWeek) {
+			, String costPerDay, String costPerWeek) {
 
 		// TODO Auto-generated constructor stub
 
@@ -234,17 +221,9 @@ public class ShareBoard {
 
 	}
 
-////
+	// //
 
-	
-
-
-
-    private Set<Reply> replies;
-
-	
-
-
+	private Set<Reply> replies;
 
 	public String getTitle() {
 
@@ -320,20 +299,16 @@ public class ShareBoard {
 
 	}
 
-	public String getUpdatedTimestamp(){
+	public String getUpdatedTimestamp() {
 
 		Date date = getUpdatedTime();
 
 		return date != null ?
 
-				TimeUtils.getTimeStamp(date.getTime())
+		TimeUtils.getTimeStamp(date.getTime())
 
-				: "";
+		: "";
 
 	}
 
-
-
 }
-
-
