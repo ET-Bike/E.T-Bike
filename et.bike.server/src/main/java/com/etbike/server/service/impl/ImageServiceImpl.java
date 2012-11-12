@@ -16,6 +16,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.etbike.server.domain.model.UploadedFile;
+import com.etbike.server.persistence.BoardRepository;
 import com.etbike.server.persistence.FileRepository;
 import com.etbike.server.service.ImageService;
 import com.etbike.server.support.img.ThumbnailCreatable;
@@ -77,7 +78,7 @@ public class ImageServiceImpl implements ImageService {
 	    uploadedFileBean.setFileName(originFileName);
 	    uploadedFileBean.setFilePath(uploadedFileFullPath);
 	    uploadedFileBean.setFileSize(String.valueOf(multipartFile.getSize()));
-
+	    uploadedFileBean.setFileDownloadUrl("http://125.209.193.11:8080/etbike/img/"+uploadedFileBean.getId());
 	    fileRepository.save(uploadedFileBean);
 	    
 	    

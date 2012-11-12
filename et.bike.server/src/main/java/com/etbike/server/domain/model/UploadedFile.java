@@ -12,6 +12,8 @@ public class UploadedFile extends AbstractPersistable<Long>{
 	private String fileName;
 	private String filePath;
 	private String fileSize;
+	private String fileDownloadUrl;
+	
 	
 	public String getFileName() {
 		return fileName;
@@ -31,9 +33,15 @@ public class UploadedFile extends AbstractPersistable<Long>{
 	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
 	}
-
+	public String getFileDownloadUrl() {
+		return fileDownloadUrl;
+	}
+	public void setFileDownloadUrl(String fileDownloadUrl) {
+		this.fileDownloadUrl = fileDownloadUrl;
+	}
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }
