@@ -4,13 +4,13 @@ import java.util.List;
 
 public class MyBikeList {
 	
-	private List<Board> myBikeBoard;
+	private List<ShareBoard> myBikeBoard;
 
-	public List<Board> getMyBikeBoard() {
+	public List<ShareBoard> getMyBikeBoard() {
 		return myBikeBoard;
 	}
 
-	public void setMyBikeBoard(List<Board> myBikeBoard) {
+	public void setMyBikeBoard(List<ShareBoard> myBikeBoard) {
 		this.myBikeBoard = myBikeBoard;
 	}
 	
