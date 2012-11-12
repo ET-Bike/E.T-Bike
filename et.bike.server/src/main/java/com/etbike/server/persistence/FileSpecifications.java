@@ -13,11 +13,11 @@ import com.etbike.server.domain.model.UploadedFile;
 public class FileSpecifications {
 
 
-	public static Specification<UploadedFile> isfileName(final String searchTerm){
+	public static Specification<UploadedFile> isfileName(final String fileName){
 		return new Specification<UploadedFile>(){
 			@Override
 			public Predicate toPredicate(Root<UploadedFile> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.like(root.<String>get(UploadedFile_.fileName), getLikePattern(searchTerm));
+				return cb.equal(root.<String>get(UploadedFile_.fileName), fileName);
 			}
 		};
 	}

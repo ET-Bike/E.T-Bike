@@ -77,8 +77,10 @@ public class BoardRepoController {
 				 , updatedTime, myImagePath, bikeImagePath
 				 , bikeType, tradeType, shareType, lati, longi, costPerTime
 				 , costPerDay, costPerWeek);
-		List<UploadedFile> files =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
-		board.setBikeImagePath(files.get(files.size() - 1).getFileDownloadUrl());
+		List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
+		board.setBikeImagePath(bikeImages.get(bikeImages.size() - 1).getFileDownloadUrl());
+		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
+		board.setBikeImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
 		boardRepository.saveAndFlush(board);
 		
 		System.err.println("GET Error");
