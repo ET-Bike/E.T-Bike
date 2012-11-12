@@ -80,7 +80,7 @@ public class BoardRepoController {
 		List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
 		board.setBikeImagePath(bikeImages.get(bikeImages.size() - 1).getFileDownloadUrl());
 		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
-		board.setBikeImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
+		board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
 		boardRepository.saveAndFlush(board);
 		
 		System.err.println("GET Error");
