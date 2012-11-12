@@ -16,9 +16,12 @@ import com.etbike.server.domain.model.Board;
 import com.etbike.server.domain.model.BoardCategory;
 import com.etbike.server.domain.model.MyBikeList;
 import com.etbike.server.domain.model.ShareBoard;
+import com.etbike.server.domain.model.UploadedFile;
 import com.etbike.server.persistence.AccountRepository;
 import com.etbike.server.persistence.BoardRepository;
 import com.etbike.server.persistence.BoardSpecifications;
+import com.etbike.server.persistence.FileRepository;
+import com.etbike.server.persistence.FileSpecifications;
 import com.etbike.server.persistence.ReplyRepository;
 
 @Controller
@@ -26,6 +29,7 @@ public class BoardRepoController {
 	@Autowired private BoardRepository boardRepository;
 	@Autowired private ReplyRepository replyRepository;
 	@Autowired private AccountRepository accountRepository;
+	@Autowired private FileRepository fileRepository;
 	
 	@RequestMapping(value="/shareBoard/getMyBikeList/{username}")
 	public String getMyDealList(@PathVariable String username, ModelMap map){
@@ -73,6 +77,8 @@ public class BoardRepoController {
 				 , updatedTime, myImagePath, bikeImagePath
 				 , bikeType, tradeType, shareType, lati, longi, costPerTime
 				 , costPerDay, costPerWeek);
+		List<UploadedFile> files =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
+		board.setBikeImagePath(files.get(files.size() - 1).getFileDownloadUrl());
 		boardRepository.saveAndFlush(board);
 		
 		System.err.println("GET Error");
