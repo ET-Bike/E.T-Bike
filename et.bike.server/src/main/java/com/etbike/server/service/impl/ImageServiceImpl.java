@@ -78,8 +78,8 @@ public class ImageServiceImpl implements ImageService {
 	    uploadedFileBean.setFileName(originFileName);
 	    uploadedFileBean.setFilePath(uploadedFileFullPath);
 	    uploadedFileBean.setFileSize(String.valueOf(multipartFile.getSize()));
-	    uploadedFileBean.setFileDownloadUrl("http://125.209.193.11:8080/etbike/img/"+uploadedFileBean.getId());
 	    fileRepository.save(uploadedFileBean);
+	    fileRepository.findOne(uploadedFileBean.getId()).setFileDownloadUrl("http://125.209.193.11:8080/etbike/img/"+uploadedFileBean.getId());
 	    
 	    
 		Map<String, String> fileInfo = new HashMap<String, String>();
