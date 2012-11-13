@@ -36,6 +36,10 @@ public class Board extends AbstractPersistable<Long>{
 	private String costPerTime;
 	private String costPerDay;
 	private String costPerWeek;
+	private int like;          
+	private String  dealWith;          
+	private String bikeImagePathThumb;
+	
 	public Board() {}
 	public Board(String title, String content,String writer,BoardCategory category
 			 ,Date updatedTime,String myImagePath,String bikeImagePath
@@ -57,6 +61,25 @@ public class Board extends AbstractPersistable<Long>{
 		this.costPerTime = costPerTime;
 		this.costPerDay = costPerDay;
 		this.costPerWeek = costPerWeek;
+	}
+	
+	public int getLike() {
+		return like;
+	}
+	public void setLike(int like) {
+		this.like = like;
+	}
+	public String getDealWith() {
+		return dealWith;
+	}
+	public void setDealWith(String dealWith) {
+		this.dealWith = dealWith;
+	}
+	public String getBikeImagePathThumb() {
+		return bikeImagePathThumb;
+	}
+	public void setBikeImagePathThumb(String bikeImagePathThumb) {
+		this.bikeImagePathThumb = bikeImagePathThumb;
 	}
 	public String getMyImagePath() {
 		return myImagePath;

@@ -13,34 +13,23 @@ public class ShareBoard {
 	private static final long serialVersionUID = -3357089862684971998L;
 
 	private String title;
-
 	private String content;
-
 	private String writer;
-
 	private BoardCategory category;
-
 	private Date updatedTime;
-
 	private String myImagePath;
-
 	private String bikeImagePath;
-
 	private String bikeType;
-
 	private String tradeType;
-
 	private String shareType;
-
 	private String lati;
-
 	private String longi;
-
 	private String costPerTime;
-
 	private String costPerDay;
-
 	private String costPerWeek;
+	private int like;          
+	private String  dealWith;          
+	private String bikeImagePathThumb;
 
 	public ShareBoard() {
 	}
@@ -87,6 +76,29 @@ public class ShareBoard {
 
 		this.costPerWeek = costPerWeek;
 
+	}
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
+	}
+
+	public String getDealWith() {
+		return dealWith;
+	}
+
+	public void setDealWith(String dealWith) {
+		this.dealWith = dealWith;
+	}
+
+	public String getBikeImagePathThumb() {
+		return bikeImagePathThumb;
+	}
+
+	public void setBikeImagePathThumb(String bikeImagePathThumb) {
+		this.bikeImagePathThumb = bikeImagePathThumb;
 	}
 
 	public String getMyImagePath() {

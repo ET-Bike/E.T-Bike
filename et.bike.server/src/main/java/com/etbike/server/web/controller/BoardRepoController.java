@@ -55,7 +55,10 @@ public class BoardRepoController {
 			shareboard.setCostPerTime(board.getCostPerTime());
 			shareboard.setCostPerDay(board.getCostPerDay());
 			shareboard.setCostPerWeek(board.getCostPerWeek());
-	
+			shareboard.setLike(board.getLike());
+			shareboard.setDealWith(board.getDealWith());
+			shareboard.setBikeImagePathThumb(board.getBikeImagePathThumb());
+			
 			shareboards.add(shareboard);
 		}
 			
@@ -79,8 +82,11 @@ public class BoardRepoController {
 				 , costPerDay, costPerWeek);
 		List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
 		board.setBikeImagePath(bikeImages.get(bikeImages.size() - 1).getFileDownloadUrl());
+		board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ bikeImages.get(bikeImages.size() - 1).getId()+"/50");
 		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
 		board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
+		
+		
 		boardRepository.saveAndFlush(board);
 		
 		System.err.println("GET Error");
