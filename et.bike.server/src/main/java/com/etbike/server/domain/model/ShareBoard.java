@@ -28,7 +28,7 @@ public class ShareBoard {
 	private String costPerDay;
 	private String costPerWeek;
 	private String like;          
-	private String  dealWith;          
+	private String dealWith;          
 	private String bikeImagePathThumb;
 
 	public ShareBoard() {
