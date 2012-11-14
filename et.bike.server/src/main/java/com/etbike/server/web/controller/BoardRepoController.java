@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.mapping.Array;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.etbike.server.domain.model.Account;
 import com.etbike.server.domain.model.Board;
 import com.etbike.server.domain.model.BoardCategory;
 import com.etbike.server.domain.model.MyBikeList;
@@ -76,7 +77,8 @@ public class BoardRepoController {
 	public String addBoard(String title, String content,String writer,BoardCategory category
 	 ,Date updatedTime,String myImagePath,String bikeImagePath
 	 ,String bikeType,String tradeType,String shareType,String lati,String longi,String costPerTime
-	 ,String costPerDay,String costPerWeek){
+	 ,String costPerDay,String costPerWeek, HttpServletRequest req, HttpServletResponse resp){
+		resp.setCharacterEncoding("UTF-8");
 		Board board = new Board( title,  content, writer, category
 				 , updatedTime, myImagePath, bikeImagePath
 				 , bikeType, tradeType, shareType, lati, longi, costPerTime
