@@ -30,7 +30,7 @@ public class AccountRepoController {
 	@ResponseBody
 	public String getUser(@PathVariable String username){
 		Account account = accountRepository.findByUsername(username);
-		
+		account.getId();
 		return account.getFirstName();
 	}
 }
