@@ -36,8 +36,7 @@ public class Board extends AbstractPersistable<Long>{
 	private String costPerTime;
 	private String costPerDay;
 	private String costPerWeek;
-	@Column(columnDefinition="INT") 
-	private int like;          
+	private String like;          
 	private String  dealWith;          
 	private String bikeImagePathThumb;
 	
@@ -64,10 +63,10 @@ public class Board extends AbstractPersistable<Long>{
 		this.costPerWeek = costPerWeek;
 	}
 	
-	public int getLike() {
+	public String getLike() {
 		return like;
 	}
-	public void setLike(int like) {
+	public void setLike(String like) {
 		this.like = like;
 	}
 	public String getDealWith() {

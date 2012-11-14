@@ -81,8 +81,9 @@ public class BoardRepoController {
 				 , bikeType, tradeType, shareType, lati, longi, costPerTime
 				 , costPerDay, costPerWeek);
 		List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
-		board.setBikeImagePath(bikeImages.get(bikeImages.size() - 1).getFileDownloadUrl());
-		board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ bikeImages.get(bikeImages.size() - 1).getId()+"/50");
+		UploadedFile selectedImege = bikeImages.get(bikeImages.size() - 1);
+		board.setBikeImagePath(selectedImege.getFileDownloadUrl());
+		board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ selectedImege.getId()+"/50");
 		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
 		board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
 		
