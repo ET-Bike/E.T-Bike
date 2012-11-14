@@ -61,4 +61,22 @@ public class AccountRepoController {
 		return "jsonView";
 
 	}
+	
+	@RequestMapping(value="/account/updateGrade")
+	@ResponseBody
+	public String updateGrade(String username,String grade){
+		
+		Account selectedAccount  = accountRepository.findByUsername(username);
+		
+		if(selectedAccount != null){
+			selectedAccount.setGrade(grade); //update grade
+			accountRepository.saveAndFlush(selectedAccount);
+			
+			return "OKAY";
+			
+		} else{
+			System.err.println("Error : There is not username...");
+			return "Error : There is not username ";
+		}
+	}
 }

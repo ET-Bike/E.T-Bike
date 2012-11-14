@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.etbike.server.domain.model.Account;
 import com.etbike.server.domain.model.Board;
 import com.etbike.server.domain.model.BoardCategory;
 import com.etbike.server.domain.model.MyBikeList;
@@ -81,16 +82,38 @@ public class BoardRepoController {
 				 , bikeType, tradeType, shareType, lati, longi, costPerTime
 				 , costPerDay, costPerWeek);
 		List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
-		UploadedFile selectedImege = bikeImages.get(bikeImages.size() - 1);
-		board.setBikeImagePath(selectedImege.getFileDownloadUrl());
-		board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ selectedImege.getId()+"/50");
+		if(bikeImages != null){
+			UploadedFile selectedImege = bikeImages.get(bikeImages.size() - 1);
+			board.setBikeImagePath(selectedImege.getFileDownloadUrl());
+			board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ selectedImege.getId()+"/50");	
+		}
 		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
-		board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
+		if(myImages != null)
+			board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
 		
 		
 		boardRepository.saveAndFlush(board);
 		
 		//System.err.println("GET Error");
 		return "OKAY";
+	}
+	
+	@RequestMapping(value="/shareBoard/updateLikeCount")
+	@ResponseBody
+	public String updateGrade(Long id){
+		
+		Board selectedBoard  = boardRepository.findOne(id);
+		
+		if(selectedBoard != null){
+			int likeCount = selectedBoard.getLikeCount();
+			selectedBoard.setLikeCount(++likeCount);
+			boardRepository.saveAndFlush(selectedBoard);
+			
+			return "OKAY";
+				
+		} else{
+			System.err.println("Error : There is not board_id...");
+			return "Error : There is not board_id ";
+		}
 	}
 }
