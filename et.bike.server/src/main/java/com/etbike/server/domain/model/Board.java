@@ -35,10 +35,10 @@ public class Board extends AbstractPersistable<Long>{
 	private String longi;
 	private String costPerTime;
 	private String costPerDay;
-	private String costPerWeek;
-	private String like;          
-	private String dealWith;          
+	private String costPerWeek;     
 	private String bikeImagePathThumb;
+	private String like;          
+	private String dealWith;   
 	
 	public Board() {}
 	public Board(String title, String content,String writer,BoardCategory category
