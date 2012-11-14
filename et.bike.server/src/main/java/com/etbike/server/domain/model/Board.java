@@ -37,7 +37,7 @@ public class Board extends AbstractPersistable<Long>{
 	private String costPerDay;
 	private String costPerWeek;     
 	private String bikeImagePathThumb;
-	private String likeCount;          
+	private int likeCount;          
 	private String dealWith;   
 	
 	public Board() {}
@@ -63,10 +63,10 @@ public class Board extends AbstractPersistable<Long>{
 		this.costPerWeek = costPerWeek;
 	}
 	
-	public String getLikeCount() {
+	public int getLikeCount() {
 		return likeCount;
 	}
-	public void setLikeCount(String likeCount) {
+	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
 	}
 	public String getDealWith() {
