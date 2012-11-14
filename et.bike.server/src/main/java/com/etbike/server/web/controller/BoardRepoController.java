@@ -1,5 +1,6 @@
 package com.etbike.server.web.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,6 +79,12 @@ public class BoardRepoController {
 	 ,Date updatedTime,String myImagePath,String bikeImagePath
 	 ,String bikeType,String tradeType,String shareType,String lati,String longi,String costPerTime
 	 ,String costPerDay,String costPerWeek, HttpServletRequest req, HttpServletResponse resp){
+		try {
+			req.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		resp.setCharacterEncoding("UTF-8");
 		Board board = new Board( title,  content, writer, category
 				 , updatedTime, myImagePath, bikeImagePath
