@@ -42,7 +42,7 @@ public class AccountRepoController {
 		return account.getFirstName();
 	}
 	
-	@RequestMapping(value="/shareBoard/myInfo/{username}")
+	@RequestMapping(value="/account/myInfo/{username}")
 	public String getMyDealList(@PathVariable String username, ModelMap map){
 		Account account = accountRepository.findByUsername(username);
 		map.put("account", account);
