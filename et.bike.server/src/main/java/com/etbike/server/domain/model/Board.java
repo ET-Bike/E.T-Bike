@@ -37,6 +37,7 @@ public class Board extends AbstractPersistable<Long>{
 	private String costPerDay;
 	private String costPerWeek;     
 	private String bikeImagePathThumb;
+	@Column(columnDefinition="INT") 
 	private int likeCount;          
 	private String dealWith;   
 	

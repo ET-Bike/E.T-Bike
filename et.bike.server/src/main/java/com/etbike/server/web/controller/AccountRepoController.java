@@ -3,6 +3,7 @@ package com.etbike.server.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,12 +19,19 @@ public class AccountRepoController {
 	@RequestMapping(value="/account/addUser")
 	@ResponseBody
 	public String addUser(String firstName, String lastName, String password, String username){
-		Account account = new Account(username, password, firstName, lastName);
-		account.setPassword(passwordEncoder.encodePassword(account.getPassword(), account.getUsername()));
-		accountRepository.saveAndFlush(account);
 		
-		//System.err.println("GET Error");
-		return "OKAY";
+		Account tempAccount  = accountRepository.findByUsername(username);
+		
+		if(tempAccount == null){
+			Account account = new Account(username, password, firstName, lastName);
+			account.setPassword(passwordEncoder.encodePassword(account.getPassword(), account.getUsername()));
+			accountRepository.saveAndFlush(account);
+			return "OKAY";
+			
+		} else{
+			System.err.println("Error : Already existent username...");
+			return "ERROR : Already existent username ";
+		}
 	}
 	
 	@RequestMapping(value="/account/getUser/{username}")
@@ -32,5 +40,13 @@ public class AccountRepoController {
 		Account account = accountRepository.findByUsername(username);
 		account.getId();
 		return account.getFirstName();
+	}
+	
+	@RequestMapping(value="/shareBoard/myInfo/{username}")
+	public String getMyDealList(@PathVariable String username, ModelMap map){
+		Account account = accountRepository.findByUsername(username);
+		map.put("account", account);
+		return "jsonView";
+
 	}
 }

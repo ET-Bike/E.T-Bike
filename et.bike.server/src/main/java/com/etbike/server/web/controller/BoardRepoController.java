@@ -72,7 +72,7 @@ public class BoardRepoController {
 	
 	@RequestMapping(value="/shareBoard/addBoard")
 	@ResponseBody
-	public String addUser(String title, String content,String writer,BoardCategory category
+	public String addBoard(String title, String content,String writer,BoardCategory category
 	 ,Date updatedTime,String myImagePath,String bikeImagePath
 	 ,String bikeType,String tradeType,String shareType,String lati,String longi,String costPerTime
 	 ,String costPerDay,String costPerWeek){
