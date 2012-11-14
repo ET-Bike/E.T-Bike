@@ -16,6 +16,7 @@ public class Account extends AbstractPersistable<Long>{
 	private String firstName;
 	private String lastName;
 	private String grade;
+	private String myImagePath;
 
 	public Account(){}
 
@@ -24,6 +25,14 @@ public class Account extends AbstractPersistable<Long>{
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+	
+	public String getMyImagePath() {
+		return myImagePath;
+	}
+
+	public void setMyImagePath(String myImagePath) {
+		this.myImagePath = myImagePath;
 	}
 
 	public String getUsername() {
