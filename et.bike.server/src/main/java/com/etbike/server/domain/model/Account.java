@@ -15,7 +15,7 @@ public class Account extends AbstractPersistable<Long>{
 	private String password;
 	private String firstName;
 	private String lastName;
-	private int grade;
+	private String grade;
 
 	public Account(){}
 
@@ -62,11 +62,11 @@ public class Account extends AbstractPersistable<Long>{
         return ToStringBuilder.reflectionToString(this);
     }
 
-	public int getGrade() {
+	public String getGrade() {
 		return grade;
 	}
 
-	public void setGrade(int grade) {
+	public void setGrade(String grade) {
 		this.grade = grade;
 	}
 }
