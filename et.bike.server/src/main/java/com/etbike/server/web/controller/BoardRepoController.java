@@ -89,7 +89,7 @@ public class BoardRepoController {
 		
 		boardRepository.saveAndFlush(board);
 		
-		System.err.println("GET Error");
+		//System.err.println("GET Error");
 		return "OKAY";
 	}
 }
