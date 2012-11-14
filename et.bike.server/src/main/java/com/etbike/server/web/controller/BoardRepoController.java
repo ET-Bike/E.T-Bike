@@ -83,7 +83,7 @@ public class BoardRepoController {
 		List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
 		UploadedFile selectedImege = bikeImages.get(bikeImages.size() - 1);
 		board.setBikeImagePath(selectedImege.getFileDownloadUrl());
-		board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ selectedImege.getId()+"/50");
+		//board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ selectedImege.getId()+"/50");
 		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
 		board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
 		
