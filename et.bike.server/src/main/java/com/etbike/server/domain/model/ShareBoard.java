@@ -28,7 +28,7 @@ public class ShareBoard {
 	private String costPerDay;
 	private String costPerWeek;      
 	private String bikeImagePathThumb;
-	private String like;          
+	private String likeCount;          
 	private String dealWith;    
 
 	public ShareBoard() {
@@ -77,12 +77,12 @@ public class ShareBoard {
 		this.costPerWeek = costPerWeek;
 
 	}
-	public String getLike() {
-		return like;
+	public String getLikeCount() {
+		return likeCount;
 	}
 
-	public void setLike(String like) {
-		this.like = like;
+	public void setLikeCount(String likeCount) {
+		this.likeCount = likeCount;
 	}
 
 	public String getDealWith() {
