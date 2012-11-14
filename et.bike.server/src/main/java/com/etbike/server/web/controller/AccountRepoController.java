@@ -22,7 +22,7 @@ public class AccountRepoController {
 		account.setPassword(passwordEncoder.encodePassword(account.getPassword(), account.getUsername()));
 		accountRepository.saveAndFlush(account);
 		
-		System.err.println("GET Error");
+		//System.err.println("GET Error");
 		return "OKAY";
 	}
 	
