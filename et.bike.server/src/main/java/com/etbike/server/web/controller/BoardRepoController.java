@@ -39,7 +39,7 @@ public class BoardRepoController {
 		List<ShareBoard> shareBoards = new ArrayList<ShareBoard>();
 		List<Board> boards = boardRepository.findAll(BoardSpecifications.isWriterName(username));
 		
-		toShareBoard(boards, shareBoards);		
+		//toShareBoard(boards, shareBoards);		
 		myBikeList.setMyBikeBoard(shareBoards);
 		
 		map.put("myBikeList", myBikeList);
@@ -106,7 +106,7 @@ public class BoardRepoController {
 		List<ShareBoard> saleBoards = new ArrayList<ShareBoard>();
 		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("sell"));
 		
-		toShareBoard(boards, saleBoards);	
+		//toShareBoard(boards, saleBoards);	
 		myBikeList.setMyBikeBoard(saleBoards);
 		
 		map.put("myBikeList", myBikeList);
@@ -120,7 +120,7 @@ public class BoardRepoController {
 		List<ShareBoard> rentalBoards = new ArrayList<ShareBoard>();
 		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("rent"));
 		
-		toShareBoard(boards, rentalBoards);	
+		//toShareBoard(boards, rentalBoards);	
 		myBikeList.setMyBikeBoard(rentalBoards);
 		
 		
