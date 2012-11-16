@@ -113,7 +113,7 @@ public class BoardRepoController {
 		boards = boardRepository.findAll(BoardSpecifications.isShareType("기부"));
 		toShareBoard(boards, donationBoards);	
 		
-		myBikeList.setMyBikeBoard(saleBoards);
+		myBikeList.setMyBikeBoard(saleBoards); 
 		myBikeList.setMyBikeBoard(rentalBoards);	
 		myBikeList.setMyBikeBoard(donationBoards);	
 		
