@@ -1,6 +1,5 @@
 package com.etbike.server.web.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -129,7 +128,7 @@ public class BoardRepoController {
 		return "jsonView";
 		
 	}
-	
+	/*
 	public List<ShareBoard> toShareBoard(List<Board> boards, List<ShareBoard> shareBoards){
 		
 		for (int i = 0; i < boards.size(); i++) {
@@ -158,5 +157,5 @@ public class BoardRepoController {
 		}
 		
 		return shareBoards;
-	}
+	}*/
 }
