@@ -1,10 +1,11 @@
 package com.etbike.server.domain.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyBikeList {
 	
-	private List<ShareBoard> myBikeBoard;
+	private List<ShareBoard> myBikeBoard = new ArrayList<ShareBoard>();
 
 	public List<ShareBoard> getMyBikeBoard() {
 		return myBikeBoard;
