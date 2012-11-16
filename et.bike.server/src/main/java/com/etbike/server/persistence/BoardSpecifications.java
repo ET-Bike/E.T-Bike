@@ -31,6 +31,15 @@ public class BoardSpecifications {
 		};
 	}
 	
+	public static Specification<Board> isShareType(final String shareType){
+		return new Specification<Board>() {
+			@Override
+			public Predicate toPredicate(Root<Board> root, CriteriaQuery<?> query, CriteriaBuilder cb){
+				return cb.equal(root.<String>get(Board_.shareType), shareType);
+			}
+		};
+	}
+	
 	public static Specification<Board> titleIsLike(final String searchTerm){
 		return new Specification<Board>(){
 			@Override

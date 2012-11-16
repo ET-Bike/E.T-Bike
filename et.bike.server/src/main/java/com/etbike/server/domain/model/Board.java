@@ -41,6 +41,7 @@ public class Board extends AbstractPersistable<Long>{
 	private int likeCount;          
 	private String dealWith;   
 	
+	
 	public Board() {}
 	public Board(String title, String content,String writer,BoardCategory category
 			 ,Date updatedTime,String myImagePath,String bikeImagePath
