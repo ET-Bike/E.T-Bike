@@ -11,8 +11,8 @@
 		
 	<util:properties id="defaultProperties">
 		<prop key="jdbc.driverClassName">com.mysql.jdbc.Driver</prop>
-		<!--<prop key="jdbc.url">jdbc:mysql://localhost:3306/etbike</prop>-->
-		<prop key="jdbc.url"><![CDATA[jdbc:mysql://localhost:3306/etbike?useUnicode=true&characterEncoding=utf8]]></prop>
+		<prop key="jdbc.url">jdbc:mysql://localhost:3306/etbike?useUnicode=true&amp;characterEncoding=utf8</prop>
+<!-- 		<prop key="jdbc.url"><![CDATA[jdbc:mysql://localhost:3306/etbike?useUnicode=true&characterEncoding=utf8]]></prop> -->
 		<prop key="jdbc.user">yukult400</prop>
 		<prop key="jdbc.password">yukult400</prop>
 			
