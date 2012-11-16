@@ -37,7 +37,7 @@ public class DialogError extends Throwable {
     public DialogError(String message, int errorCode, String failingUrl) {
         super(message);
         mErrorCode = errorCode;
-        mFailingUrl = failingUrl;
+        mFailingUrl = failingUrl; 
     }
 
     int getErrorCode() {
