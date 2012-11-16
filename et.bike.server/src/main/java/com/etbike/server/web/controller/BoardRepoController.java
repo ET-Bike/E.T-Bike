@@ -48,7 +48,7 @@ public class BoardRepoController {
 		
 	}
 	
-	@RequestMapping(value="/shareBoard/addBoard" , produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/shareBoard/addBoard") //, produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String addBoard(String title, String content,String writer,BoardCategory category
 	 ,Date updatedTime,String myImagePath,String bikeImagePath
@@ -74,8 +74,7 @@ public class BoardRepoController {
 		List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
 		if(!myImages.isEmpty())
 			board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
-		
-		
+
 		boardRepository.saveAndFlush(board);
 		
 		//System.err.println("GET Error");
@@ -92,7 +91,6 @@ public class BoardRepoController {
 			int likeCount = selectedBoard.getLikeCount();
 			selectedBoard.setLikeCount(++likeCount);
 			boardRepository.saveAndFlush(selectedBoard);
-			
 			return "OKAY";
 				
 		} else{

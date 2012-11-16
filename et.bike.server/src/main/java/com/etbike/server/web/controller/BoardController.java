@@ -3,13 +3,17 @@ package com.etbike.server.web.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 import com.etbike.server.domain.model.Board;
 import com.etbike.server.domain.model.BoardCategory;
@@ -17,12 +21,20 @@ import com.etbike.server.domain.model.Reply;
 import com.etbike.server.persistence.BoardRepository;
 import com.etbike.server.persistence.ReplyRepository;
 import com.etbike.server.service.BoardService;
+import com.etbike.server.support.social.SignupForm;
 
 @Controller
 public class BoardController {
 
 	@Autowired private BoardService boardService;
+	
+	@RequestMapping(value="/addBoard", method=RequestMethod.POST)
+	public String addBoard(@Valid Board model, ModelMap map) {
+			boardService.saveBoard(model);
+			map.put("result", "success");
 
+			return "jsonView";
+		}
 	
 	@RequestMapping(value = "/board", method = RequestMethod.GET)
 	public void board(ModelMap map) {
