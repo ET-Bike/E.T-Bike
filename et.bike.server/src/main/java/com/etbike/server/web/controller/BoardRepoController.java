@@ -1,5 +1,6 @@
 package com.etbike.server.web.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,30 +37,55 @@ public class BoardRepoController {
 	@RequestMapping(value="/shareBoard/getMyBikeList/{username}")
 	public String getMyDealList(@PathVariable String username, ModelMap map){
 		MyBikeList myBikeList = new MyBikeList();
-		List<ShareBoard> shareBoards = new ArrayList<ShareBoard>();
+		List<ShareBoard> shareboards = new ArrayList<ShareBoard>();
 		List<Board> boards = boardRepository.findAll(BoardSpecifications.isWriterName(username));
 		
-		//toShareBoard(boards, shareBoards);		
-		myBikeList.setMyBikeBoard(shareBoards);
+		for (int i = 0; i < boards.size(); i++) {
+			ShareBoard shareboard = new ShareBoard();
+			Board board = boards.get(i);
+			shareboard.setTitle(board.getTitle());
+			shareboard.setContent(board.getContent());
+			shareboard.setWriter(board.getWriter());
+			shareboard.setCategory(board.getCategory());
+			shareboard.setUpdatedTime(board.getUpdatedTime());
+			shareboard.setMyImagePath(board.getMyImagePath());
+			shareboard.setBikeImagePath(board.getBikeImagePath());
+			shareboard.setBikeType(board.getBikeType());
+			shareboard.setTradeType(board.getTradeType());
+			shareboard.setShareType(board.getShareType());
+			shareboard.setLati(board.getLati());
+			shareboard.setLongi(board.getLongi());
+			shareboard.setCostPerTime(board.getCostPerTime());
+			shareboard.setCostPerDay(board.getCostPerDay());
+			shareboard.setCostPerWeek(board.getCostPerWeek());
+			shareboard.setLikeCount(board.getLikeCount());
+			shareboard.setDealWith(board.getDealWith());
+			shareboard.setBikeImagePathThumb(board.getBikeImagePathThumb());
+			
+			shareboards.add(shareboard);
+		}
+			
+		myBikeList.setMyBikeBoard(shareboards);
+		
 		
 		map.put("myBikeList", myBikeList);
 		return "jsonView";
 		
 	}
 	
-	@RequestMapping(value="/shareBoard/addBoard")// , produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/shareBoard/addBoard")
 	@ResponseBody
 	public String addBoard(String title, String content,String writer,BoardCategory category
 	 ,Date updatedTime,String myImagePath,String bikeImagePath
 	 ,String bikeType,String tradeType,String shareType,String lati,String longi,String costPerTime
 	 ,String costPerDay,String costPerWeek, HttpServletRequest req, HttpServletResponse resp){
-		/*try {
+		try {
 			req.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		resp.setCharacterEncoding("UTF-8");*/
+		resp.setCharacterEncoding("UTF-8");
 		Board board = new Board( title,  content, writer, category
 				 , updatedTime, myImagePath, bikeImagePath
 				 , bikeType, tradeType, shareType, lati, longi, costPerTime
@@ -99,63 +125,4 @@ public class BoardRepoController {
 			return "Error : There is not board_id ";
 		}
 	}
-	
-	@RequestMapping(value="/shareBoard/getSaleBoard")
-	public String getSaleBoard(@PathVariable ModelMap map){
-		MyBikeList myBikeList = new MyBikeList();
-		List<ShareBoard> saleBoards = new ArrayList<ShareBoard>();
-		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("sell"));
-		
-		//toShareBoard(boards, saleBoards);	
-		myBikeList.setMyBikeBoard(saleBoards);
-		
-		map.put("myBikeList", myBikeList);
-		return "jsonView";
-		
-	}
-	
-	@RequestMapping(value="/shareBoard/getRentalBoard")
-	public String getRentalBoard(@PathVariable  ModelMap map){
-		MyBikeList myBikeList = new MyBikeList();
-		List<ShareBoard> rentalBoards = new ArrayList<ShareBoard>();
-		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("rent"));
-		
-		//toShareBoard(boards, rentalBoards);	
-		myBikeList.setMyBikeBoard(rentalBoards);
-		
-		
-		map.put("myBikeList", myBikeList);
-		return "jsonView";
-		
-	}
-	/*
-	public List<ShareBoard> toShareBoard(List<Board> boards, List<ShareBoard> shareBoards){
-		
-		for (int i = 0; i < boards.size(); i++) {
-			ShareBoard shareboard = new ShareBoard();
-			Board board = boards.get(i);
-			shareboard.setTitle(board.getTitle());
-			shareboard.setContent(board.getContent());
-			shareboard.setWriter(board.getWriter());
-			shareboard.setCategory(board.getCategory());
-			shareboard.setUpdatedTime(board.getUpdatedTime());
-			shareboard.setMyImagePath(board.getMyImagePath());
-			shareboard.setBikeImagePath(board.getBikeImagePath());
-			shareboard.setBikeType(board.getBikeType());
-			shareboard.setTradeType(board.getTradeType());
-			shareboard.setShareType(board.getShareType());
-			shareboard.setLati(board.getLati());
-			shareboard.setLongi(board.getLongi());
-			shareboard.setCostPerTime(board.getCostPerTime());
-			shareboard.setCostPerDay(board.getCostPerDay());
-			shareboard.setCostPerWeek(board.getCostPerWeek());
-			shareboard.setLikeCount(board.getLikeCount());
-			shareboard.setDealWith(board.getDealWith());
-			shareboard.setBikeImagePathThumb(board.getBikeImagePathThumb());
-			
-			shareBoards.add(shareboard);
-		}
-		
-		return shareBoards;
-	}*/
 }

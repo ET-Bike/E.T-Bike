@@ -10,5 +10,4 @@ public class Board_ {
     public static volatile SingularAttribute<Board, String> content;
     public static volatile SingularAttribute<Board, BoardCategory> category;
     public static volatile SingularAttribute<Board, String> writer;
-    public static volatile SingularAttribute<Board, String> shareType;
 }

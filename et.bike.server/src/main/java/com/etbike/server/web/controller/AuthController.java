@@ -46,7 +46,7 @@ public class AuthController {
 			return "redirect:/";
 		}
 		return null;
-	}	
+	}
 
 	private Account createAccount(SignupForm form, BindingResult formBinding) {
 		try {
