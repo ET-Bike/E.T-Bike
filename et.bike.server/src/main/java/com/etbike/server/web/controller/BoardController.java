@@ -1,6 +1,5 @@
 package com.etbike.server.web.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,29 +7,46 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
 
 import com.etbike.server.domain.model.Board;
 import com.etbike.server.domain.model.BoardCategory;
 import com.etbike.server.domain.model.Reply;
+import com.etbike.server.domain.model.ShareBoard;
+import com.etbike.server.domain.model.UploadedFile;
 import com.etbike.server.persistence.BoardRepository;
-import com.etbike.server.persistence.ReplyRepository;
+import com.etbike.server.persistence.BoardSpecifications;
+import com.etbike.server.persistence.FileRepository;
+import com.etbike.server.persistence.FileSpecifications;
 import com.etbike.server.service.BoardService;
-import com.etbike.server.support.social.SignupForm;
 
 @Controller
 public class BoardController {
 
 	@Autowired private BoardService boardService;
+	@Autowired private FileRepository fileRepository;
+	@Autowired private BoardRepository boardRepository;
 	
 	@RequestMapping(value="/addBoard", method=RequestMethod.POST)
 	public String addBoard(@Valid Board model, ModelMap map) {
 			boardService.saveBoard(model);
+			
+			List<Board> boards = boardRepository.findAll(BoardSpecifications.isWriterName(model.getWriter()));
+			Board board = boards.get(boards.size() - 1);
+			List<UploadedFile> bikeImages =fileRepository.findAll(FileSpecifications.isfileName(board.getBikeImagePath()));
+			if(!bikeImages.isEmpty()){
+				UploadedFile selectedImege = bikeImages.get(bikeImages.size() - 1);
+				board.setBikeImagePath(selectedImege.getFileDownloadUrl());
+				board.setBikeImagePathThumb("http://125.209.193.11:8080/etbike/thumb/"+ selectedImege.getId()+"/50");	
+			}
+			List<UploadedFile>  myImages =fileRepository.findAll(FileSpecifications.isfileName(board.getMyImagePath()));
+			if(!myImages.isEmpty())
+				board.setMyImagePath(myImages.get(myImages.size() - 1).getFileDownloadUrl());
+			
+			boardService.saveBoard(board);
+			
 			map.put("result", "success");
 
 			return "jsonView";

@@ -106,11 +106,11 @@ public class BoardRepoController {
 		List<ShareBoard> rentalBoards = new ArrayList<ShareBoard>();
 		List<ShareBoard> donationBoards = new ArrayList<ShareBoard>();
 		
-		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("sell"));
+		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("판매"));
 		toShareBoard(boards, saleBoards);
-		boards = boardRepository.findAll(BoardSpecifications.isShareType("rent"));
+		boards = boardRepository.findAll(BoardSpecifications.isShareType("대여"));
 		toShareBoard(boards, rentalBoards);	
-		boards = boardRepository.findAll(BoardSpecifications.isShareType("donation"));
+		boards = boardRepository.findAll(BoardSpecifications.isShareType("기부"));
 		toShareBoard(boards, donationBoards);	
 		
 		myBikeList.setMyBikeBoard(saleBoards);
