@@ -4,19 +4,24 @@ import java.util.List;
 
 public class MyBikeList {
 	
-	private List<ShareBoard> myBikeBoards;
+	private List<ShareBoard> myBikeBoard;
 
 	public List<ShareBoard> getMyBikeBoard() {
-		return myBikeBoards;
+		return myBikeBoard;
 	}
 
 	public void setMyBikeBoard(List<ShareBoard> myBikeBoard) {
 		
 		if(myBikeBoard.isEmpty())
-			this.myBikeBoards = myBikeBoard;
+			this.myBikeBoard = myBikeBoard;
 		
-		else
-			this.myBikeBoards.addAll(myBikeBoard);
+		else{
+			int len = myBikeBoard.size();
+			for (int i = 0; i < len; i++) {
+				this.myBikeBoard.add(myBikeBoard.get(i));
+			}
+		}
+			
 	}
 	
 	
