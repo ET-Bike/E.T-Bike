@@ -48,7 +48,7 @@ public class BoardRepoController {
 		
 	}
 	
-	@RequestMapping(value="/shareBoard/addBoard" , produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/shareBoard/addBoard")// , produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String addBoard(String title, String content,String writer,BoardCategory category
 	 ,Date updatedTime,String myImagePath,String bikeImagePath
