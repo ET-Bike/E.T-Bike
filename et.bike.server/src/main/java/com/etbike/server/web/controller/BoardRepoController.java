@@ -101,14 +101,23 @@ public class BoardRepoController {
 		}
 	}
 	
-	@RequestMapping(value="/shareBoard/getSaleBoard" , method = RequestMethod.GET)
-	public String getSaleBoard(ModelMap map){
+	@RequestMapping(value="/getShareBoards" , method = RequestMethod.GET)
+	public String getShareBoards(ModelMap map){
 		MyBikeList myBikeList = new MyBikeList();
 		List<ShareBoard> saleBoards = new ArrayList<ShareBoard>();
-		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("sell"));
+		List<ShareBoard> rentalBoards = new ArrayList<ShareBoard>();
+		List<ShareBoard> donationBoards = new ArrayList<ShareBoard>();
 		
-		toShareBoard(boards, saleBoards);	
+		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("sell"));
+		toShareBoard(boards, saleBoards);
+		boards = boardRepository.findAll(BoardSpecifications.isShareType("rent"));
+		toShareBoard(boards, rentalBoards);	
+		boards = boardRepository.findAll(BoardSpecifications.isShareType("donation"));
+		toShareBoard(boards, donationBoards);	
+		
 		myBikeList.setMyBikeBoard(saleBoards);
+		myBikeList.setMyBikeBoard(rentalBoards);	
+		myBikeList.setMyBikeBoard(donationBoards);	
 		
 		map.put("myBikeList", myBikeList);
 		return "jsonView";
