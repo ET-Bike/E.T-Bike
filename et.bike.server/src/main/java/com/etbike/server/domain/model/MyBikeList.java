@@ -12,7 +12,7 @@ public class MyBikeList {
 
 	public void setMyBikeBoard(List<ShareBoard> myBikeBoard) {
 		
-		if(myBikeBoard.isEmpty())
+		if(this.myBikeBoard.isEmpty())
 			this.myBikeBoard = myBikeBoard;
 		
 		else{
