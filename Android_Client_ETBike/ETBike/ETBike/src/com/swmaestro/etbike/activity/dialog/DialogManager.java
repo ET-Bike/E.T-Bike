@@ -3,11 +3,13 @@ package com.swmaestro.etbike.activity.dialog;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WpsInfo;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -18,9 +20,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.swmaestro.etbike.activity.R;
+
+import com.swmaestro.etbike.activity.listview.MyDynamicListAdapter;
 import com.swmaestro.etbike.activity.listview.MyListAdapter;
-import com.swmaestro.etbike.activity.listview.object.MyBikeItem;
 import com.swmaestro.etbike.activity.listview.object.RegisterItem;
+import com.swmaestro.etbike.serverobject.MyBikeBoard;
 import com.swmaestro.object.WorkVectors;
 import com.swmaestro.variable.Variable;
 
@@ -29,6 +33,7 @@ public class DialogManager {
 	Context context;
 	AlertDialog.Builder builder;
 	AlertDialog ad;
+	LinearLayout ll;
 
 	public DialogManager(Context context) {
 		this.context = context;
@@ -36,9 +41,10 @@ public class DialogManager {
 
 	}
 
-	public AlertDialog getRegisterDialog(final WorkVectors wv, final ArrayList<RegisterItem> mal, final MyListAdapter mla) {
+	public AlertDialog getRegisterDialog(final WorkVectors wv,
+			final ArrayList<RegisterItem> mal, final MyListAdapter mla) {
 
-		// º¯º≠ ∫‰∏¶ ∫—¿Ã∞Ì ad ª˝º∫
+		// ÔøΩÔøΩ ÔøΩ‰∏¶ ÔøΩÔøΩÔøΩÃ∞ÔøΩ ad ÔøΩÔøΩ
 		/*
 		 * ll = (LinearLayout) View.inflate(this, R.layout.actiondialog, null);
 		 * builder.setView(ll); ad = builder.create(); ad.show(); break;
@@ -60,16 +66,16 @@ public class DialogManager {
 		final ArrayList<String> al = new ArrayList<String>();
 
 		if (dialType.equals(WorkVectors.DIAL_TYPE_BIKE)) {
-			al.add("ªÍæ‡øÎ");
-			al.add("√‚≈±ŸøÎ");
-			al.add("º±ºˆøÎ");
+			al.add("ÏÇ∞ÏïÖÏö©");
+			al.add("Ï∂úÌá¥Í∑ºÏö©");
+			al.add("ÏÑ†ÏàòÏö©");
 		} else if (dialType.equals(WorkVectors.DIAL_TYPE_TRADE)) {
-			al.add("¡˜∞≈∑°");
-			al.add("≈√πË");
+			al.add("ÏßÅÍ±∞Îûò");
+			al.add("ÌÉùÎ∞∞");
 		} else if (dialType.equals(WorkVectors.DIAL_TYPE_SHARE)) {
-			al.add("¥Îø©");
-			al.add("±‚∫Œ");
-			al.add("∆«∏≈");
+			al.add("ÎåÄÏó¨");
+			al.add("Í∏∞Î∂Ä");
+			al.add("ÌåêÎß§");
 
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
@@ -80,7 +86,8 @@ public class DialogManager {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,	int position, long arg3) {
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
 				String value = null;
 				int mainDialPosition = 0;
 				if (dialType.equals(WorkVectors.DIAL_TYPE_BIKE)) {
@@ -91,11 +98,10 @@ public class DialogManager {
 						wv.put(WorkVectors.BIKE_TYPE, WorkVectors.BIKE_TYPE_COMMUTE);
 						value = Variable.KOR_BIKE_TYPE_COMMUTE;
 					} else if (position == 2) {
-						wv.put(WorkVectors.BIKE_TYPE, WorkVectors.BIKE_TYPE_PLAYER);
+						wv.put(WorkVectors.BIKE_TYPE, 	WorkVectors.BIKE_TYPE_PLAYER);
 						value = Variable.KOR_BIKE_TYPE_PLAYER;
 					}
 					mainDialPosition = 0;
-//					mal.get(0).strItem3 = 
 
 				} else if (dialType.equals(WorkVectors.DIAL_TYPE_TRADE)) {
 					if (position == 0) {
@@ -127,94 +133,155 @@ public class DialogManager {
 			}
 
 		});
-		
-		
-		// builderø° view ∫—¿Ã±‚
-		builder.setTitle("ºº∫Œ¡§∫∏∏¶ µÓ∑œ«ÿ¡÷ººø‰.").setView(ll);
+
+		// builderÔøΩÔøΩ view ÔøΩÔøΩÔøΩÃ±ÔøΩ
+		builder.setTitle("ÏûêÏ†ÑÍ±∞Ïùò ÏÑ∏Î∂ÄÏÇ¨Ìï≠ÏùÑ ÏûÖÎ†•Ìï¥Ï£ºÏÑ∏Ïöî.").setView(ll);
 		ad = builder.create();
-		
+
 		return ad;
 
 	}
-	
+
 	public AlertDialog getCostDialog(final WorkVectors wv) {
 
-		// º¯º≠ ∫‰∏¶ ∫—¿Ã∞Ì ad ª˝º∫
-		/*
-		 * ll = (LinearLayout) View.inflate(this, R.layout.actiondialog, null);
-		 * builder.setView(ll); ad = builder.create(); ad.show(); break;
-		 */
+		final LinearLayout ll = (LinearLayout) View.inflate(context,
+				R.layout.costdialog, null);
 
-		/*
-		 * define view
-		 */
+		// builderÔøΩÔøΩ view ÔøΩÔøΩÔøΩÃ±ÔøΩ
+		builder.setTitle("ÏûêÏ†ÑÍ±∞Ïùò ÎπÑÏö©ÏùÑ ÏûÖÎ†•Ï£ºÏÑ∏Ïöî.").setView(ll)
+				.setPositiveButton("ÌôïÏù∏", new OnClickListener() {
 
-		final LinearLayout ll = (LinearLayout) View.inflate(context, R.layout.costdialog, null);
-		
-		// builderø° view ∫—¿Ã±‚
-		builder.setTitle("ºº∫Œ¡§∫∏∏¶ µÓ∑œ«ÿ¡÷ººø‰.").setView(ll).setPositiveButton("»Æ¿Œ", new OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				TextView tv1 = (TextView)ll.findViewById(R.id.timeCostET);
-				TextView tv2 = (TextView)ll.findViewById(R.id.dayCostET);
-				TextView tv3 = (TextView)ll.findViewById(R.id.weekCostET);
-				
-				String text1 = tv1.getText().toString();
-				String text2 = tv2.getText().toString();
-				String text3 = tv3.getText().toString();
-				
-				if(text1.equals("") || text2.equals("") || text3.equals("")) {
-					return;
-				}
-				else {
-					wv.put(WorkVectors.COST_TIME, text1);
-					wv.put(WorkVectors.COST_DAY, text2);
-					wv.put(WorkVectors.COST_WEEK, text3);
-				}
-				
-			}
-		});
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						TextView tv1 = (TextView) ll
+								.findViewById(R.id.timeCostET);
+						TextView tv2 = (TextView) ll
+								.findViewById(R.id.dayCostET);
+						TextView tv3 = (TextView) ll
+								.findViewById(R.id.weekCostET);
+
+						String text1 = tv1.getText().toString();
+						String text2 = tv2.getText().toString();
+						String text3 = tv3.getText().toString();
+
+						if (text1.equals("") || text2.equals("")
+								|| text3.equals("")) {
+							return;
+						} else {
+							wv.put(WorkVectors.COST_TIME, text1);
+							wv.put(WorkVectors.COST_DAY, text2);
+							wv.put(WorkVectors.COST_WEEK, text3);
+						}
+
+					}
+				});
 		ad = builder.create();
 		return ad;
 
 	}
-	
-	public AlertDialog getMyBikeDialog(final MyBikeItem bim) {
 
-		// º¯º≠ ∫‰∏¶ ∫—¿Ã∞Ì ad ª˝º∫
-		/*
-		 * ll = (LinearLayout) View.inflate(this, R.layout.actiondialog, null);
-		 * builder.setView(ll); ad = builder.create(); ad.show(); break;
-		 */
+	public AlertDialog getMyBikeDialog(final MyBikeBoard mbb) {
 
 		/*
 		 * define view
 		 */
-		final LinearLayout ll = (LinearLayout) View.inflate(context, R.layout.mybikedialog, null);
-		
-		ImageView iv = (ImageView)ll.findViewById(R.id.myBikeIVmyBikeDialog);
-		ListView lv = (ListView)ll.findViewById(R.id.myBikeLVmyBikeDialog);
-		
+		ll = (LinearLayout) View.inflate(context, R.layout.mybikedialog, null);
+
+		ListView lv = (ListView) ll.findViewById(R.id.myBikeLVmyBikeDialog);
+
 		ArrayList<String> al = new ArrayList<String>();
-		
-		al.add("¿⁄¿¸∞≈ ≈∏¿‘ : " + bim.bikeType);
-		al.add("∞≈∑° ≈∏¿‘ : " + bim.tradeType);
-		al.add("∞¯¿Ø ≈∏¿‘ : " + bim.shareType);
-		al.add("ºº∫Œ ªÁ«◊ : " + bim.content);
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, al);
+
+		al.add("ÏûêÏ†ÑÍ±∞ ÌÉÄÏûÖ: " + mbb.getBikeType());
+		al.add("Í±∞Îûò ÌÉÄÏûÖ: " + mbb.getTradeType());
+		al.add("Í≥µÏú† ÌÉÄÏûÖ: " + mbb.getShareType());
+		al.add("ÏÑ∏Î∂Ä ÏÇ¨Ìï≠ : " + mbb.getContent());
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+				android.R.layout.simple_list_item_1, al);
 		lv.setAdapter(adapter);
-		
-		Bitmap bm = BitmapFactory.decodeFile(bim.bikeImagePath);
-		iv.setImageBitmap(bm);
-		
-		// builderø° view ∫—¿Ã±‚
-		
+
+		// builderÔøΩÔøΩ view ÔøΩÔøΩÔøΩÃ±ÔøΩ
+		builder.setView(ll);
 		ad = builder.create();
 		return ad;
 
 	}
+
+	public AlertDialog getFilterDialog(final ArrayList<MyBikeBoard> mal,
+			final MyDynamicListAdapter sbla) {
+
+		/*
+		 * define view
+		 */
+		ll = (LinearLayout) View.inflate(context, R.layout.mybikedialog, null);
+
+		ListView lv = (ListView) ll.findViewById(R.id.myBikeLVmyBikeDialog);
+
+		final ArrayList<String> al = new ArrayList<String>();
+
+		al.add(WorkVectors.SHARE_TYPE_DONATION);
+		al.add(WorkVectors.SHARE_TYPE_RENT);
+		al.add(WorkVectors.SHARE_TYPE_SELL);
+
+		// wv.put(WorkVectors.SHARE_TYPE, WorkVectors.SHARE_TYPE_RENT);
+		// value = Variable.KOR_SHARE_TYPE_RENT;
+		// } else if (position == 1) {
+		// wv.put(WorkVectors.SHARE_TYPE, WorkVectors.SHARE_TYPE_DONATION);
+		// value = Variable.KOR_SHARE_TYPE_DONATION;
+		// } else if (position == 2) {
+		// wv.put(WorkVectors.SHARE_TYPE, WorkVectors.SHARE_TYPE_SELL);
+		// value = Variable.KOR_SHARE_TYPE_SELL;
+		final ArrayList<MyBikeBoard> nmal = new ArrayList<MyBikeBoard>();
+
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < mal.size(); i++) {
+
+					if (al.get(position).equals(mal.get(i).getShareType())) {
+						nmal.add(mal.get(i));
+					}
+				}
+
+				mal.clear();
+				for (int i = 0; i < nmal.size(); i++) {
+					mal.add(nmal.get(i));
+				}
+				sbla.notifyDataSetChanged();
+				ad.dismiss();
+
+			}
+
+		});
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+				android.R.layout.simple_list_item_1, al);
+		lv.setAdapter(adapter);
+
+		builder.setView(ll);
+		ad = builder.create();
+		return ad;
+
+	}
+
+	public void setBikeImgDialog(final MyBikeBoard mbb) {
+
+		ImageView iv = (ImageView) ll.findViewById(R.id.myBikeIVmyBikeDialog);
+		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
+		iv.setImageBitmap(bm);
+
+	}
+
+	public AlertDialog getMapDialog(String lati, String longi) {
+
+		ad = builder.create();
+		return ad;
+	}
+
+	
 
 }

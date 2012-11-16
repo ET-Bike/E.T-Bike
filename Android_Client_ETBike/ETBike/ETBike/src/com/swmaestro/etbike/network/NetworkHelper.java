@@ -2,6 +2,8 @@ package com.swmaestro.etbike.network;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOError;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,12 +14,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Entity;
 import android.util.Log;
 
 import com.swmaestro.variable.Variable;
@@ -36,11 +38,16 @@ public class NetworkHelper {
 	public boolean downloadImage(String downloadUrl, String path) {
 
 		int read;
+		String mTAG = " downloadImage";
 
 		String sFolderPath = path.substring(0, path.lastIndexOf("/"));
+		Log.e(TAG + mTAG, sFolderPath);
 		makeDir(sFolderPath);
 
 		File fPath = new File(path);
+		//http://125.209.193.11:8080/etbike/thumb/7/50
+		//http://125.209.193.11:8080/etbike/thumb/7
+
 
 		if (fPath.exists())
 			return true;
@@ -78,9 +85,51 @@ public class NetworkHelper {
 
 	public String getFileName(String path) {
 		int index = path.lastIndexOf('/');
+		int lastIndexOfFile = path.length()-1;
+		Log.e(TAG + " getFileName", "index = " + index);
+		Log.e(TAG + " getFileName", "lastindex = " + lastIndexOfFile);
+		if(index == lastIndexOfFile) {
+			path = path.substring(0,lastIndexOfFile);
+			Log.e(TAG + " getFileName", "path = " + path);
+			index = path.lastIndexOf('/'); 
+		}
 		String fileName = path.substring(index + 1);
+		Log.e(TAG + " getFileName", "fileName = " + fileName);
 		return fileName;
+		
+//		http://125.209.193.11:8080/etbike/img/7
 
+
+	}
+	
+	protected String getThumbNailFileName(String path){
+		
+		int lastIndexOfFile = path.length();
+//		return path.substring(lastIndexOfFile-6, )
+		String thumbNailPath = path.substring(0, lastIndexOfFile -3);
+		Log.e(TAG + "getThumbNailFileName" ,"thumbpath = " + thumbNailPath);
+		return getFileName(thumbNailPath);
+		
+		
+//		String path = path.substring(0,lastIndexOfFile);
+//		while(true) {
+//			Log.e(TAG + "getThumbNailFileName" ,"in for loop");
+//			if(path.charAt(i) == '/') {
+//				j++;
+//			}
+//			if(j == 2) {
+//				Log.e(TAG + "getThumbNailFileName" ,"path's substring = " + path.substring(0, j));
+//				return getFileName(path.substring(0, j));
+//			}
+//			if(i==0) {
+//				Log.e(TAG + "getThumbNailFileName" ,"name not found");
+//				return null;
+////				return  new IOException ;
+//			}
+//			i--;
+//		}
+		
+		
 	}
 
 	public File getStrPathByFile(String downloadUrl) {
@@ -126,6 +175,7 @@ public class NetworkHelper {
 				System.out.println("있");
 
 			FileBody bin = new FileBody(saveFile);
+			
 			MultipartEntity multipart = new MultipartEntity(
 					HttpMultipartMode.BROWSER_COMPATIBLE);
 			multipart.addPart("upload", bin);

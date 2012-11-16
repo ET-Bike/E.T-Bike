@@ -7,6 +7,15 @@ public class Account {
 	private String password;
 	private String firstName;
 	private String lastName;
+	private String myImagePath;
+
+	public String getMyImagePath() {
+		return myImagePath;
+	}
+
+	public void setMyImagePath(String myImagePath) {
+		this.myImagePath = myImagePath;
+	}
 
 	public Account(){}
 

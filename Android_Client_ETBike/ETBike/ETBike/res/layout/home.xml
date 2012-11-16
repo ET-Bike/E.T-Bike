@@ -27,28 +27,28 @@
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people1" />
 
                 <ImageView
                     android:id="@+id/peopleIV1"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people2" />
 
                 <ImageView
                     android:id="@+id/peopleIV2"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people3" />
 
                 <ImageView
                     android:id="@+id/peopleIV3"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people4" />
             </LinearLayout>
 
             <LinearLayout
@@ -62,28 +62,28 @@
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people5" />
 
                 <ImageView
                     android:id="@+id/peopleIV5"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people6" />
 
                 <ImageView
                     android:id="@+id/peopleIV6"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people7" />
 
                 <ImageView
                     android:id="@+id/peopleIV7"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people8" />
             </LinearLayout>
 
             <LinearLayout
@@ -97,31 +97,41 @@
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people9" />
 
                 <ImageView
                     android:id="@+id/peopleIV9"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people10" />
 
                 <ImageView
                     android:id="@+id/peopleIV10"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people11" />
 
                 <ImageView
                     android:id="@+id/peopleIV11"
                     android:layout_width="0px"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/icon" />
+                    android:background="@drawable/main_people12" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/home_logo"
+         >
+    </LinearLayout>    
+        
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -132,7 +142,7 @@
             android:id="@+id/sceneIVHome"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/facebook_icon" />
+            android:background="@drawable/main_bike" />
 
         <RelativeLayout
             android:id="@+id/viewGroup"
@@ -189,7 +199,7 @@
                 android:background="@drawable/composer_music"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
-
+<!-- 
             <com.paran.animation.demo.app.animation.PathButton
                 android:id="@+id/thought"
                 android:layout_width="wrap_content"
@@ -213,7 +223,7 @@
                 android:background="@drawable/composer_sleep"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
-
+ -->
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

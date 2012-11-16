@@ -28,18 +28,19 @@ public class WorkVectors {
 	public static final String DIAL_TYPE_SHARE = "dial_type_share";
 
 	public static final String BIKE_TYPE = "my_bike_bike_type";
-	public static final int BIKE_TYPE_MOUNTAIN = 0;
-	public static final int BIKE_TYPE_COMMUTE = 1;
-	public static final int BIKE_TYPE_PLAYER = 2;
+	public static final String BIKE_TYPE_MOUNTAIN = "산악용";
+	public static final String BIKE_TYPE_COMMUTE = "출퇴근용";
+	public static final String BIKE_TYPE_PLAYER = "선수용";
 
 	public static final String TRADE_TYPE = "my_bike_trade_type";
-	public static final int TRADE_TYPE_DELIEVERY = 0;
-	public static final int TRADE_TYPE_DIRECT_DEAL = 1;
+	public static final String TRADE_TYPE_DELIEVERY = "택배";
+	public static final String TRADE_TYPE_DIRECT_DEAL = "직거래";
 
 	public static final String SHARE_TYPE = "my_bike_share_type";
-	public static final int SHARE_TYPE_RENT = 0;
-	public static final int SHARE_TYPE_DONATION = 1;
-	public static final int SHARE_TYPE_SELL = 2;
+	
+	public static final String SHARE_TYPE_RENT = "대여";
+	public static final String SHARE_TYPE_DONATION = "기부";
+	public static final String SHARE_TYPE_SELL = "판매";
 
 	public static final String DIAL_CONTENT = "dial_content";
 	
@@ -62,6 +63,12 @@ public class WorkVectors {
 	public static final String UPLOAD_FACEBOOK_FLAG = "upload_facebook_flag";
 	
 	public static final String MY_BIKE_LIST = "my_bike_list";
+	
+	public static final String SELECTED_MY_BIKE = "my_bike";
+	
+	public static final String SHARE_BIKE = "share_bike";
+	
+	public static final String FILTER_TYPE ="filter_type";
 	
 	
 	

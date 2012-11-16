@@ -7,7 +7,7 @@ public class Reply{
 
 	private String message;
 	private String writer;
-	private Board board;
+	private MyBikeBoard board;
 	private Date updatedTime;
 	
 	public String getMessage() {
@@ -22,10 +22,10 @@ public class Reply{
 	public void setWriter(String writer) {
 		this.writer = writer;
 	}
-	public Board getBoard() {
+	public MyBikeBoard getBoard() {
 		return board;
 	}
-	public void setBoard(Board board) {
+	public void setBoard(MyBikeBoard board) {
 		this.board = board;
 	}
 	public Date getUpdatedTime() {
@@ -35,11 +35,11 @@ public class Reply{
 		this.updatedTime = updatedTime;
 	}
 
-	public String getUpdatedTimestamp(){
-		Date date = getUpdatedTime();
-		return date != null ?
-				TimeUtils.getTimeStamp(date.getTime())
-				: "";
-	}
+//	public String getUpdatedTimestamp(){
+//		Date date = getUpdatedTime();
+//		return date != null ?
+//				TimeUtils.getTimeStamp(date.getTime())
+//				: "";
+//	}
 
 }

@@ -1,5 +1,6 @@
 package com.swmaestro.etbike.activity;
 
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,6 @@ public class LoadingActivity extends Activity {
 				finish();
 			}
 		};
-		mHandler.sendEmptyMessageDelayed(0, 4000);
+		mHandler.sendEmptyMessageDelayed(0, 0000);
 	}
 }

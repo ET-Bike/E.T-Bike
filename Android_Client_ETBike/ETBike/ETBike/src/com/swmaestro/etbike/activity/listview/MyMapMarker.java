@@ -32,7 +32,6 @@ public class MyMapMarker extends ItemizedOverlay {
 	public MyMapMarker(Drawable defaultMarker, Context context) {
 		this(defaultMarker);
 		mContext = context;
-		
 
 	}
 
@@ -46,11 +45,9 @@ public class MyMapMarker extends ItemizedOverlay {
 
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 		super.draw(canvas, mapView, shadow);
-		
 
 	}
 
-	
 	public void addOverlay(OverlayItem item, Drawable draw, int color) {
 
 		setColor(color);
@@ -75,7 +72,7 @@ public class MyMapMarker extends ItemizedOverlay {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 		dialog.setTitle(item.getTitle());
 		dialog.setMessage(item.getSnippet());
-		dialog.setPositiveButton("?�인", null);
+		dialog.setPositiveButton("?�인", null);
 		dialog.show();
 		return true;
 	}

@@ -9,7 +9,7 @@ public class FHaloManager {
 	Facebook mFacebook;
 	User user;
 	Photos photo;
-	
+
 	static FHaloManager fhm;
 
 	private FHaloManager() {
@@ -20,57 +20,53 @@ public class FHaloManager {
 		user = user.createInstance("me");
 		photo = new Photos();
 	}
-	
+
 	public static FHaloManager getInstance() {
-		if(fhm == null) {
+		if (fhm == null) {
 			fhm = new FHaloManager();
 		}
 		return fhm;
 	}
 
 	public String getMyProfilePic() {
-		
+
 		return user.getPicture();
 	}
 
 	public String getMyLastName() {
-		
-		
+
 		return user.getLastName();
 
 	}
-	
+
 	public String getMyFirstName() {
-		
-		
+
 		return user.getFirstName();
 
 	}
-	
+
 	public String getUserName() {
-		
+
 		return user.getUsername();
-		
+
 	}
-	
+
 	public boolean updatePhote(String detail, String strImgPath, String fileName) {
-		
+
 		photo.setMessage(detail);
 		photo.setSource(strImgPath);
 		photo.setFileName(fileName);
-		
-		
+
 		user.publishPhotos(user.albums().getData().get(0).getId(), photo);
 		return true;
 	}
-	
-//	public String get() {
-//		return user.getp
-//	}
+
+	// public String get() {
+	// return user.getp
+	// }
 
 	public boolean publishFeed() {
 		return true;
 	}
 
 }
-

@@ -1,7 +1,8 @@
 eclipse.preferences.version=1
-encoding//src/com/paran/animation/demo/app/animation/Path.java=UTF-8
-encoding//src/com/swmaestro/etbike/activity/MainActivity.java=UTF-8
+encoding//src/com/swmaestro/etbike/activity/HomeActivity.java=UTF-8
 encoding//src/com/swmaestro/etbike/network/NetworkHelper.java=UTF-8
 encoding//src/com/swmaestro/etbike/network/PageStreamer.java=UTF-8
 encoding//src/com/swmaestro/etbike/serverobject/BoardCategory.java=UTF-8
+encoding//src/com/swmaestro/etbike/serverobject/MyBikeBoard.java=UTF-8
 encoding//src/com/swmaestro/etbike/serverobject/TimeUtils.java=UTF-8
+encoding/<project>=UTF-8

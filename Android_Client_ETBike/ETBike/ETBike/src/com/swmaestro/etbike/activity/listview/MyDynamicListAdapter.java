@@ -16,24 +16,30 @@ import android.widget.TextView;
 import com.google.android.maps.MapView;
 import com.swmaestro.etbike.activity.MyProfileActivity;
 import com.swmaestro.etbike.activity.R;
-import com.swmaestro.etbike.activity.listview.object.MyBikeItem;
-import com.swmaestro.object.WorkVectors;
+import com.swmaestro.etbike.serverobject.MyBikeBoard;
 
 public class MyDynamicListAdapter extends BaseAdapter {
 
 	Context context;
 	LayoutInflater li;
-	ArrayList<MyBikeItem> al;
+	ArrayList<MyBikeBoard> al;
 	MapView mv;
 	boolean mapScrollFlag;
 	String exQuery;
 	String TAG = "MyDynamicListAdapter";
+	String exShareType = "ëŒ€ì—¬";
+	int mdloType = 0;
 
-	public MyDynamicListAdapter(Context context, ArrayList<MyBikeItem> al) {
+	public static final int VIEW_TYPE_MYBIKE = 0;
+	public static final int VIEW_TYPE_SHARE_BIKE = 1;
+
+	public MyDynamicListAdapter(Context context, ArrayList<MyBikeBoard> al,
+			int mdloType) {
 		this.context = context;
 		this.al = al;
 		this.li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.mdloType = mdloType;
 
 	}
 
@@ -51,22 +57,21 @@ public class MyDynamicListAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 		return position;
 	}
-
-	public int getItemViewType(int position) {
-		int viewType = al.get(position).viewType;
-		return viewType;
+	
+	public int getViewType(int position) {
+		return al.get(position).getViewType();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see android.widget.BaseAdapter#getViewTypeCount() ¹Ù²ã¾ßÇÔ
+	 * @see android.widget.BaseAdapter#getViewTypeCount() ï¿½Ù²ï¿½ï¿½ï¿½ï¿½
 	 */
+	//11-16 22:49:59.815: E/PageStremer executeMethod(8655): url = http://125.209.193.11:8080/etbike//shareBoard/getMyBikeList/doo.kim.54/
+
 	public int getViewTypeCount() {
 		return 2;
 	}
-
-	
 
 	/*
 	 * (non-Javadoc)
@@ -74,18 +79,20 @@ public class MyDynamicListAdapter extends BaseAdapter {
 	 * @see android.widget.Adapter#getView(int, android.view.View,
 	 * android.view.ViewGroup)
 	 */
-	
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
+
+		String strBikeImgThumbPath = al.get(position).getStrBikeImageThumbPath();
+		String content = al.get(position).getContent();
+		String tradeType = al.get(position).getTradeType();
+		String shareType = al.get(position).getShareType();
 		
+		int viewType = al.get(position).getViewType();
 		
-		String imgPath = al.get(position).bikeImagePath;
-		Bitmap imbBM = al.get(position).bitmap;
-		String tradeType = al.get(position).tradeType;
-		String detail = al.get(position).content;
-		int viewType = al.get(position).viewType;
+		Log.e(TAG + " getView","shareType = " + shareType);
 		
+
 		if (convertView == null) {
 			Log.e(TAG, "convertview null");
 
@@ -97,30 +104,31 @@ public class MyDynamicListAdapter extends BaseAdapter {
 			}
 			convertView = li.inflate(res, parent, false);
 		}
-		
-		if(viewType == MyProfileActivity.VIEW_TYPE_MY_BIKE) {
-			
-			ImageView iv = (ImageView)convertView.findViewById(R.id.myBikeImgIVMyBikeItem);
-			TextView tv = (TextView)convertView.findViewById(R.id.tradeTypeTVMyBikeItem);
-			TextView tv1 = (TextView)convertView.findViewById(R.id.detailTVMyBikeItem);
-			/*
-			 * Bitmap bm = BitmapFactory.decodeFile(imageURL);
-				myPicIV.setImageBitmap(bm);
-			 */
-			Bitmap bm = BitmapFactory.decodeFile(imgPath);
-			iv.setImageBitmap(bm);
-			
-			tv.setText(tradeType);
-			tv1.setText(detail);
-			
-		}else if(viewType == MyProfileActivity.VIEW_TYPE_SEPARATOR) {
-			
-			TextView tv = (TextView)convertView.findViewById(R.id.separatorTVMDLAview);
-			
-			tv.setText(tradeType);
-			
+		if (mdloType == VIEW_TYPE_MYBIKE) {
+			if (viewType == MyProfileActivity.VIEW_TYPE_SEPARATOR) {
+				
+				TextView tv = (TextView) convertView.findViewById(R.id.separatorTVMDLAview);
+				tv.setText(shareType);
+
+			} else {
+
+				ImageView iv = (ImageView) convertView.findViewById(R.id.myBikeImgIVMyBikeItem);
+				TextView tv = (TextView) convertView.findViewById(R.id.tradeTypeTVMyBikeItem);
+				TextView tv1 = (TextView) convertView.findViewById(R.id.detailTVMyBikeItem);
+				Log.e(TAG + " getView","strBikeThumbImg = " + strBikeImgThumbPath);
+				if(strBikeImgThumbPath != null) {
+					Log.e(TAG + " getView" ,"strBikeImgThumbPath = "+ strBikeImgThumbPath);
+					Bitmap bm = BitmapFactory.decodeFile(strBikeImgThumbPath);
+					iv.setImageBitmap(bm);	
+				}
+				tv.setText(tradeType);
+				tv1.setText(content);
+				exShareType = shareType;
+
+			}
 		}
 		
+
 		return convertView;
 	}
 

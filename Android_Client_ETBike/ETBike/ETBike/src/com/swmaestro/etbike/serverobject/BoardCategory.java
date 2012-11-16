@@ -9,12 +9,12 @@ public enum BoardCategory {
 	},
 	SCENE{
 		@Override public String getDescription() {
-			return "寃쎌튂蹂닿린";
+			return "SCENE";
 		}
 	},
 	SHARE{
 		@Override public String getDescription() {
-			return "怨듭쑀�섍린";
+			return "SHARE";
 		}
 	},
 	DEALIST{
@@ -24,12 +24,12 @@ public enum BoardCategory {
 	},
 	FALLOFFAME{
 		@Override public String getDescription() {
-			return "紐낆삁���꾨떦";
+			return "FALLOFFAME";
 		}
 	},
 	RIDEWITHME{
 		@Override public String getDescription() {
-			return "媛숈씠��린";
+			return "RIDEWITHME";
 		}
 	}
 	;

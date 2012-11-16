@@ -40,6 +40,7 @@ public class FindLocationActivity extends MapActivity {
 
 	Context context;
 	
+	
 	String TAG = "FindLocationActivity";
 
 	public void onCreate(Bundle savedInstance) {
@@ -51,7 +52,7 @@ public class FindLocationActivity extends MapActivity {
 
 		mdlo.enableMyLocation();
 		mdlo.enableCompass();
-
+		
 		context = this;
 		mdlo.runOnFirstFix(new Runnable() {
 

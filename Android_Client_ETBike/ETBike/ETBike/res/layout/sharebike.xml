@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/shareBikeByLVLL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/shareBikeLV"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/shareBikeByMapLL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+<!--         <ListView -->
+<!--             android:id="@+id/DealLV" -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" > -->
+<!--         </ListView> -->
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/shareBikeBySearchLL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+<!--         <ListView -->
+<!--             android:id="@+id/myJoinLV" -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" > -->
+<!--         </ListView> -->
+    </LinearLayout>
+    
+
+</FrameLayout>

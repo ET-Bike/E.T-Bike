@@ -2,30 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/listcolor"
     android:orientation="horizontal" >
-        
-    <ImageView 
-        android:id="@+id/myBikeImgIVMyBikeItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/icon"
-        />
-    
-    <TextView
-        android:id="@+id/tradeTypeTVMyBikeItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="item2"
-        android:layout_marginLeft="15dp"
-        />
-    
-    <TextView
-        android:id="@+id/detailTVMyBikeItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/dial_yellow"
-        android:layout_marginLeft="150dp"
-        />
-    
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/myBikeImgIVMyBikeItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/tradeTypeTVMyBikeItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="item2"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="right|center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/detailTVMyBikeItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dial_yellow" />
+    </LinearLayout>
 
 </LinearLayout>

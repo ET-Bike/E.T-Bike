@@ -15,22 +15,26 @@ public class Variable {
 	  public static final String ET_BIKE_FOLDER = "/ETBike/";
 		public static final String SD_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
 		public static final String ROOT_DIR = SD_DIR + ET_BIKE_FOLDER;
+		public static final String MY_BIKE_THUMB_DIR  = ROOT_DIR + "mythumbbike/";
+		public static final String MY_BIKE_DIR  = ROOT_DIR + "mybike/";
 		public static final String MY_PROFILE_DIR  = ROOT_DIR + "myprofile/";
+		public static final String MY_DEAL_DIR  = ROOT_DIR + "mydeal/";
+		
+		public static final String KOR_TRADE_TYPE_DELIEVERY = "ÌÉùÎ∞∞";
+		public static final String KOR_TRADE_TYPE_DIRECT_DEAL = "ÏßÅÍ±∞Îûò";
+		
+		public static final String KOR_SHARE_TYPE_RENT = "ÎåÄÏó¨";
+		public static final String KOR_SHARE_TYPE_DONATION = "Í∏∞Î∂Ä";
+		public static final String KOR_SHARE_TYPE_SELL = "ÌåêÎß§";		
+		//http://125.209.193.11:8080/etbike/thumb/38/50
 
-		public static final String KOR_TRADE_TYPE_DELIEVERY = "≈√πË";
-		public static final String KOR_TRADE_TYPE_DIRECT_DEAL = "¡˜∞≈∑°";
+//		public static final String KOR_COST_TIME = "ÔøΩ√∞ÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩ";
+//		public static final String KOR_COST_DAY = "ÔøΩœ¥ÔøΩ ÔøΩÔøΩÔøΩ";
+//		public static final String KOR_COST_WEEK = "ÔøΩ÷¥ÔøΩ ÔøΩÔøΩÔøΩ";
 		
-		public static final String KOR_SHARE_TYPE_RENT = "∑ª∆Æ";
-		public static final String KOR_SHARE_TYPE_DONATION = "±‚∫Œ";
-		public static final String KOR_SHARE_TYPE_SELL = "∆«∏≈";		
-		
-		public static final String KOR_COST_TIME = "Ω√∞£¥Á ∫ÒøÎ";
-		public static final String KOR_COST_DAY = "¿œ¥Á ∫ÒøÎ";
-		public static final String KOR_COST_WEEK = "¡÷¥Á ∫ÒøÎ";
-		
-		public static final String KOR_BIKE_TYPE_MOUNTAIN = "ªÍæ«øÎ";
-		public static final String KOR_BIKE_TYPE_COMMUTE = "≈Î±ŸøÎ";
-		public static final String KOR_BIKE_TYPE_PLAYER = "º±ºˆøÎ";
+		public static final String KOR_BIKE_TYPE_MOUNTAIN = "ÏÇ∞ÏïÖÏö©";
+		public static final String KOR_BIKE_TYPE_COMMUTE = "Ï∂úÌá¥Í∑ºÏö©";
+		public static final String KOR_BIKE_TYPE_PLAYER = "ÏÑ†ÏàòÏö©";
 		
 		public static final int SHARE_TYPE_NUM = 3;
 		
@@ -72,8 +76,13 @@ public class Variable {
 //		public static final String SERVER_BIKE_INFO_URL = "http://125.209.193.11:8080/etbike/boards";
 		public static final String SERVER_BIKE_INFO_URL = "http://125.209.193.11:8080/etbike/shareBoard/addBoard/";  
 		public static final String SERVER_GET_MY_BIKE_LIST_URL = "http://125.209.193.11:8080/etbike/shareBoard/getMyBikeList/";
-		//http://125.209.193.11:8080/etbike/shareBoard/getMyDealList/sex 
-		
+
+		public static final String SERVER_GET_SHARE_BIKE_LIST_URL = "http://125.209.193.11:8080/etbike/getShareBoards";
 		public static final String SERVER_IMG_URL = "http://125.209.193.11:8080/etbike/upload/img?CKEditor=contentEditor&CKEditorFuncNum=2&langCode=ko";
+		
+		
+		public static final String SERVER_SHARE_TYPE_RENT = "RENT";
+		public static final String SERVER_SHARE_TYPE_SELL = "SELL";
+		public static final String SERVER_SHARE_TYPE_DONATE = "DONATE";
 
 }

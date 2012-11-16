@@ -3,20 +3,34 @@
     android:id="@+id/homeTitleBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="left"
+    android:gravity="center"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/icon" />
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/myprofileBtnhomeTitleBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:background="@drawable/icon"
-         />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="right|center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/profileBtnhomeTitleBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/myinfo" />
+    </LinearLayout>
 
 </LinearLayout>

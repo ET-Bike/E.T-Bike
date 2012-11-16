@@ -125,9 +125,9 @@ public class RegisterBike extends MapActivity {
 
 		al = new ArrayList<RegisterItem>();
 
-		al.add(new RegisterItem("ÀÚÀü°Å Å¸ÀÔ",""));
-		al.add(new RegisterItem("°Å·¡ Å¸ÀÔ",""));
-		al.add(new RegisterItem("°øÀ¯  Å¸ÀÔ",""));
+		al.add(new RegisterItem("ìì „ê±° íƒ€ì…",""));
+		al.add(new RegisterItem("ê±°ë˜ íƒ€ì…",""));
+		al.add(new RegisterItem("ê³µìœ  íƒ€ì…",""));
 		
 		mla = new MyListAdapter(this, R.layout.registerfeatureitem, al);
 		lv.setAdapter(mla);
@@ -172,7 +172,7 @@ public class RegisterBike extends MapActivity {
 		mv.getOverlays().add(mdlo);
 
 		mapRegisterTV = (TextView) findViewById(R.id.mapRegisterTV);
-		mapRegisterTV.setText("ÇöÀçÀ§Ä¡ : " + mdlo.getLocationDetail());
+		mapRegisterTV.setText("í˜„ì¬ìœ„ì¹˜ : " + mdlo.getLocationDetail());
 		
 		dm = new DialogManager(this);
 
@@ -221,16 +221,16 @@ public class RegisterBike extends MapActivity {
 						// TODO Auto-generated method stub
 						String detail = registerBikeET.getText().toString();
 						if(detail.equals("")) {
-							Toast.makeText(context, "detailÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.", Toast.LENGTH_LONG).show();
+							Toast.makeText(context, "detailï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.", Toast.LENGTH_LONG).show();
 							return;
 							
 						}
 						if(bikeImgPath == null) {
-							Toast.makeText(context, "ÀÌ¹ÌÁö¸¦ µî·ÏÇÏ¼¼¿ä.", Toast.LENGTH_LONG).show();
+							Toast.makeText(context, "ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.", Toast.LENGTH_LONG).show();
 							return;
 							
 						}
-						Toast.makeText(context, "µî·Ï¿Ï·á µÇ¾ú½À´Ï´Ù.", Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "ï¿½ï¿½Ï¿Ï·ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½Ï´ï¿½.", Toast.LENGTH_LONG).show();
 						wv.put(WorkVectors.BIKE_INFO_CONTENT,detail);
 						
 						updateMyBike();
@@ -292,8 +292,8 @@ public class RegisterBike extends MapActivity {
 		ListView lv = (ListView) ll.findViewById(R.id.listViewLV);
 		final ArrayList<String> al = new ArrayList<String>();
 
-		al.add("»çÁøÃ£±â");
-		al.add("Ä«¸Ş¶ó");
+		al.add("ì‚¬ì§„ì²©ì—ì„œ ê°€ì ¸ì˜¤ê¸°");
+		al.add("ì¹´ë©”ë¼ë¡œ ì°ê¸°");
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
 				android.R.layout.simple_list_item_1, al);
@@ -324,7 +324,7 @@ public class RegisterBike extends MapActivity {
 
 		});
 
-		builder.setTitle("¼¼ºÎÁ¤º¸¸¦ µî·ÏÇØÁÖ¼¼¿ä.").setView(ll);
+		builder.setTitle("ì‚¬ì§„ì„ ê°€ì ¸ì˜¤ê¸°.").setView(ll);
 		ad = builder.create();
 		return ad;
 
@@ -350,7 +350,7 @@ public class RegisterBike extends MapActivity {
 				Log.e(TAG + "onactvitituresult", "location ==  " + loc);
 				Log.e(TAG + "onactvitituresult", "latitude ==  " + lat);
 
-				mapRegisterTV.setText("ÇöÀç À§Ä¡  : " + loc);
+				mapRegisterTV.setText("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡  : " + loc);
 				int iLat = (int) (Double.parseDouble(lat) * 1E6);
 				int iLon = (int) (Double.parseDouble(lon) * 1E6);
 				

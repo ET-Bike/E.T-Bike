@@ -1,21 +1,22 @@
 package com.swmaestro.etbike.serverobject;
 
-
-
-import java.util.List;
-
+import java.util.ArrayList;
 
 public class MyBikeList {
 	
-	private List<Board> myBikeBoard;
+	private  ArrayList<MyBikeBoard> myBikeBoard;
+//	private  ArrayList<MyBikeBoard> page;
 
-	public List<Board> getMyBikeBoard() {
+	public ArrayList<MyBikeBoard> getMyBikeBoard() {
 		return myBikeBoard;
 	}
 
-	public void setMyBikeBoard(List<Board> myBikeBoard) {
+	public void setMyBikeBoard(ArrayList<MyBikeBoard> myBikeBoard) {
 		this.myBikeBoard = myBikeBoard;
 	}
+
+	
+	
 	
 	
 }

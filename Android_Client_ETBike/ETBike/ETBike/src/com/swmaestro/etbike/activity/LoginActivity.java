@@ -6,10 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.sax.StartElementListener;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 
 import com.facebook.android.DialogError;
@@ -17,7 +18,6 @@ import com.facebook.android.FaceBookInstaceFactory;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
-import com.facebook.halo.application.types.User;
 import com.facebook.halo.framework.common.AccessToken;
 
 @SuppressLint("NewApi")
@@ -30,10 +30,11 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initTitleBar(R.layout.login, R.layout.logintitlebar);
         context = this;
         //loading
         startActivity(new Intent(context, LoadingActivity.class));
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
         
         mFaceBook = new Facebook(FACEBOOK_APP_ID);
         
@@ -50,7 +51,7 @@ public class LoginActivity extends Activity {
          */
         
         
-        findViewById(R.id.loginBtnMain).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.loginBtnLogin).setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -64,6 +65,14 @@ public class LoginActivity extends Activity {
         
         
     }
+    
+    private void initTitleBar(int mainLayout, int titleBarLayout) {
+
+		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		setContentView(mainLayout);
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, titleBarLayout);
+
+	}
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
 	  {
@@ -124,7 +133,9 @@ class AuthorizeListener implements DialogListener {
 		
 		FaceBookInstaceFactory.setFaceBook(mFacebook);
 		
-		context.startActivity(new Intent(context, MainActivity.class));
+		
+		
+		context.startActivity(new Intent(context, HomeActivity.class));
 		
 		
 		
