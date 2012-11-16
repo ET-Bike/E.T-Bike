@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.etbike.server.domain.model.Board;
@@ -100,8 +101,8 @@ public class BoardRepoController {
 		}
 	}
 	
-	@RequestMapping(value="/shareBoard/getSaleBoard")
-	public String getSaleBoard(@PathVariable ModelMap map){
+	@RequestMapping(value="/shareBoard/getSaleBoard" , method = RequestMethod.GET)
+	public String getSaleBoard(ModelMap map){
 		MyBikeList myBikeList = new MyBikeList();
 		List<ShareBoard> saleBoards = new ArrayList<ShareBoard>();
 		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("sell"));
@@ -114,8 +115,8 @@ public class BoardRepoController {
 		
 	}
 	
-	@RequestMapping(value="/shareBoard/getRentalBoard")
-	public String getRentalBoard(@PathVariable  ModelMap map){
+	@RequestMapping(value="/shareBoard/getRentalBoard", method = RequestMethod.GET)
+	public String getRentalBoard(ModelMap map){
 		MyBikeList myBikeList = new MyBikeList();
 		List<ShareBoard> rentalBoards = new ArrayList<ShareBoard>();
 		List<Board> boards = boardRepository.findAll(BoardSpecifications.isShareType("rent"));
