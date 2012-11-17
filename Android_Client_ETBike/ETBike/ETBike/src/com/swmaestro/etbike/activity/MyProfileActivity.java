@@ -202,7 +202,7 @@ public class MyProfileActivity extends TabActivity {
 						.getData(WorkVectors.SELECTED_MY_BIKE);
 				Log.e(TAG + " " + handlerTAg + " getmybike", "strbieimg = "
 						+ mbb.getStrBikeImagePath());
-				dm.setBikeImgDialog(mbb);
+				dm.setMyBikeImgDialog(mbb);
 			}
 		}
 	};

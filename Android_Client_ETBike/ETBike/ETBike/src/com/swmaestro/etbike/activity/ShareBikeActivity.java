@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,15 +57,9 @@ public class ShareBikeActivity extends TabActivity {
 		Drawable mapDraw = getResources().getDrawable(R.drawable.map);
 		Drawable searchDraw = getResources().getDrawable(R.drawable.search);
 
-		mTab.addTab(mTab.newTabSpec("viewByList")
-				.setIndicator("현재위치에서 찾기", locaDraw)
-				.setContent(R.id.shareBikeByLVLL));
-		mTab.addTab(mTab.newTabSpec("viewByMap")
-				.setIndicator("지도로 찾기", mapDraw)
-				.setContent(R.id.shareBikeByMapLL));
-		mTab.addTab(mTab.newTabSpec("viewBySearch")
-				.setIndicator("검색으로 찾기", searchDraw)
-				.setContent(R.id.shareBikeBySearchLL));
+		mTab.addTab(mTab.newTabSpec("viewByList").setIndicator("현재위치에서 찾기", locaDraw).setContent(R.id.shareBikeByLVLL));
+		mTab.addTab(mTab.newTabSpec("viewByMap").setIndicator("지도로 찾기", mapDraw).setContent(R.id.shareBikeByMapLL));
+		mTab.addTab(mTab.newTabSpec("viewBySearch")	.setIndicator("검색으로 찾기", searchDraw).setContent(R.id.shareBikeBySearchLL));
 
 		for (int i = 0; i < 3; i++) {
 			TextView text = (TextView) mTab.getTabWidget().getChildAt(i)
@@ -151,7 +146,9 @@ public class ShareBikeActivity extends TabActivity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				// TODO Auto-generated method stub
-				dm.getShareBikeDialog(shareBikeListAL.get(position)).show();
+				wv.put(WorkVectors.SELECTED_MY_BIKE, "MyBikeBoard",	shareBikeListAL.get(position));
+				dm.getShareBikeDialog(shareBikeListAL.get(position), mHandler).show();
+				new NetworkManager(wv, mHandler,NetworkManager.COMM_GET_MY_BIKE_IMG).start();
 			}
 		});
 
@@ -163,6 +160,10 @@ public class ShareBikeActivity extends TabActivity {
 				Toast.makeText(context, "자전거 정보를 받아 왓습니다.", Toast.LENGTH_LONG)
 						.show();
 				mdla.notifyDataSetChanged();
+			} else if (msg.what == NetworkManager.COMM_GET_MY_BIKE_IMG) {
+
+				MyBikeBoard mbb = (MyBikeBoard) wv	.getData(WorkVectors.SELECTED_MY_BIKE);
+				dm.setshareBikeImgDialog(mbb);
 			}
 		}
 	};

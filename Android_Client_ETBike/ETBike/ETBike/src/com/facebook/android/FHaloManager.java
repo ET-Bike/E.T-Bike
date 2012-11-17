@@ -27,6 +27,7 @@ public class FHaloManager {
 		}
 		return fhm;
 	}
+	
 
 	public String getMyProfilePic() {
 

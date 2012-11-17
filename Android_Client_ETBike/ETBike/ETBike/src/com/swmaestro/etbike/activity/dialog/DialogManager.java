@@ -9,11 +9,15 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Handler;
+import android.text.style.BulletSpan;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -227,7 +231,7 @@ public class DialogManager {
 
 	}
 
-	public AlertDialog getShareBikeDialog(final MyBikeBoard mbb) {
+	public AlertDialog getShareBikeDialog(final MyBikeBoard mbb, final Handler mHandler) {
 
 		/*
 		 * define view
@@ -246,16 +250,17 @@ public class DialogManager {
 		// Button likeButton =
 		// (Button)ll.findViewById(R.id.likeBtnshareBikeDialog);
 		final TextView likeTV = (TextView) ll
-				.findViewById(R.id.likeCountshareBikeDialog);
-		
+				.findViewById(R.id.likeCountTVshareBikeDialog);
+
 		final TextView commentTV = (TextView) ll
 				.findViewById(R.id.commentCountshareBikeDialog);
-		
+
 		final ArrayList<String> commentAL = new ArrayList<String>();
-		final ArrayAdapter<String> commentAA = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,commentAL);
-		ListView commentLV = (ListView)ll.findViewById(R.id.commentLVshareBikeDialog);
-		commentLV.setAdapter(commentAA);
-		
+		final ArrayAdapter<String> commentAA = new ArrayAdapter<String>(
+				context, android.R.layout.simple_list_item_1, commentAL);
+		// ListView commentLV =
+		// (ListView)ll.findViewById(R.id.commentLVshareBikeDialog);
+		// commentLV.setAdapter(commentAA);
 
 		titleTV.setText(mbb.getContent());
 		shareTV.setText(mbb.getShareType());
@@ -265,8 +270,14 @@ public class DialogManager {
 		String longi = mbb.getLongi();
 
 		detailLocTV.setText(mlm.getDetailLocationByCoordinate(lati, longi));
-		
-		commentTV.setText(mbb.getReplies().size() + "");
+
+		if (mbb.getReplies() == null) {
+			commentTV.setText(0 + "");
+		} else {
+			commentTV.setText(mbb.getReplies().size() + "");
+		}
+
+		boolean likeFlag = false;
 
 		ll.findViewById(R.id.likeBtnshareBikeDialog).setOnClickListener(
 				new android.view.View.OnClickListener() {
@@ -274,9 +285,17 @@ public class DialogManager {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						int likeCount = Integer.parseInt(likeTV.getText()
-								.toString());
-						likeTV.setText(likeCount + 1);
+
+						// int likeCount = Integer.parseInt(likeTV.getText()
+						// .toString());
+						// if()
+						// if(mbb.getLikeCount() == null) {
+						// likeTV.setText(1 + "");
+						// }else {
+						int likeNum = mbb.getLikeCount() + 1;
+						String likeString = likeNum + "";
+						likeTV.setText(likeString);
+						// }
 
 					}
 				});
@@ -287,16 +306,23 @@ public class DialogManager {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						for(int i = 0; i < mbb.getReplies().size(); i++) {
-							Iterator<Reply> replies = mbb.getReplies().iterator();
-							while(replies.hasNext()) {
-								Reply reply = replies.next();
-								String content = reply.getWriter() + ":" + reply.getMessage() + "(" + reply.getUpdatedTime() + ")";
-								commentAL.add(content);
-							}
-						}
-						commentAA.notifyDataSetChanged();
-						
+						// if (mbb.getReplies() == null) {
+						// return;
+						// }
+						// for (int i = 0; i < mbb.getReplies().size(); i++) {
+						// Iterator<Reply> replies = mbb.getReplies()
+						// .iterator();
+						// while (replies.hasNext()) {
+						// Reply reply = replies.next();
+						// String content = reply.getWriter() + ":"
+						// + reply.getMessage() + "("
+						// + reply.getUpdatedTime() + ")";
+						// commentAL.add(content);
+						// }
+						// }
+						// commentAA.notifyDataSetChanged();
+						ad.dismiss();
+						getCommentDialog(mbb, mHandler).show();
 
 					}
 				});
@@ -308,6 +334,52 @@ public class DialogManager {
 		return ad;
 
 	}
+
+	private AlertDialog getCommentDialog(final MyBikeBoard mbb, Handler mHandler) {
+
+		ll = (LinearLayout) View.inflate(context, R.layout.commentdialog, null);
+
+		ImageView iv = (ImageView) ll
+				.findViewById(R.id.BikeIVcommentDialog);
+		ListView lv = (ListView) ll.findViewById(R.id.commentLVcommentDialog);
+		EditText et = (EditText) ll.findViewById(R.id.commentETcommentDialog);
+		Button btn = (Button) ll.findViewById(R.id.commentBtncommentDialog);
+
+		ArrayList<String> al = new ArrayList<String>();
+		ArrayAdapter<String> aa = new ArrayAdapter<String>(context,
+				android.R.layout.simple_list_item_1, al);
+
+		if (mbb.getReplies() != null) {
+
+			for (int i = 0; i < mbb.getReplies().size(); i++) {
+				Iterator<Reply> replies = mbb.getReplies().iterator();
+				while (replies.hasNext()) {
+					Reply reply = replies.next();
+					String content = reply.getWriter() + ":"
+							+ reply.getMessage() + "(" + reply.getUpdatedTime()
+							+ ")";
+					al.add(content);
+				}
+			}
+
+		}
+
+		lv.setAdapter(aa);
+
+		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
+		iv.setImageBitmap(bm);
+
+		
+		builder.setView(ll);
+		ad = builder.create();
+		return ad;
+
+	}
+
+	// private AlertDialog getFilterDialog(final MyBikeBoard mbb) {
+	//
+	// return
+	// }
 
 	public AlertDialog getFilterDialog(final ArrayList<MyBikeBoard> mal,
 			final MyDynamicListAdapter sbla) {
@@ -370,11 +442,22 @@ public class DialogManager {
 
 	}
 
-	public void setBikeImgDialog(final MyBikeBoard mbb) {
+	public void setMyBikeImgDialog(final MyBikeBoard mbb) {
 
 		ImageView iv = (ImageView) ll.findViewById(R.id.myBikeIVmyBikeDialog);
-		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
-		iv.setImageBitmap(bm);
+//		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
+//		iv.setImageBitmap(bm);
+		iv.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
+
+	}
+
+	public void setshareBikeImgDialog(final MyBikeBoard mbb) {
+
+		ImageView iv = (ImageView) ll
+				.findViewById(R.id.shareBikeIVshareBikeDialog);
+//		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
+//		iv.setImageBitmap(bm);
+		iv.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
 
 	}
 

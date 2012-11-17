@@ -16,6 +16,6 @@ public class LoadingActivity extends Activity {
 				finish();
 			}
 		};
-		mHandler.sendEmptyMessageDelayed(0, 0000);
+		mHandler.sendEmptyMessageDelayed(0, 3000);
 	}
 }

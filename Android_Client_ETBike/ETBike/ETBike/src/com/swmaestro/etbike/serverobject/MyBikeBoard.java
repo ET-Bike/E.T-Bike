@@ -36,6 +36,15 @@ public class MyBikeBoard {
 	 */
 	private String bikeImagePathThumb;
 	private int viewType;
+	private String strMyImgPath;
+	public String getStrMyImgPath() {
+		return strMyImgPath;
+	}
+
+
+	public void setStrMyImgPath(String strMyImgPath) {
+		this.strMyImgPath = strMyImgPath;
+	}
 	private String strBikeImagePath;
 	private String strBikeImageThumbPath;
 	/*
