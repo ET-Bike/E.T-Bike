@@ -118,5 +118,26 @@ public class GeoProvider {
 
 		return new GeoPoint(ilati, ilongi);
 	}
+	
+	/*
+	 * addr = geocoder.getFromLocation(gProvider.getDLatitude(),
+						gProvider.getDLongitude(), 5);
+	 */
+	
+	public String getDetailLocationByCoordinate(String lati, String longi) {
+		try {
+			addr = geocoder.getFromLocation(Double.parseDouble(lati), Double.parseDouble(longi), 5);			
+			return composeAddressLine(addr.get(0));
+			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 
 }

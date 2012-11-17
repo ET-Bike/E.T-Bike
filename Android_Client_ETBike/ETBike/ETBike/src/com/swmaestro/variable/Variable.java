@@ -27,10 +27,6 @@ public class Variable {
 		public static final String KOR_SHARE_TYPE_DONATION = "기부";
 		public static final String KOR_SHARE_TYPE_SELL = "판매";		
 		//http://125.209.193.11:8080/etbike/thumb/38/50
-
-//		public static final String KOR_COST_TIME = "�ð��� ���";
-//		public static final String KOR_COST_DAY = "�ϴ� ���";
-//		public static final String KOR_COST_WEEK = "�ִ� ���";
 		
 		public static final String KOR_BIKE_TYPE_MOUNTAIN = "산악용";
 		public static final String KOR_BIKE_TYPE_COMMUTE = "출퇴근용";

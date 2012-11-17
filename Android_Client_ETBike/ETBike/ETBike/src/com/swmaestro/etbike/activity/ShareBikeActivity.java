@@ -14,15 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TabHost.OnTabChangeListener;
 
 import com.swmaestro.etbike.activity.dialog.DialogManager;
 import com.swmaestro.etbike.activity.listview.MyDynamicListAdapter;
-import com.swmaestro.etbike.activity.listview.MyListAdapter;
 import com.swmaestro.etbike.network.NetworkManager;
 import com.swmaestro.etbike.serverobject.MyBikeBoard;
 import com.swmaestro.object.WorkVectors;
@@ -141,6 +142,16 @@ public class ShareBikeActivity extends TabActivity {
 							.setBackgroundColor(Color.parseColor("#5f4444"));
 
 				}
+			}
+		});
+		
+		shareBikeListLV.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				// TODO Auto-generated method stub
+				dm.getShareBikeDialog(shareBikeListAL.get(position)).show();
 			}
 		});
 

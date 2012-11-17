@@ -43,7 +43,7 @@ public class MyBikeBoard {
 	 */
 	private int likeCount;
 	
-	private boolean dealWith;
+	private String dealWith;
 	
 	public MyBikeBoard(String shareType ,int viewType) {
 		this.shareType = shareType;
@@ -64,15 +64,20 @@ public class MyBikeBoard {
 	public void setLikeCount(int likeCount) {
 		this.likeCount = likeCount;
 	}
-	public boolean isDealWith() {
-		return dealWith;
-	}
-	public void setDealWith(boolean dealWith) {
-		this.dealWith = dealWith;
-	}
+	
 	public String getStrBikeImageThumbPath() {
 		return strBikeImageThumbPath;
 	}
+	public String getDealWith() {
+		return dealWith;
+	}
+
+
+	public void setDealWith(String dealWith) {
+		this.dealWith = dealWith;
+	}
+
+
 	public void setStrBikeImageThumbPath(String strBikeImageThumbPath) {
 		this.strBikeImageThumbPath = strBikeImageThumbPath;
 	}

@@ -9,7 +9,9 @@
         android:id="@+id/myBikeListLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:background="@drawable/background_img"
+        >
 
         <ListView
             android:id="@+id/myBikeLV"
@@ -23,7 +25,9 @@
         android:id="@+id/dealListLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:background="@drawable/background_img"
+         >
 
         <ListView
             android:id="@+id/DealLV"
@@ -37,7 +41,9 @@
         android:id="@+id/myJoinListLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:background="@drawable/background_img"
+        >
 
         <ListView
             android:id="@+id/myJoinLV"

@@ -34,3 +34,5 @@
     </LinearLayout>
 
 </LinearLayout>
+
+<!-- android:id="@+id/registerBtnTitleBar" -->

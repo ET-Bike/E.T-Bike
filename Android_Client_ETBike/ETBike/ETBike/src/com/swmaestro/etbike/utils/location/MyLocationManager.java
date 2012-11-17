@@ -63,6 +63,12 @@ public class MyLocationManager {
 		return geoPrivider.getGeoPoint(lati, longi);
 	}
 	
+	public String getDetailLocationByCoordinate(String lati, String longi) {
+		return geoPrivider.getDetailLocationByCoordinate(lati, longi);
+	}
+	
+	
+	
 	
 
 }

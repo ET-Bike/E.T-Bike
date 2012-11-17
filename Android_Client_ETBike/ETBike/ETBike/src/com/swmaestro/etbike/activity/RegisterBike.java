@@ -94,6 +94,8 @@ public class RegisterBike extends MapActivity {
 	
 	GPSProvider gProvier;
 	MyLocationManager lcm;
+	
+//	Button facebookToggleBtn;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initTitleBar(R.layout.register, R.layout.registertitlebar);
@@ -135,8 +137,10 @@ public class RegisterBike extends MapActivity {
 
 		mv = (MapView) findViewById(R.id.mapview);
 		
+		facebookToggleBtn = (Button)findViewById(R.id.facebookToggleBtn);
 		
-		findViewById(R.id.facebookToggleBtn).setOnClickListener(new OnClickListener() {
+		
+		facebookToggleBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -145,8 +149,11 @@ public class RegisterBike extends MapActivity {
 				
 				if(faceBooktoggleFlag == true) {
 					faceBooktoggleFlag = false;
+					facebookToggleBtn.setBackgroundResource(R.drawable.facebook_off);
 					Toast.makeText(context, "toggle button off", Toast.LENGTH_LONG).show();
+					
 				}else {
+					facebookToggleBtn.setBackgroundResource(R.drawable.facebook_on);
 					faceBooktoggleFlag = true;
 					Toast.makeText(context, "toggle button on", Toast.LENGTH_LONG).show();
 				}

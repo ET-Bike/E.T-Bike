@@ -2,18 +2,165 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_img"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/myBikeIVmyBikeDialog"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="5" />
+        android:layout_weight="5"
+        android:gravity="center"
+        android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/myBikeLVmyBikeDialog"
-        android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/myBikeIVmyBikeDialog"
+            android:layout_width="300dp"
+            android:layout_height="250dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="5" />
+        android:layout_weight="5"
+        android:background="@drawable/white_btn"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1.5"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titleTVmyBikeDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- 공유타입 : "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/shareTypeTVmyBikeDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- 공유자 : "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/ownerTVmyBikeDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- 거래대상 : "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/dealWithTVmyBikeDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+            <Button
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/call_dial" />
+
+            <Button
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/facebook_dial" />
+
+            <Button
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/profile_dial" />
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- 세부위치: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/detailLocationTVmyBikeDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

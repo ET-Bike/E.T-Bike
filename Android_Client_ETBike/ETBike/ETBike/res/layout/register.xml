@@ -2,18 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_img"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:orientation="vertical" >
-
-        <ImageView
-            android:id="@+id/myPicIVRegister"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/icon" />
 
         <FrameLayout
             android:layout_width="fill_parent"
@@ -24,16 +19,26 @@
             <EditText
                 android:id="@+id/registerBikeDetailETRegister"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/dial_yellow" />
+                android:layout_height="222dp"
+                android:background="@drawable/dial_blue" />
 
             <ImageView
                 android:id="@+id/registerBikeImageTVRegister"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="right"
-                android:background="@drawable/icon" />
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/anony_bike" />
         </FrameLayout>
+
+        <ImageView
+            android:id="@+id/myPicIVRegister"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/anony_people" />
     </RelativeLayout>
 
     <LinearLayout
@@ -52,7 +57,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="0px"
                 android:layout_weight="1"
-                android:text="세부사항을 선택하세요." />
+                android:background="@drawable/white_s_btn"
+                android:text="세부사항을 선택하세요."
+                android:textColor="@android:color/black"
+                android:textAlignment="center"
+                android:padding="10dp"
+                 />
 
             <ListView
                 android:id="@+id/registerFeatureLVRegister"
@@ -73,7 +83,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="0px"
                 android:layout_weight="1"
-                android:text="현재 위치는" />
+                android:background="@drawable/white_s_btn"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:text="현재 위치는"
+                android:padding="10dp"
+                 />
 
             <com.google.android.maps.MapView
                 android:id="@+id/mapview"
@@ -89,14 +104,14 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:gravity="right|center" >
 
         <Button
             android:id="@+id/facebookToggleBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/facebook_icon"
-             />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/facebook_off" />
     </LinearLayout>
 
 </LinearLayout>
