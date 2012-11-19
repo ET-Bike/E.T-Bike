@@ -11,22 +11,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
-import android.text.style.BulletSpan;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.swmaestro.etbike.activity.R;
 import com.swmaestro.etbike.activity.listview.MyDynamicListAdapter;
 import com.swmaestro.etbike.activity.listview.MyListAdapter;
 import com.swmaestro.etbike.activity.listview.object.RegisterItem;
+import com.swmaestro.etbike.activity.map.MyCourseOverlayItem;
 import com.swmaestro.etbike.serverobject.MyBikeBoard;
 import com.swmaestro.etbike.serverobject.Reply;
 import com.swmaestro.etbike.utils.location.MyLocationManager;
@@ -42,12 +46,21 @@ public class DialogManager {
 	AlertDialog ad;
 	LinearLayout ll;
 	MyLocationManager mlm;
+	String TAG = "DialogManager";
 
 	public DialogManager(Context context) {
 		this.context = context;
 		this.builder = new AlertDialog.Builder(context);
 		this.mlm = new MyLocationManager(context);
 
+	}
+	
+	public AlertDialog getConfirmDialog() {
+		builder.setTitle("코스 참가").setMessage("정말로 참가하시겠습니까?").setPositiveButton("확인", null).setNegativeButton("취소", null);
+		ad = builder.create();
+		return ad;
+		
+		
 	}
 
 	public AlertDialog getRegisterDialog(final WorkVectors wv,
@@ -231,7 +244,8 @@ public class DialogManager {
 
 	}
 
-	public AlertDialog getShareBikeDialog(final MyBikeBoard mbb, final Handler mHandler) {
+	public AlertDialog getShareBikeDialog(final MyBikeBoard mbb,
+			final Handler mHandler) {
 
 		/*
 		 * define view
@@ -339,8 +353,7 @@ public class DialogManager {
 
 		ll = (LinearLayout) View.inflate(context, R.layout.commentdialog, null);
 
-		ImageView iv = (ImageView) ll
-				.findViewById(R.id.BikeIVcommentDialog);
+		ImageView iv = (ImageView) ll.findViewById(R.id.BikeIVcommentDialog);
 		ListView lv = (ListView) ll.findViewById(R.id.commentLVcommentDialog);
 		EditText et = (EditText) ll.findViewById(R.id.commentETcommentDialog);
 		Button btn = (Button) ll.findViewById(R.id.commentBtncommentDialog);
@@ -369,7 +382,6 @@ public class DialogManager {
 		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
 		iv.setImageBitmap(bm);
 
-		
 		builder.setView(ll);
 		ad = builder.create();
 		return ad;
@@ -445,8 +457,8 @@ public class DialogManager {
 	public void setMyBikeImgDialog(final MyBikeBoard mbb) {
 
 		ImageView iv = (ImageView) ll.findViewById(R.id.myBikeIVmyBikeDialog);
-//		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
-//		iv.setImageBitmap(bm);
+		// Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
+		// iv.setImageBitmap(bm);
 		iv.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
 
 	}
@@ -455,16 +467,84 @@ public class DialogManager {
 
 		ImageView iv = (ImageView) ll
 				.findViewById(R.id.shareBikeIVshareBikeDialog);
-//		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
-//		iv.setImageBitmap(bm);
+		// Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
+		// iv.setImageBitmap(bm);
 		iv.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
 
 	}
 
-	public AlertDialog getMapDialog(String lati, String longi) {
+//	public AlertDialog getMapDialog(String lati, String longi) {
+//		ll = (LinearLayout) View.inflate(context, R.layout.mapdialog, null);
+//		ImageView iv = (ImageView) ll.findViewById(R.id.mapDialogMV);
+//		ad = builder.create();
+//		return ad;
+//	}
 
+	public AlertDialog getSetTimeDialog(final WorkVectors wv, final TextView timeTV) {
+		
+		ll = (LinearLayout) View.inflate(context, R.layout.timedialog, null);
+		DatePicker dp = (DatePicker)ll.findViewById(R.id.datePicker1);
+		TimePicker tp = (TimePicker)ll.findViewById(R.id.timePicker1);
+
+		wv.put(WorkVectors.COURSE_YEAR, dp.getYear());
+		wv.put(WorkVectors.COURSE_MONTH, dp.getMonth() + 1);
+		wv.put(WorkVectors.COURSE_DAY, dp.getDayOfMonth());
+//		wv.put(key, value);
+		
+		wv.put(WorkVectors.COURSE_HOUR, tp.getCurrentHour());
+		wv.put(WorkVectors.COURSE_MINUTE, tp.getCurrentMinute());
+		
+		Log.e(TAG + " getSetTimeDialog", "연월일 : " + dp.getYear() + " " + dp.getMonth() + " " + dp.getDayOfMonth());
+		Log.e(TAG + " getSetTimeDialog", "시간 : " + tp.getCurrentHour() + " " + tp.getCurrentMinute());
+		final String date = dp.getYear() + "년  " + dp.getMonth() + "월 " + dp.getDayOfMonth() + "일 " + tp.getCurrentHour() + "시 " + tp.getCurrentMinute() + "분 ";
+		
+		
+		builder.setView(ll).setTitle("세부 시간을 입력해주세요.").setPositiveButton("확인", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				wv.put(WorkVectors.COURSE_DATE, date);
+				timeTV.setText("코스 시간 : " + date);
+				
+				
+			}
+		});
 		ad = builder.create();
 		return ad;
+
+	}
+	
+public AlertDialog getCourseDetailDialog(MyCourseOverlayItem mcoi) {
+	
+	MyLocationManager mlm = new MyLocationManager(context);
+		
+		ll = (LinearLayout) View.inflate(context, R.layout.coursedetaildialog, null);		
+		TextView contentTV = (TextView) ll.findViewById(R.id.courseDetailDialogContentTV);
+		TextView routeTV = (TextView) ll.findViewById(R.id.courseDetailDialogRouteTV);
+		TextView timeTV = (TextView) ll.findViewById(R.id.courseDetailDialogTimeTV);
+		
+		String sLoc = mlm.getDetailLocationByCoordinate(mcoi.getsGeo());
+		String eLoc = mlm.getDetailLocationByCoordinate(mcoi.geteGeo());
+		contentTV.setText(mcoi.getTitle());
+		routeTV.setText(sLoc + "->" + eLoc);
+		timeTV.setText(mcoi.getTime());
+		
+		
+		
+		
+		
+		
+		builder.setView(ll);
+		
+		ad = builder.create();
+		
+		 LayoutParams params = ad.getWindow().getAttributes(); 
+	        params.x = 300;
+	        params.y = 500;
+	        ad.getWindow().setAttributes(params);
+		return ad;
+
 	}
 
 }

@@ -37,12 +37,11 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.swmaestro.etbike.activity.dialog.DialogManager;
 import com.swmaestro.etbike.activity.listview.MyListAdapter;
-import com.swmaestro.etbike.activity.listview.MyMapMarker;
 import com.swmaestro.etbike.activity.listview.object.RegisterItem;
+import com.swmaestro.etbike.activity.map.MyDynamicLocationOverlay;
+import com.swmaestro.etbike.activity.map.MyMapMarker;
 import com.swmaestro.etbike.network.NetworkManager;
-import com.swmaestro.etbike.utils.location.GPSProvider;
-import com.swmaestro.etbike.utils.location.GeoProvider;
-import com.swmaestro.etbike.utils.location.MyDynamicLocationOverlay;
+
 import com.swmaestro.etbike.utils.location.MyLocationManager;
 import com.swmaestro.object.WorkVectors;
 
@@ -51,7 +50,7 @@ public class RegisterBike extends MapActivity {
 
 	final int TAKE_CAMERA = 1;
 	final int TAKE_GALLERY = 2;
-
+	final int FIND_LOCAION_BY_MAP = 18;
 	ImageView bikePicIV;
 	ImageView myPicIV;
 	
@@ -76,7 +75,7 @@ public class RegisterBike extends MapActivity {
 	MyDynamicLocationOverlay mdlo;
 
 	TextView mapRegisterTV;
-	int FIND_LOCAION_BY_MAP = 18;
+	
 
 	DialogManager dm;
 
@@ -92,7 +91,7 @@ public class RegisterBike extends MapActivity {
 	String latitude;
 	String longitude;
 	
-	GPSProvider gProvier;
+
 	MyLocationManager lcm;
 	
 //	Button facebookToggleBtn;
@@ -345,7 +344,7 @@ public class RegisterBike extends MapActivity {
 		
 		if (resultCode == RESULT_OK) {
 			if (requestCode == FIND_LOCAION_BY_MAP) {
-				GeoProvider gp = new GeoProvider(context);
+//				GeoProvider gp = new GeoProvider(context);
 				String lat = data.getStringExtra("latitude");
 				String lon = data.getStringExtra("longitude");
 				String loc = data.getStringExtra("location");
@@ -353,15 +352,13 @@ public class RegisterBike extends MapActivity {
 				wv.put(WorkVectors.BIKE_LATITUDE, lat);
 				wv.put(WorkVectors.BIKE_LONGITUDE, lon);
 				
-				Log.e(TAG + "onactvitituresult", "result ok");
-				Log.e(TAG + "onactvitituresult", "location ==  " + loc);
-				Log.e(TAG + "onactvitituresult", "latitude ==  " + lat);
+				Log.e(TAG + " onactvitituresult", "result ok");
+				Log.e(TAG + " onactvitituresult", "location ==  " + loc);
+				Log.e(TAG + " onactvitituresult", "latitude ==  " + lat);
 
-				mapRegisterTV.setText("���� ��ġ  : " + loc);
+				mapRegisterTV.setText("현재위치는  : " + loc);
 				int iLat = (int) (Double.parseDouble(lat) * 1E6);
 				int iLon = (int) (Double.parseDouble(lon) * 1E6);
-				
-				
 				
 				addOverlay(iLat, iLon);
 
@@ -389,11 +386,12 @@ public class RegisterBike extends MapActivity {
 	}
 
 	private void addOverlay(int lati, int longi) {
+		Log.e(TAG + " addOverlay", "addOverlay start");
+		Log.e(TAG + " addOverlay", "lati = " + lati);
+		Log.e(TAG + " addOverlay", "longi = " + longi);
 		MyMapMarker mapMarker = null;
-
-		int ilati = (int) (lati * 1E6);
-		int ilongi = (int) (longi * 1E6);
-		GeoPoint gp = new GeoPoint(ilati, ilongi);
+		
+		GeoPoint gp = new GeoPoint(lati, longi);
 
 		Drawable stDraw = context.getResources().getDrawable(
 				R.drawable.map_departure_icon);
@@ -402,6 +400,8 @@ public class RegisterBike extends MapActivity {
 
 		mapMarker = new MyMapMarker(stDraw, context);
 		mapMarker.addOverlay(new OverlayItem(gp, "", ""), stDraw, Color.BLACK);
+		
+		mv.getOverlays().add(mapMarker);
 
 	}
 
@@ -414,12 +414,7 @@ public class RegisterBike extends MapActivity {
 		return cursor.getString(column_index);
 
 	}
-
-	private void animateLocation(GeoPoint gp) {
-		mv.getController().setZoom(17);
-		mv.getController().animateTo(gp);
-	}
-
+	
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
@@ -436,3 +431,4 @@ public class RegisterBike extends MapActivity {
 
 // public void onPause() {
 // super.onPauss();
+

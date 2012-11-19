@@ -19,14 +19,14 @@ public class GeoProvider {
 	Geocoder geocoder;
 	List<Address> addr = null;
 
-	public GeoProvider(Context context) {
+	protected GeoProvider(Context context) {
 
 		this.context = context;
 		this.geocoder = new Geocoder(context);
 
 	}
 
-	public String getLocationDetail(String lat, String lon) {
+	protected String getLocationDetail(String lat, String lon) {
 
 		try {
 			addr = geocoder.getFromLocation(Double.parseDouble(lat),
@@ -44,7 +44,7 @@ public class GeoProvider {
 
 	}
 
-	public String getDetailLocationByLocation(String location) {
+	protected String getDetailLocationByLocation(String location) {
 		try {
 			addr = geocoder.getFromLocationName(location, 5);
 		} catch (IOException e) {
@@ -57,7 +57,7 @@ public class GeoProvider {
 
 	}
 
-	public ArrayList<LocationItem> getDetailLocationListByLocation(
+	protected ArrayList<LocationItem> getDetailLocationListByLocation(
 			String location) {
 		// ArrayList<String> al = ArrayList<String>();
 		ArrayList<LocationItem> al = new ArrayList<LocationItem>();
@@ -96,11 +96,11 @@ public class GeoProvider {
 		return sb.toString();
 	}
 
-	public GeoPoint getGeoPoint(int lati, int longi) {
+	protected GeoPoint getGeoPoint(int lati, int longi) {
 		return new GeoPoint(lati, longi);
 	}
 
-	public GeoPoint getGeoPoint(String lati, String longi) {
+	protected GeoPoint getGeoPoint(String lati, String longi) {
 
 		Double dlati = Double.parseDouble(lati);
 		Double dlongi = Double.parseDouble(longi);
@@ -110,7 +110,7 @@ public class GeoProvider {
 		return new GeoPoint(ilati, ilongi);
 	}
 
-	public GeoPoint getGeoPoint(Double lati, Double longi) {
+	protected GeoPoint getGeoPoint(Double lati, Double longi) {
 
 		
 		int ilati = (int) (lati * 1E6);
@@ -124,9 +124,10 @@ public class GeoProvider {
 						gProvider.getDLongitude(), 5);
 	 */
 	
-	public String getDetailLocationByCoordinate(String lati, String longi) {
+	protected String getDetailLocationByCoordinate(String lati, String longi) {
 		try {
-			addr = geocoder.getFromLocation(Double.parseDouble(lati), Double.parseDouble(longi), 5);			
+			addr = geocoder.getFromLocation(Double.parseDouble(lati), Double.parseDouble(longi), 5);
+			
 			return composeAddressLine(addr.get(0));
 			
 		} catch (NumberFormatException e) {
@@ -139,5 +140,28 @@ public class GeoProvider {
 		return null;
 		
 	}
+	
+	protected String getDetailLocationByGeoPoint(GeoPoint gp) {
+		try {
+			double dlat = (double)(gp.getLatitudeE6()/1E6);
+			double dlon = (double)(gp.getLongitudeE6()/1E6);
+			
+			addr = geocoder.getFromLocation(dlat, dlon, 5);
+			
+			return composeAddressLine(addr.get(0));
+			
+			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	
 
 }

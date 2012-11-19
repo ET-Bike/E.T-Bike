@@ -70,6 +70,16 @@ public class WorkVectors {
 	
 	public static final String FILTER_TYPE ="filter_type";
 	
+	public static final String COURSE_YEAR = "course_year";
+	public static final String COURSE_MONTH = "course_month";
+	public static final String COURSE_DAY = "course_day";
+	public static final String COURSE_DATE = "course_date";
+	
+	public static final String COURSE_HOUR = "course_time";
+	public static final String COURSE_MINUTE = "course_minute";
+	
+	
+	
 	
 	
 

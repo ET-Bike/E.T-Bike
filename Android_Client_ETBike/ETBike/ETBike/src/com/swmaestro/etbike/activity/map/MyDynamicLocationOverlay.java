@@ -1,18 +1,16 @@
-package com.swmaestro.etbike.utils.location;
+package com.swmaestro.etbike.activity.map;
 
 import java.io.IOException;
 import java.util.List;
-
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.swmaestro.etbike.utils.location.GPSProvider;
 
 public class MyDynamicLocationOverlay extends MyLocationOverlay {
 
@@ -24,14 +22,13 @@ public class MyDynamicLocationOverlay extends MyLocationOverlay {
 	public MyDynamicLocationOverlay(Context context, MapView mapView) {
 		super(context, mapView);
 		this.context = context;
-		LocationManager mLocMan = (LocationManager) context
-				.getSystemService(context.LOCATION_SERVICE);
+		LocationManager mLocMan = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
 		gProvider = new GPSProvider(mLocMan);
 		geocoder = new Geocoder(context);
 	}
 
 	protected boolean dispatchTap() {
-		Toast.makeText(context, "¿©±â°¡ ÇöÀç À§Ä¡ ÀÔ´Ï´Ù.", Toast.LENGTH_LONG).show();
+		Toast.makeText(context, "ï¿½ï¿½ï¿½â°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ô´Ï´ï¿½.", Toast.LENGTH_LONG).show();
 		return false;
 	}
 
@@ -62,8 +59,6 @@ public class MyDynamicLocationOverlay extends MyLocationOverlay {
 			sb.append(addr.getSubLocality() + " ");
 		if (addr.getThoroughfare() != null)
 			sb.append(addr.getThoroughfare() + " ");
-		// if(addr.getLocality() != null)
-		// sb.append(addr.getSubThoroughfare());
 		Log.e(TAG, sb.toString());
 		return sb.toString();
 	}

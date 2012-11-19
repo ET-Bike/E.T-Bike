@@ -99,11 +99,12 @@ public class HomeActivity extends Activity {
 					}
 					//ride with me
 					else if(i == 1) {
-						
+						startActivity(new Intent(context, SceneBikeActivity.class));
 					}
 					//scene with bike
 					else if(i == 2) {
-						
+//						startActivity(new Intent(context, RegisterCourseActivity.class));
+						startActivity(new Intent(context, CourseViewActivity.class));
 					}
 					
 					else if(i == 3) {

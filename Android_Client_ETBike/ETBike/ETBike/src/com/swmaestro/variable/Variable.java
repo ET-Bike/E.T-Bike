@@ -19,6 +19,7 @@ public class Variable {
 		public static final String MY_BIKE_DIR  = ROOT_DIR + "mybike/";
 		public static final String MY_PROFILE_DIR  = ROOT_DIR + "myprofile/";
 		public static final String MY_DEAL_DIR  = ROOT_DIR + "mydeal/";
+		public static final String SCENE_DIR  = ROOT_DIR + "scene/";
 		
 		public static final String KOR_TRADE_TYPE_DELIEVERY = "택배";
 		public static final String KOR_TRADE_TYPE_DIRECT_DEAL = "직거래";

@@ -21,8 +21,6 @@ import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.swemaestro.etbike.dao.DBManager;
 import com.swmaestro.etbike.activity.dialog.DialogManager;
 import com.swmaestro.etbike.activity.listview.MyDynamicListAdapter;
 import com.swmaestro.etbike.network.NetworkManager;
@@ -41,8 +39,6 @@ public class MyProfileActivity extends TabActivity {
 
 	public static final int VIEW_TYPE_SEPARATOR = 0;
 	public static final int VIEW_TYPE_MY_BIKE = 1;
-
-	DBManager dbm;
 
 	NetworkManager nm;
 
@@ -88,7 +84,6 @@ public class MyProfileActivity extends TabActivity {
 
 		}
 
-		dbm = new DBManager(context);
 		dm = new DialogManager(this);
 		wv = new WorkVectors();
 		nm = new NetworkManager(wv, mHandler,

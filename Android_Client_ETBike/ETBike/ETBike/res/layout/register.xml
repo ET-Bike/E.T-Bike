@@ -61,7 +61,7 @@
                 android:text="세부사항을 선택하세요."
                 android:textColor="@android:color/black"
                 android:textAlignment="center"
-                android:padding="10dp"
+                android:layout_margin="4dp"
                  />
 
             <ListView
@@ -87,7 +87,7 @@
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:text="현재 위치는"
-                android:padding="10dp"
+                android:layout_margin="4dp"
                  />
 
             <com.google.android.maps.MapView
@@ -99,6 +99,8 @@
                 android:clickable="true" />
         </LinearLayout>
     </LinearLayout>
+    
+     
 
     <LinearLayout
         android:layout_width="match_parent"
