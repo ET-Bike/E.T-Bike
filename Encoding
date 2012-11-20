@@ -1,3 +1,16 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	new file:   Encoding_Solution.txt
+#	modified:   et.bike.server/src/main/java/com/etbike/server/domain/model/MyBikeList.java
+#	modified:   et.bike.server/target/m2e-wtp/web-resources/META-INF/maven/com.etbike/server/pom.properties
+#	deleted:    nameValuePairs
+#
+
 tomcat - Spring - DB - Client 이 4박자가 다 맞아야하는데 전부 utf-8로 바꾸려고했지만 잘 넣어지질 않았다.
 
 tomcat : 환경설정에서 open config 해서 encoding방식을 utf-8로 바꿔야한다.

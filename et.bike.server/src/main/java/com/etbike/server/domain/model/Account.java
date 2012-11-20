@@ -8,8 +8,11 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
 public class Account extends AbstractPersistable<Long>{
-	private static final long serialVersionUID = 5896590556584893996L;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7163931446421012738L;
 	private String username;
 	@JsonIgnore
 	private String password;
