@@ -70,7 +70,7 @@ public class BoardServiceImpl implements BoardService {
 //	@Cacheable(value="boardCache")
 	@Transactional(readOnly=true)
 	public Board readById(Long id) {
-		return boardRepository.findOne(id);
+		return boardRepository.findOne(id); 
 	}
 	
 	@Override
