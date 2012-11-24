@@ -34,17 +34,15 @@ public class BoardRepoController {
 	@Autowired private AccountRepository accountRepository;
 	@Autowired private FileRepository fileRepository;
 	
-	@RequestMapping(value="/shareBoard/get")
-	public String get(@PathVariable String username, ModelMap map){
-//		MyBikeList myBikeList = new MyBikeList();
-//		List<ShareBoard> shareBoards = new ArrayList<ShareBoard>();
-//		List<Board> boards = boardRepository.findAll(BoardSpecifications.isWriterName(username));
-//		
-//		toShareBoard(boards, shareBoards);		
-//		myBikeList.setMyBikeBoard(shareBoards);
-//		
-//		map.put("myBikeList", myBikeList);
-		return "ABAB";
+	@RequestMapping(value="/request/push", method = RequestMethod.GET)
+	@ResponseBody
+	public String requestPush(@PathVariable String username, ModelMap map){
+
+		
+		//sendMsg("doo871128","응답바");
+		//map.put("myBikeList", myBikeList);
+		//eturn "jsonView";
+		return "OK";
 		
 	}
 	
