@@ -7,15 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.etbike.server.domain.model.Account;
 import com.etbike.server.domain.model.MyCourseOverlayItem;
-import com.etbike.server.service.MyCourseService;
+import com.etbike.server.service.MyCourseOverlayItemService;
 
 @Controller
-public class MyCourseController {
+public class MyCourseOverlayItemController {
 
 	 @Autowired
-	 private MyCourseService myCourseService;
+	 private MyCourseOverlayItemService myCourseService;
 	 
 		@RequestMapping(value = "/myCourse", method = RequestMethod.PUT)
 		public String add(MyCourseOverlayItem model, ModelMap map) {

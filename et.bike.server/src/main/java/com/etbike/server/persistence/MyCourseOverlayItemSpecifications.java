@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.etbike.server.domain.model.MyCourseOverlayItem;
 import com.etbike.server.domain.model.MyCourseOverlayItem_;
 
-public class MyCourseSpecifications {
+public class MyCourseOverlayItemSpecifications {
 
 	public static Specification<MyCourseOverlayItem> isCoordinates(final Double sLatitude,final Double sLongitude){
 		return new Specification<MyCourseOverlayItem>() {

@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.etbike.server.domain.model.MyCourseOverlayItem;
-import com.etbike.server.persistence.MyCourseRepository;
-import com.etbike.server.persistence.MyCourseSpecifications;
-import com.etbike.server.service.MyCourseService;
+import com.etbike.server.persistence.MyCourseOverlayItemRepository;
+import com.etbike.server.persistence.MyCourseOverlayItemSpecifications;
+import com.etbike.server.service.MyCourseOverlayItemService;
 
 @Service
-public abstract class MyCourseServiceImpl implements MyCourseService{
+public abstract class MyCourseOverlayItemServiceImpl implements MyCourseOverlayItemService{
 
-	@Autowired private MyCourseRepository myCourseRepository;
+	@Autowired private MyCourseOverlayItemRepository myCourseRepository;
 	
 	@Override
 	public MyCourseOverlayItem saveMyCourse(MyCourseOverlayItem myCourseOverlayItem) {
@@ -21,7 +21,7 @@ public abstract class MyCourseServiceImpl implements MyCourseService{
 
 	public MyCourseOverlayItem findByCoordinates(double sLatitude,double sLongitude) {
 		// TODO Auto-generated method stub
-		return myCourseRepository.findOne(MyCourseSpecifications.isCoordinates(sLatitude, sLongitude));
+		return myCourseRepository.findOne(MyCourseOverlayItemSpecifications.isCoordinates(sLatitude, sLongitude));
 		
 	}
 }
