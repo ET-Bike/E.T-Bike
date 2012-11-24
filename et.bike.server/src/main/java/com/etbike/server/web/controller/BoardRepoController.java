@@ -197,6 +197,7 @@ public class BoardRepoController {
 			shareboard.setLikeCount(board.getLikeCount());
 			shareboard.setDealWith(board.getDealWith());
 			shareboard.setBikeImagePathThumb(board.getBikeImagePathThumb());
+			shareboard.setReplies(board.getReplies());
 			
 			shareBoards.add(shareboard);
 		}
