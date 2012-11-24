@@ -15,7 +15,7 @@ import com.google.appengine.api.xmpp.XMPPServiceFactory;
 
 @Controller
 public class PushingController {
-
+/*
 	@RequestMapping(value="/request/push")
 	@ResponseBody
 	public String requestPush(@PathVariable ModelMap map){
@@ -26,7 +26,7 @@ public class PushingController {
 		//eturn "jsonView";
 		return "OK";
 		
-	}
+	}*/
 	
 	private void sendMsg(String id, String body) {
 		/*
@@ -50,4 +50,5 @@ public class PushingController {
 
 		}
 	}
+
 }
