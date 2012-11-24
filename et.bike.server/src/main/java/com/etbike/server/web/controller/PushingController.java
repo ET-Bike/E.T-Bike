@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.appengine.api.xmpp.JID;
 import com.google.appengine.api.xmpp.Message;
@@ -16,6 +17,7 @@ import com.google.appengine.api.xmpp.XMPPServiceFactory;
 public class PushingController {
 
 	@RequestMapping(value="/request/push")
+	@ResponseBody
 	public String requestPush(@PathVariable ModelMap map){
 
 		
