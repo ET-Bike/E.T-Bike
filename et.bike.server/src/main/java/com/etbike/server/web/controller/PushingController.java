@@ -19,8 +19,10 @@ public class PushingController {
 	public String requestPush(@PathVariable ModelMap map){
 
 		
+		sendMsg("doo871128","응답바");
 		//map.put("myBikeList", myBikeList);
-		return "jsonView";
+		//eturn "jsonView";
+		return "OK";
 		
 	}
 	
