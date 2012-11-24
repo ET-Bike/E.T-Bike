@@ -26,6 +26,12 @@ import com.etbike.server.persistence.BoardSpecifications;
 import com.etbike.server.persistence.FileRepository;
 import com.etbike.server.persistence.FileSpecifications;
 import com.etbike.server.persistence.ReplyRepository;
+import com.google.appengine.api.xmpp.JID;
+import com.google.appengine.api.xmpp.Message;
+import com.google.appengine.api.xmpp.MessageBuilder;
+import com.google.appengine.api.xmpp.SendResponse;
+import com.google.appengine.api.xmpp.XMPPService;
+import com.google.appengine.api.xmpp.XMPPServiceFactory;
 
 @Controller
 public class BoardRepoController {
@@ -38,9 +44,32 @@ public class BoardRepoController {
 	@ResponseBody
 	public String addBoard(){
 
+		sendMsg("doo871128","응답바");
 		return "OKAY";
 	}
 	
+	private void sendMsg(String id, String body) {
+		/*
+		 * idformat is 2005/doo871128
+		 */
+		String gid = id.substring(id.indexOf("/") + 1, id.length());
+
+		JID jid = new JID(gid + "@gmail.com");
+
+		Message msg = new MessageBuilder().withRecipientJids(jid)
+				.withBody(body).build();
+		boolean messageSent = false;
+
+		XMPPService xmpp = XMPPServiceFactory.getXMPPService();
+		if (xmpp.getPresence(jid).isAvailable()) {
+			SendResponse status = xmpp.sendMessage(msg);
+
+			messageSent = (status.getStatusMap().get(jid) == SendResponse.Status.SUCCESS);
+		}
+		if (!messageSent) {
+
+		}
+	}
 	
 	@RequestMapping(value="/shareBoard/getMyBikeList/{username}")
 	public String getMyDealList(@PathVariable String username, ModelMap map){
