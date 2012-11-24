@@ -85,7 +85,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void saveReply(Reply model) {
+		Board board;
 		replyRepository.save(model);
+		board = boardRepository.findOne(model.getBoard().getId());
+		board.getReplies().add(model);
+		saveBoard(board);
+		
 	}
 
 	@Override
