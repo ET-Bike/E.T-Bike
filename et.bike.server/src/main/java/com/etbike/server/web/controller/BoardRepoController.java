@@ -34,6 +34,18 @@ public class BoardRepoController {
 	@Autowired private AccountRepository accountRepository;
 	@Autowired private FileRepository fileRepository;
 	
+	@RequestMapping(value="/request/push")
+	@ResponseBody
+	public String requestPush(@PathVariable ModelMap map){
+
+		
+		//sendMsg("doo871128","응답바");
+		//map.put("myBikeList", myBikeList);
+		//eturn "jsonView";
+		return "OK";
+		
+	}
+	
 	@RequestMapping(value="/shareBoard/getMyBikeList/{username}")
 	public String getMyDealList(@PathVariable String username, ModelMap map){
 		MyBikeList myBikeList = new MyBikeList();
