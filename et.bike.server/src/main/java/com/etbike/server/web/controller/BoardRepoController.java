@@ -34,6 +34,14 @@ public class BoardRepoController {
 	@Autowired private AccountRepository accountRepository;
 	@Autowired private FileRepository fileRepository;
 	
+	@RequestMapping(value="/request/push") //, produces="text/plain;charset=UTF-8")
+	@ResponseBody
+	public String addBoard(){
+
+		return "OKAY";
+	}
+	
+	
 	@RequestMapping(value="/shareBoard/getMyBikeList/{username}")
 	public String getMyDealList(@PathVariable String username, ModelMap map){
 		MyBikeList myBikeList = new MyBikeList();
