@@ -19,11 +19,11 @@ public class MyCourseOverlayItem extends AbstractPersistable<Long>{
 	private String sLoc;
 	private String eLoc;
     
-    private double sLatitude;
-    private double sLongitude;
+    private Double sLatitude;
+    private Double sLongitude;
     
-    private double eLatitude;
-    private double eLongitude;
+    private Double eLatitude;
+    private Double eLongitude;
     
     
 	private String time;

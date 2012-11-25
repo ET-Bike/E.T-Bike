@@ -19,13 +19,13 @@ public class MyCourseOverlayItemController {
 		@RequestMapping(value = "/myCourse", method = RequestMethod.PUT)
 		public String add(MyCourseOverlayItem model, ModelMap map) {
 			MyCourseOverlayItem myCourseOverlayItem = myCourseService.saveMyCourse(model);
-			map.put("result", "success");
+			map.put("myCourseOverlayItem", myCourseOverlayItem);
 
 			return "jsonView";
 		}
 		
 		@RequestMapping(value = "/getMyCourse")
-		public String getMyDealList(@PathVariable double sLatitude, double sLongitude, ModelMap map) {
+		public String getMyCourse(@PathVariable double sLatitude, double sLongitude, ModelMap map) {
 			MyCourseOverlayItem myCourseOverlayItem = myCourseService.findByCoordinates(sLatitude,sLongitude);
 			map.put("myCourseOverlayItem", myCourseOverlayItem);
 			return "jsonView";
