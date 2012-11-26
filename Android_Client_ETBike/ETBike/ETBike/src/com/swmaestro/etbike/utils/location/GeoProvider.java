@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.android.maps.GeoPoint;
-import com.swmaestro.etbike.activity.listview.object.LocationItem;
 
 import android.content.Context;
 import android.location.Address;
@@ -131,6 +130,7 @@ public class GeoProvider {
 			return composeAddressLine(addr.get(0));
 			
 		} catch (NumberFormatException e) {
+			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {

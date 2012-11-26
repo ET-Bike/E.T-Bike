@@ -3,6 +3,7 @@ package com.swmaestro.etbike.activity.listview;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
@@ -15,10 +16,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.swmaestro.etbike.activity.MapDialogActivity;
 import com.swmaestro.etbike.activity.R;
 import com.swmaestro.etbike.activity.dialog.DialogManager;
 import com.swmaestro.etbike.activity.listview.object.RegisterItem;
-import com.swmaestro.etbike.serverobject.MyBikeBoard;
+import com.swmaestro.etbike.activity.map.MyCourseOverlayItem;
+import com.swmaestro.etbike.network.object.MyBikeBoard;
 
 public class MyListAdapter extends BaseAdapter {
 
@@ -26,54 +29,56 @@ public class MyListAdapter extends BaseAdapter {
 	LayoutInflater li;
 	ArrayList<RegisterItem> registerAL;
 	ArrayList<MyBikeBoard> bikeAL;
+	ArrayList<MyCourseOverlayItem> courseAL;
 	PackageManager pm;
 	int layout;
 	int viewType;
 	String TAG = "MyListAdapter";
-	
+
 	public static final int SCENE_VIEW = 0;
 	public static final int REGISTER_VIEW = 1;
+	public static final int MY_COURSE = 2;
 
-	public MyListAdapter(Context context, int layout, ArrayList<RegisterItem> al) {
+	public MyListAdapter(Context context, int layout, Object al, int viewType) {
 		this.context = context;
 		this.layout = layout;
-		this.registerAL = al;
 		this.li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		pm = context.getPackageManager();
-		this.viewType = REGISTER_VIEW;
 
-	}
+		this.viewType = viewType;
 
-	public MyListAdapter(Context context, int layout,
-			ArrayList<MyBikeBoard> al, int type) {
-		this.context = context;
-		this.layout = layout;
-		this.bikeAL = al;
-		this.li = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		pm = context.getPackageManager();
-		this.viewType = type;
+		if (viewType == SCENE_VIEW) {
+			this.bikeAL = (ArrayList<MyBikeBoard>) al;
+		} else if (REGISTER_VIEW == viewType) {
+			this.registerAL = (ArrayList<RegisterItem>) al;
+		} else if (MY_COURSE == viewType) {
+			this.courseAL = (ArrayList<MyCourseOverlayItem>) al;
+		}
 
 	}
 
 	public int getCount() {
 		// TODO Auto-generated method stubif)
-//		if(S)
-		if(viewType == SCENE_VIEW) {
+		// if(S)
+		if (viewType == SCENE_VIEW) {
 			return bikeAL.size();
-		}else {
-			return registerAL.size();	
+		} else if (viewType == REGISTER_VIEW) {
+			return registerAL.size();
+		} else {
+			return courseAL.size();
 		}
-		
+
 	}
 
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		if(viewType == SCENE_VIEW) {
+		if (viewType == SCENE_VIEW) {
 			return bikeAL.get(position).getBikeImagePath();
-		}else {
-			return registerAL.get(position).key;	
+		} else if (viewType == REGISTER_VIEW) {
+			return registerAL.get(position).key;
+		} else {
+			return courseAL.get(position).getDetail();
 		}
 	}
 
@@ -82,7 +87,7 @@ public class MyListAdapter extends BaseAdapter {
 		return position;
 	}
 
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 
 		if (convertView == null) {
@@ -134,23 +139,76 @@ public class MyListAdapter extends BaseAdapter {
 					.findViewById(R.id.sceneLikeCountTV);
 			TextView commentTV = (TextView) convertView
 					.findViewById(R.id.sceneCommentCountTV);
-			
-			TextView detailTV = (TextView)convertView.findViewById(R.id.sceneDetailTVsceneItem);
+
+			TextView detailTV = (TextView) convertView
+					.findViewById(R.id.sceneDetailTVsceneItem);
 
 			writerIV.setBackgroundResource(mbb.getStrMyImgResource());
 			writerTV.setText(mbb.getWriter());
 			sceneIV.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
-//			mbb.getStrBikeImagePath()
-			Log.e(TAG + " sceneview", "scene path = " + mbb.getStrBikeImagePath());
-//			String sLikeCount = mbb.getLikeCount() +
+			// mbb.getStrBikeImagePath()
+			Log.e(TAG + " sceneview",
+					"scene path = " + mbb.getStrBikeImagePath());
+			// String sLikeCount = mbb.getLikeCount() +
 			likeTV.setText((mbb.getLikeCount() + ""));
-//			if (mbb.getReplies() != null) {
-//				commentTV.setText(mbb.getReplies().size());
-//			} else {
-//				commentTV.setText("0");
-//			}
+			// if (mbb.getReplies() != null) {
+			// commentTV.setText(mbb.getReplies().size());
+			// } else {
+			// commentTV.setText("0");
+			// }
 			commentTV.setText(mbb.getRepliesCount() + "");
 			detailTV.setText(mbb.getContent());
+		} else if (R.layout.myjoinlistitem == layout) {
+
+//			ImageView joinIV = (ImageView) convertView.findViewById(R.id.myJoinListItemImgIV);
+			TextView locationTV = (TextView) convertView	.findViewById(R.id.myJoinListLocationTV);
+			TextView writerTV = (TextView) convertView.findViewById(R.id.myJoinListWriterTV);
+			TextView peopleNumTV = (TextView) convertView
+					.findViewById(R.id.myJoinListPeopleNumTV);
+			TextView TimeTV = (TextView) convertView
+					.findViewById(R.id.myJoinListTimeTV);
+			
+//			joinIV.setb
+			locationTV.setText(courseAL.get(position).getsLoc() +" -> " + courseAL.get(position).geteLoc());
+			writerTV.setText("송태웅 : " + courseAL.get(position).getTitle());
+			peopleNumTV.setText("2명");
+			TimeTV.setText(courseAL.get(position).getTime());
+
+			convertView.findViewById(R.id.myJoinListcallBtn).setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							
+
+						}
+					});
+
+			convertView.findViewById(R.id.myJoinListcourseBtn).setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							Intent intent = new Intent(context, MapDialogActivity.class);
+							
+							Double slatitude = ((Double)(courseAL.get(position).getsGeo().getLatitudeE6()/1E6));
+							Double slongitude = ((Double)(courseAL.get(position).getsGeo().getLongitudeE6()/1E6));
+							
+							Double elatitude = ((Double)(courseAL.get(position).geteGeo().getLatitudeE6()/1E6));
+							Double elongitude = ((Double)(courseAL.get(position).geteGeo().getLongitudeE6()/1E6));
+							
+							intent.putExtra("slatitude", slatitude + "");
+							intent.putExtra("slongitude", slongitude + "");
+							intent.putExtra("elatitude", elatitude + "");
+							intent.putExtra("elongitude", elongitude + "");
+							
+							context.startActivity(intent);
+
+						}
+					});
+			
+			
+
 		}
 
 		return convertView;

@@ -3,27 +3,54 @@
     android:id="@+id/homeTitleBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="left|center"
+    android:gravity="center"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/logo" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="left|center_vertical"
+        android:orientation="horizontal" >
 
-    <!-- <LinearLayout -->
-    <!-- android:layout_width="0px" -->
-    <!-- android:layout_height="match_parent" -->
-    <!-- android:layout_weight="1" -->
-    <!-- android:gravity="right|center" -->
-    <!-- android:orientation="horizontal" > -->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo" />
+    </LinearLayout>
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal" >
 
-    <!-- <Button -->
-    <!-- android:id="@+id/profileBtnhomeTitleBar" -->
-    <!-- android:layout_width="wrap_content" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:background="@drawable/myinfo" /> -->
-    <!-- </LinearLayout> -->
+        <ImageView
+            android:id="@+id/myprofileTitleBarMyImgIV"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/anony_people"
+            
+             />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/score_icon" 
+            android:layout_marginLeft="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="146"
+            android:textSize="25dp"
+            android:textColor="@android:color/black" 
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
 
 </LinearLayout>

@@ -61,12 +61,7 @@ public class PathButton extends Button {
 	    outRect.top = (int) (curr.top + y_offset);
 	    outRect.left = (int) (curr.left + x_offset);
 	    outRect.right = (int) (curr.right + x_offset);
-//	    rect = curr;
-	    
-//	    Log.e("bottom", outRect.bottom + "");
-//	    Log.e("top", outRect.top + "");
-//	    Log.e("left", outRect.left + "");
-//	    Log.e("right", outRect.right + "");
+
 	}
 	
 	

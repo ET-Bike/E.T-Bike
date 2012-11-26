@@ -9,9 +9,9 @@ import android.util.Log;
 import com.facebook.android.FHaloManager;
 import com.google.gson.Gson;
 import com.swmaestro.etbike.activity.MyProfileActivity;
-import com.swmaestro.etbike.serverobject.JsonResult;
-import com.swmaestro.etbike.serverobject.MyBikeBoard;
-import com.swmaestro.etbike.serverobject.MyBikeList;
+import com.swmaestro.etbike.network.object.JsonResult;
+import com.swmaestro.etbike.network.object.MyBikeBoard;
+import com.swmaestro.etbike.network.object.MyBikeList;
 import com.swmaestro.object.WorkVectors;
 import com.swmaestro.variable.Variable;
 
@@ -28,6 +28,8 @@ public class NetworkManager extends Thread {
 	// public static final int COMM_UPLOAD_MY_BIKE_INFOS = 5;
 	public static final int COMM_GET_SHRE_BIKE_LIST_INFOS = 7;
 	public static final int COMM_GET_MY_BIKE_IMG = 8;
+	public static final int COMM_GET_MY_DEAL_IMG = 9;
+	public static final int COMM_UPLOAD_MY_REPLY = 10;
 
 	int commandState = -1;
 
@@ -37,23 +39,7 @@ public class NetworkManager extends Thread {
 	FHaloManager fhm;
 	boolean threadStartFlag = false;
 	
-	/*
-	 * url = new URL("ㅎㅎ당신이 원하는 url");
-con = (HttpURLConnection)url.openConnection();
-con.setRequestMethod("POST");
-con.setDoOutput(true);
-con.setRequestProperty("Accept-Charset", charset); 
-con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-con.setInstanceFollowRedirects(false);
 
-// Parameter Setting
-con.setRequestProperty("login_id", "ㅎㅎ");
-con.setRequestProperty("login_password", "ㅎㅎ");
-con.setRequestProperty("x", "40");
-con.setRequestProperty("y", "30");
-con.connect();
-[출처] Web Login Using HTTP Request in Java (POST)|작성자 세디츠
-	 */
 	
 
 	public NetworkManager(WorkVectors wv, Handler mHandler, int commandState) {
@@ -88,13 +74,24 @@ con.connect();
 				getBikeListInfos();
 			} else if (commandState == COMM_GET_SHRE_BIKE_LIST_INFOS) {
 				getBikeListInfos();
-			} else if(commandState == COMM_GET_MY_BIKE_IMG) {
+			} else if(commandState == COMM_GET_MY_BIKE_IMG || commandState == COMM_GET_MY_DEAL_IMG) {
 				getBikeImg();
+			}else if(commandState == COMM_UPLOAD_MY_REPLY) {
+				uploadReply();
 			}
 			threadStartFlag = false;
 			Looper.loop();
 		}
 
+	}
+	
+	private void uploadReply() {
+//		String mTAG = " uploadReply";
+//		MyBikeBoard mbb = (MyBikeBoard)wv.getData(WorkVectors.SELECTED_MY_BIKE);
+//		nh.clearGetAndPUT();
+//		nh.setMethodType("put");
+//		nh.setGetServUrl(rootURL);
+		
 	}
 	
 	private void getBikeImg() {
@@ -108,7 +105,7 @@ con.connect();
 		Log.e(TAG + "getBikeImg", "strPath "+strPath);
 		if(nh.downloadImage(mbb.getBikeImagePath(), strPath)) {
 			mbb.setStrBikeImagePath(strPath);
-			mHandler.sendEmptyMessage(COMM_GET_MY_BIKE_IMG);
+			mHandler.sendEmptyMessage(commandState);
 		}
 	}
 
@@ -226,7 +223,7 @@ con.connect();
 	 */
 
 	private void uploadMyAccout(WorkVectors wv) {
-
+/*
 		fhm = FHaloManager.getInstance();
 		String downloadUrl = fhm.getMyProfilePic();
 		String myImageFileName = nh.getFileName(downloadUrl);
@@ -237,12 +234,20 @@ con.connect();
 		}
 		// fhm = FHaloManager.getInstance();
 		nh.setGetServUrl(Variable.SERVER_URL);
-		nh.addGetParameter("username", fhm.getUserName());
+		Log.e(TAG + " uploadAccount", "user name " + fhm.getUserName());
+		if(fhm.getUserName() == null) {
+			nh.addGetParameter("username", "none");
+		}else {
+			nh.addGetParameter("username", fhm.getUserName());
+		}
+		
 		nh.addGetParameter("firstName", fhm.getMyFirstName());
 		nh.addGetParameter("lastName", fhm.getMyLastName());
 		nh.addGetParameter("password", "password");
 		nh.addGetParameter("myImagePath", myImageFileName);
 		nh.executeGet();
+		
+		*/
 	}
 
 	private void uploadMyBikeInfo(WorkVectors wv) {

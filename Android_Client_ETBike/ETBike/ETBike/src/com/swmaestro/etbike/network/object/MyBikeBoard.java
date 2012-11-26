@@ -1,6 +1,5 @@
-package com.swmaestro.etbike.serverobject;
+package com.swmaestro.etbike.network.object;
 
-import java.util.Date;
 import java.util.Set;
 
 public class MyBikeBoard {

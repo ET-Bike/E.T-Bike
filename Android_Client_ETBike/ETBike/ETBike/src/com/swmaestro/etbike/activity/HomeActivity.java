@@ -9,33 +9,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.FloatMath;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.paran.animation.demo.app.animation.PathButton;
+import com.paran.animation.demo.app.animation.PathButtonAnimation;
 import com.swmaestro.etbike.network.NetworkManager;
-import com.swmaestro.etbike.serverobject.MyBikeBoard;
-import com.swmaestro.etbike.serverobject.MyBikeList;
+import com.swmaestro.etbike.push.PushService;
 import com.swmaestro.object.WorkVectors;
 import com.swmaestro.variable.Variable;
 
@@ -44,130 +30,68 @@ public class HomeActivity extends Activity {
 	ImageView peopleIV[];
 	int imageViewNum = 0;
 	
-	/**
-	 * 筌롫뗀�긷첎占쏙옙��죬占쎄쑬釉�占쎈�猷�椰꾧퀡��
-	 */
-	private static final int length = 220;
-	/**
-	 * (+)甕곌쑵��占쎌늿��占쎌뮄而�
-	 */
-	private static final int duration = 100;
-	/**
-	 * 占쎌꼷��筌롫뗀��占쎌늿��占쎌뮄而�
-	 */
-	private static final int sub_duration = 200;
-	/**
-	 * 占쎌꼷��筌롫뗀��占쎌쥚源�옙占쏙옙�덉삂 占쎌뮄而�
-	 */
-	private static final int sub_select_duration = 200;
-	/**
-	 * 占쎌꼷��筌롫뗀��占쎌늿�됵옙占썲첎占썼린袁る뱣揶쏄쑴��占쎌뮄而�Gap
-	 */
-	private static final int sub_offset = 30;
 
-	private Button plus_button;
-	private ImageView plus;
-
-	/**
-	 * 占쎌꼷��筌롫뗀��甕곌쑵���귐딅뮞占쏙옙
-	 */
-	private ArrayList<PathButton> buttons;
-
-	/**
-	 * Menu 揶쏉옙占쎈���옙�덈뮉筌욑옙占썬꺆占쏙옙�덈뮉筌욑옙筌ｋ똾寃뺧옙�띾┛占쎄쑵釉�flag
-	 */
-	private boolean isMenuOpened = false;
 
 	String TAG = "Path";
 
 	public static final int PEOPLE_IV_NUM = 12;
 	Context context;
 	WorkVectors wv;
-	public final OnTouchListener myTouchListener = new OnTouchListener() {
-		public boolean onTouch(View v, MotionEvent event) {
-			
-			for (int i = 0; i < buttons.size(); i++) {
-				Log.e("i == " +i, "here");
-				Rect hitRect = new Rect();
-				buttons.get(i).getHitRect(hitRect); // 媛뺤젣濡�hitRect 瑜��뺤씤��
-				if (hitRect.contains((int) event.getX(), (int) event.getY()) && isMenuOpened == true) {
-					startSubButtonSelectedAnimation(i);
-					
-					//share your bike
-					if(i == 0) {
-						startActivity(new Intent(context, ShareBikeActivity.class));
-					}
-					//ride with me
-					else if(i == 1) {
-						startActivity(new Intent(context, SceneBikeActivity.class));
-					}
-					//scene with bike
-					else if(i == 2) {
-//						startActivity(new Intent(context, RegisterCourseActivity.class));
-						startActivity(new Intent(context, CourseViewActivity.class));
-					}
-					
-					else if(i == 3) {
-						
-					}
-					return true;
-				}
-			}
-			return false;
-
-		}		
-		
-	};
+	
 	
 	NetworkManager nm;
+	
+	private ArrayList<PathButton> buttons;
+	private Button plus_button;
+	private ImageView plus;
+	PathButtonAnimation pathButtonAnimation;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		init(R.layout.home, R.layout.hometitlebar);
 		
 		plus_button = (Button) findViewById(R.id.plus_button);
-
-		plus_button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (!isMenuOpened) {
-					isMenuOpened = true;
-				} else {
-					isMenuOpened = false;
-				}
-				startMenuAnimation(isMenuOpened);
-			}
-		});
-		
 		plus = (ImageView) findViewById(R.id.plus);
+		buttons = new ArrayList<PathButton>();		
 
-		buttons = new ArrayList<PathButton>();
+		PathButton button = (PathButton) findViewById(R.id.homeGoToHomePathBtn);		
+		buttons.add(button);
+
+		button = (PathButton) findViewById(R.id.homeSceneWithBikePathBtn);		
+		buttons.add(button);
+
+		button = (PathButton) findViewById(R.id.homeRideWithMePathBtn);		
+		buttons.add(button);
 		
-
-		PathButton button = (PathButton) findViewById(R.id.camera);		
+		button = (PathButton) findViewById(R.id.homeShareYourBikePathBtn);
 		buttons.add(button);
-
-		button = (PathButton) findViewById(R.id.with);		
-		buttons.add(button);
-
-		button = (PathButton) findViewById(R.id.place);		
-		buttons.add(button);
-		button = (PathButton) findViewById(R.id.music);
+		
+		
+		pathButtonAnimation = new PathButtonAnimation(buttons, this, plus_button, plus);
+		findViewById(R.id.viewGroup).setOnTouchListener(pathButtonAnimation.myTouchListener);
 		
 		SharedPreferences firstLoginState = getSharedPreferences("firstLoginState", 0);
 		boolean firstLoginFlag = firstLoginState.getBoolean("firstLoginState", true);
 		
 		nm = new NetworkManager(wv, mHandler, -1);
+		
+		/*
+		 * set push service
+		 */
+		
+		Intent serviceIntent = new Intent(this, PushService.class);
+		startService(serviceIntent);
+		
+		
+		
 		if(firstLoginFlag) {
 			SharedPreferences.Editor loginStateEditor = firstLoginState.edit();
 			loginStateEditor.putBoolean("firstLoginState", false);
 			nm.setCommand(NetworkManager.COMM_SEND_MY_ACCOUNT_INFO);
 			nm.start();
 		}
-//		
-		findViewById(R.id.viewGroup).setOnTouchListener(myTouchListener);
+		
+		
 		
 		findViewById(R.id.profileBtnhomeTitleBar).setOnClickListener(new OnClickListener() {
 			
@@ -183,9 +107,8 @@ public class HomeActivity extends Activity {
 		makeDir(Variable.ROOT_DIR);		
 
 		wv = new WorkVectors();
+	
 		
-		
-//		nm.start();
 		
 
 	}
@@ -195,138 +118,7 @@ public class HomeActivity extends Activity {
 		return null;
 	}
 
-	private void startSubButtonSelectedAnimation(int index) {
-		for (int i = 0; i < buttons.size(); i++) {
-			if (index == i) {
-				PathButton view = buttons.get(i);
-
-				AnimationSet animation = new AnimationSet(false);
-
-				Animation translate = new TranslateAnimation(0.0f,
-						view.getXOffset(), 0.0f, view.getYOffset());
-				translate.setDuration(0);
-
-				Animation scale = new ScaleAnimation(1.0f, 2.5f, 1.0f, 2.5f,
-						Animation.RELATIVE_TO_SELF, 0.5f,
-						Animation.RELATIVE_TO_SELF, 0.5f);
-				scale.setDuration(sub_select_duration);
-
-				Animation alpha = new AlphaAnimation(1.0f, 0.0f);
-				alpha.setDuration(sub_select_duration);
-
-				animation.addAnimation(scale);
-				animation.addAnimation(translate);
-				animation.addAnimation(alpha);
-
-				view.startAnimation(animation);
-			} else {
-				PathButton view = buttons.get(i);
-
-				AnimationSet animation = new AnimationSet(false);
-
-				Animation translate = new TranslateAnimation(0.0f,
-						view.getXOffset(), 0.0f, view.getYOffset());
-				translate.setDuration(0);
-
-				Animation scale = new ScaleAnimation(1.0f, 0.0f, 1.0f, 0.0f,
-						Animation.RELATIVE_TO_SELF, 0.5f,
-						Animation.RELATIVE_TO_SELF, 0.5f);
-				scale.setDuration(sub_select_duration);
-
-				Animation alpha = new AlphaAnimation(1.0f, 0.0f);
-				alpha.setDuration(sub_select_duration);
-
-				animation.addAnimation(scale);
-				animation.addAnimation(translate);
-				animation.addAnimation(alpha);
-
-				view.startAnimation(animation);
-			}
-		}
-
-		if (isMenuOpened) {
-			isMenuOpened = false;
-
-			Animation rotate = new RotateAnimation(-45, 0,
-					Animation.RELATIVE_TO_SELF, 0.5f,
-					Animation.RELATIVE_TO_SELF, 0.5f);
-
-			rotate.setInterpolator(AnimationUtils.loadInterpolator(this,
-					android.R.anim.anticipate_overshoot_interpolator));
-			rotate.setFillAfter(true);
-			rotate.setDuration(sub_select_duration);
-			plus.startAnimation(rotate);
-		}
-	}
 	
-	private void startSubButtonAnimation(int index, boolean open) {
-
-		PathButton view = buttons.get(index);
-
-		float endX = length
-				* FloatMath.cos((float) (Math.PI * 1 / 2 * (index) / (buttons
-						.size() - 1)));
-		float endY = length
-				* FloatMath.sin((float) (Math.PI * 1 / 2 * (index) / (buttons
-						.size() - 1)));
-
-		AnimationSet animation = new AnimationSet(false);
-		
-
-		Animation translate;
-		Animation rotate = new RotateAnimation(0, 360,
-				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-				0.5f);
-		rotate.setDuration(sub_duration);
-		rotate.setRepeatCount(1);
-		rotate.setInterpolator(AnimationUtils.loadInterpolator(this,
-				android.R.anim.accelerate_interpolator));
-
-		if (open) {
-			translate = new TranslateAnimation(0.0f, endX, 0.0f, -endY);
-			translate.setDuration(sub_duration);
-			translate.setInterpolator(AnimationUtils.loadInterpolator(this,
-					android.R.anim.overshoot_interpolator));
-			translate.setStartOffset(sub_offset * index);
-
-			view.setOffset(endX, -endY);
-		} else {
-			translate = new TranslateAnimation(endX, 0, -endY, 0);
-			translate.setDuration(sub_duration);
-			translate.setStartOffset(sub_offset
-					* (buttons.size() - (index + 1)));
-			translate.setInterpolator(AnimationUtils.loadInterpolator(this,
-					android.R.anim.anticipate_interpolator));
-
-			view.setOffset(-endX, endY);
-		}
-
-		animation.setFillAfter(true);
-		animation.addAnimation(rotate);
-		animation.addAnimation(translate);
-		view.startAnimation(animation);
-	}
-	
-	private void startMenuAnimation(boolean open) {
-		Animation rotate;
-
-		if (open)
-			rotate = new RotateAnimation(0, 45, Animation.RELATIVE_TO_SELF,
-					0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-		else
-			rotate = new RotateAnimation(-45, 0, Animation.RELATIVE_TO_SELF,
-					0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-
-		rotate.setInterpolator(AnimationUtils.loadInterpolator(this,
-				android.R.anim.anticipate_overshoot_interpolator));
-		rotate.setFillAfter(true);
-		rotate.setDuration(duration);
-		plus.startAnimation(rotate);
-
-		for (int i = 0; i < buttons.size(); i++) {
-			startSubButtonAnimation(i, open);
-		}
-	}
 
 	private void init(int titleBarLayout, int titleBarView) {
 		initTitleBar(titleBarLayout, titleBarView);

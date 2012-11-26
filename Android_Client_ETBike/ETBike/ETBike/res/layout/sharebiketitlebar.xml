@@ -25,17 +25,12 @@
         android:gravity="right|center"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/filterBikesharebike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/add_ov" />
-        
+    
         <Button
             android:id="@+id/addBikeBtnsharebike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/filter_icon" />
+            android:background="@drawable/add_ov" />
     </LinearLayout>
 
 </LinearLayout>

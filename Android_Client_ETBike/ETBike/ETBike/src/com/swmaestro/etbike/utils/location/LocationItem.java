@@ -1,4 +1,4 @@
-package com.swmaestro.etbike.activity.listview.object;
+package com.swmaestro.etbike.utils.location;
 
 public class LocationItem {
 	

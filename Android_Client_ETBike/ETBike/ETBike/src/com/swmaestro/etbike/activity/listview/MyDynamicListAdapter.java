@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import com.google.android.maps.MapView;
 import com.swmaestro.etbike.activity.MyProfileActivity;
 import com.swmaestro.etbike.activity.R;
-import com.swmaestro.etbike.serverobject.MyBikeBoard;
+import com.swmaestro.etbike.network.object.MyBikeBoard;
 
 public class MyDynamicListAdapter extends BaseAdapter {
 
@@ -118,8 +119,7 @@ public class MyDynamicListAdapter extends BaseAdapter {
 				Log.e(TAG + " getView","strBikeThumbImg = " + strBikeImgThumbPath);
 				if(strBikeImgThumbPath != null) {
 					Log.e(TAG + " getView" ,"strBikeImgThumbPath = "+ strBikeImgThumbPath);
-					Bitmap bm = BitmapFactory.decodeFile(strBikeImgThumbPath);
-					iv.setImageBitmap(bm);	
+					iv.setImageURI(Uri.parse(strBikeImgThumbPath));
 				}
 				tv.setText(tradeType);
 				tv1.setText(content);

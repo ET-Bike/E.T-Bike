@@ -20,9 +20,10 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
-import com.swmaestro.etbike.activity.listview.object.LocationItem;
 import com.swmaestro.etbike.activity.map.MyDynamicLocationOverlay;
 import com.swmaestro.etbike.activity.map.MyMapMarker;
+import com.swmaestro.etbike.activity.map.MyTouchMapMarker;
+import com.swmaestro.etbike.utils.location.LocationItem;
 import com.swmaestro.etbike.utils.location.MyLocationManager;
 import com.swmaestro.etbike.utils.location.UtilityProvider;
 
@@ -43,20 +44,35 @@ public class FindLocationActivity extends MapActivity {
 	
 	Intent intent;
 	MyMapMarker mapMarker;
+	Drawable stDraw;
 	
+	
+	MyTouchMapMarker mtmm;
 	
 	
 
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		new UtilityProvider(this).initTitleBar(R.layout.findlocation, R.layout.findlocationtitlebar);
-		
-		mlm = new MyLocationManager(this);
 
+		/*
+		 * init resouce
+		 */
 		mv = (MapView) findViewById(R.id.findLocationMV);
 		et = (EditText) findViewById(R.id.findLocationETtitleBar);
+		lv = (ListView) findViewById(R.id.findLocationLV);
 		
 		context = this;
+		mlm = new MyLocationManager(this);
+		
+		stDraw = this.getResources().getDrawable(R.drawable.map_departure_icon);
+		stDraw.setBounds(0, 0, stDraw.getIntrinsicWidth(),	stDraw.getIntrinsicHeight());
+		
+		mapMarker = new MyMapMarker(stDraw, context, intent);
+		mapMarker.addOverlay(new OverlayItem(mlm.getCurGeoPoint(), "", ""), stDraw, Color.BLACK);
+		mtmm = new MyTouchMapMarker(context, mapMarker);
+		
+		
 		/*
 		 * location fix
 		 */
@@ -70,36 +86,35 @@ public class FindLocationActivity extends MapActivity {
 				mv.getController().animateTo(mdlo.getMyLocation());
 			}
 		});
-		mv.getOverlays().add(mdlo);
 
-		lv = (ListView) findViewById(R.id.findLocationLV);
+		mv.getOverlays().add(mtmm);
+		mv.getOverlays().add(mdlo);
+		mv.getOverlays().add(mapMarker);
+		
 		al = new ArrayList<String>();
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al);
 		lv.setAdapter(adapter);
 
 		lal = new ArrayList<LocationItem>();
 		
-		intent = new Intent();
-		
-			
+		intent = new Intent();	
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				// TODO Auto-generated method stub
 				intent = new Intent();
 				String location = lal.get(position).location;
 				Double latitude = lal.get(position).latitude;
 				Double longitude = lal.get(position).longitude;
 				
-				Log.e(TAG +"listview click", location);
+				Log.e(TAG +" listview click", location);
 
 				intent.putExtra("location", location);
 				intent.putExtra("latitude", latitude + "");
-				
 				intent.putExtra("longitude", longitude + "");
+				
 				setResult(RESULT_OK, intent);
 
 				finish();
@@ -133,11 +148,7 @@ public class FindLocationActivity extends MapActivity {
 	}
 
 	private void addOverlay(ArrayList<LocationItem> al) {
-		
-		Drawable stDraw = context.getResources().getDrawable(R.drawable.map_departure_icon);		
-		mapMarker = new MyMapMarker(stDraw, context, intent);	
-//		mapMarker.setIntent(intent);	
-		stDraw.setBounds(0, 0, stDraw.getIntrinsicWidth(),	stDraw.getIntrinsicHeight());
+	
 		
 		for (int i = 0; i < al.size(); i++) {
 			int ilati = (int) (al.get(i).latitude * 1E6);
@@ -146,10 +157,7 @@ public class FindLocationActivity extends MapActivity {
 			mapMarker.addOverlay(new OverlayItem(gp, "", ""), stDraw, Color.BLACK);			
 			
 		}
-		
-		if (mapMarker != null) {
-			mv.getOverlays().add(mapMarker);
-		}
+
 
 	}
 

@@ -153,53 +153,53 @@
             android:layout_marginLeft="10dp" >
 
             <com.paran.animation.demo.app.animation.PathButton
-                android:id="@+id/camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/homeGoToHomePathBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="4dp"
-                android:background="@drawable/composer_camera"
+                android:background="@drawable/path_home_icon"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
 
             <com.paran.animation.demo.app.animation.PathButton
-                android:id="@+id/with"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/homeSceneWithBikePathBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="4dp"
-                android:background="@drawable/composer_with"
+                android:background="@drawable/path_scene_icon"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
 
             <com.paran.animation.demo.app.animation.PathButton
-                android:id="@+id/place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/homeRideWithMePathBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="4dp"
-                android:background="@drawable/composer_place"
+                android:background="@drawable/path_ride_with_me_icon"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
 
             <com.paran.animation.demo.app.animation.PathButton
-                android:id="@+id/music"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/homeShareYourBikePathBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="4dp"
-                android:background="@drawable/composer_music"
+                android:background="@drawable/path_share_your_bike_icon"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
-<!-- 
+
             <com.paran.animation.demo.app.animation.PathButton
                 android:id="@+id/thought"
                 android:layout_width="wrap_content"
@@ -211,7 +211,7 @@
                 android:background="@drawable/composer_thought"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
-
+ 
             <com.paran.animation.demo.app.animation.PathButton
                 android:id="@+id/sleep"
                 android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                 android:background="@drawable/composer_sleep"
                 android:visibility="visible" >
             </com.paran.animation.demo.app.animation.PathButton>
- -->
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -248,6 +248,8 @@
                 </ImageView>
             </RelativeLayout>
         </RelativeLayout>
+        
+       
     </FrameLayout>
 
 </LinearLayout>

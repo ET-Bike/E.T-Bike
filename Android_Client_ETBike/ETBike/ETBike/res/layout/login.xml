@@ -26,9 +26,9 @@
 
         <Button
             android:id="@+id/loginBtnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/facebook_login" />
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:background="@drawable/facebook_btn" />
     </LinearLayout>
 
     <LinearLayout

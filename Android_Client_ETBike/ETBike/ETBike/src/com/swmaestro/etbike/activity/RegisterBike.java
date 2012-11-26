@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,12 +41,11 @@ import com.swmaestro.etbike.activity.listview.object.RegisterItem;
 import com.swmaestro.etbike.activity.map.MyDynamicLocationOverlay;
 import com.swmaestro.etbike.activity.map.MyMapMarker;
 import com.swmaestro.etbike.network.NetworkManager;
-
 import com.swmaestro.etbike.utils.location.MyLocationManager;
 import com.swmaestro.object.WorkVectors;
 
 public class RegisterBike extends MapActivity {
-	Spinner spner;
+	
 
 	final int TAKE_CAMERA = 1;
 	final int TAKE_GALLERY = 2;
@@ -54,12 +53,14 @@ public class RegisterBike extends MapActivity {
 	ImageView bikePicIV;
 	ImageView myPicIV;
 	
-	String bikeImgPath = null;
-
 	ListView lv;
 	ArrayList<RegisterItem> al;
 	MyListAdapter mla;
 
+	
+	String bikeImgPath = null;
+
+	
 	WorkVectors wv;
 
 	int bikeType = 0;
@@ -130,7 +131,7 @@ public class RegisterBike extends MapActivity {
 		al.add(new RegisterItem("거래 타입",""));
 		al.add(new RegisterItem("공유 타입",""));
 		
-		mla = new MyListAdapter(this, R.layout.registerfeatureitem, al);
+		mla = new MyListAdapter(this, R.layout.registerfeatureitem, (Object)al, MyListAdapter.REGISTER_VIEW);
 		lv.setAdapter(mla);
 		
 
@@ -227,16 +228,16 @@ public class RegisterBike extends MapActivity {
 						// TODO Auto-generated method stub
 						String detail = registerBikeET.getText().toString();
 						if(detail.equals("")) {
-							Toast.makeText(context, "detail�� �Է����ּ���.", Toast.LENGTH_LONG).show();
+							Toast.makeText(context, "세부사항을 입력해주세요.", Toast.LENGTH_LONG).show();
 							return;
 							
 						}
 						if(bikeImgPath == null) {
-							Toast.makeText(context, "�̹����� ����ϼ���.", Toast.LENGTH_LONG).show();
+							Toast.makeText(context, "이미지가 등록되어있지 않습니다.", Toast.LENGTH_LONG).show();
 							return;
 							
 						}
-						Toast.makeText(context, "��ϿϷ� �Ǿ���ϴ�.", Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "등록되었습니다.", Toast.LENGTH_LONG).show();
 						wv.put(WorkVectors.BIKE_INFO_CONTENT,detail);
 						
 						updateMyBike();

@@ -15,9 +15,9 @@
 
         <ImageView
             android:id="@+id/myBikeImgIVMyBikeItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/icon" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            />
 
         <TextView
             android:id="@+id/tradeTypeTVMyBikeItem"
@@ -40,7 +40,10 @@
             android:id="@+id/detailTVMyBikeItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/dial_yellow" />
+            android:textSize="8dp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/dial_blue"
+            />
     </LinearLayout>
 
 </LinearLayout>

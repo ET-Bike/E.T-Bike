@@ -1,4 +1,4 @@
-package com.swmaestro.etbike.serverobject;
+package com.swmaestro.etbike.network.object;
 
 
 public enum BoardCategory {

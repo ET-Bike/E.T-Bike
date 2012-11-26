@@ -1,5 +1,6 @@
 package com.swmaestro.variable;
 
+import com.swmaestro.etbike.activity.map.MyCourseOverlayItem;
 import com.swmaestro.object.WorkVectors;
 
 import android.os.Environment;
@@ -48,11 +49,9 @@ public class Variable {
 		
 		
 
-		public static final String TRADE_TYPE = "my_bike_trade_type";
-		
+		public static final String TRADE_TYPE = "my_bike_trade_type";		
 
-		public static final String SHARE_TYPE = "my_bike_share_type";
-		
+		public static final String SHARE_TYPE = "my_bike_share_type";		
 
 		public static final String DIAL_CONTENT = "dial_content";
 		
@@ -81,5 +80,9 @@ public class Variable {
 		public static final String SERVER_SHARE_TYPE_RENT = "RENT";
 		public static final String SERVER_SHARE_TYPE_SELL = "SELL";
 		public static final String SERVER_SHARE_TYPE_DONATE = "DONATE";
+		
+		public static int MY_SELECTED_BIKE = 0;
+		
+		public static MyCourseOverlayItem MCOI;
 
 }

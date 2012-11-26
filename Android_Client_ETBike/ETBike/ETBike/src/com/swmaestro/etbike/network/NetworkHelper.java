@@ -106,7 +106,7 @@ public class NetworkHelper {
 		
 		int lastIndexOfFile = path.length();
 //		return path.substring(lastIndexOfFile-6, )
-		String thumbNailPath = path.substring(0, lastIndexOfFile -3);
+		String thumbNailPath = path.substring(0, lastIndexOfFile -4);
 		Log.e(TAG + "getThumbNailFileName" ,"thumbpath = " + thumbNailPath);
 		return getFileName(thumbNailPath);
 		

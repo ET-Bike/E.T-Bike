@@ -7,13 +7,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -27,12 +27,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.swmaestro.etbike.activity.R;
+import com.swmaestro.etbike.activity.WebViewActivity;
 import com.swmaestro.etbike.activity.listview.MyDynamicListAdapter;
 import com.swmaestro.etbike.activity.listview.MyListAdapter;
 import com.swmaestro.etbike.activity.listview.object.RegisterItem;
 import com.swmaestro.etbike.activity.map.MyCourseOverlayItem;
-import com.swmaestro.etbike.serverobject.MyBikeBoard;
-import com.swmaestro.etbike.serverobject.Reply;
+import com.swmaestro.etbike.network.object.MyBikeBoard;
+import com.swmaestro.etbike.network.object.Reply;
 import com.swmaestro.etbike.utils.location.MyLocationManager;
 import com.swmaestro.object.WorkVectors;
 import com.swmaestro.variable.Variable;
@@ -47,6 +48,7 @@ public class DialogManager {
 	LinearLayout ll;
 	MyLocationManager mlm;
 	String TAG = "DialogManager";
+	ImageView dialogBikeIV;
 
 	public DialogManager(Context context) {
 		this.context = context;
@@ -54,13 +56,22 @@ public class DialogManager {
 		this.mlm = new MyLocationManager(context);
 
 	}
-	
-	public AlertDialog getConfirmDialog() {
-		builder.setTitle("코스 참가").setMessage("정말로 참가하시겠습니까?").setPositiveButton("확인", null).setNegativeButton("취소", null);
+
+	public AlertDialog getConfirmDialog(final MyCourseOverlayItem mcoi) {
+		
+		builder.setTitle("코스 참가").setMessage("정말로 참가하시겠습니까?")
+				.setPositiveButton("확인", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+						Variable.MCOI = mcoi;
+						
+					}
+				}).setNegativeButton("취소", null);
 		ad = builder.create();
 		return ad;
-		
-		
+
 	}
 
 	public AlertDialog getRegisterDialog(final WorkVectors wv,
@@ -227,6 +238,8 @@ public class DialogManager {
 		TextView detailLocTV = (TextView) ll
 				.findViewById(R.id.detailLocationTVmyBikeDialog);
 
+		dialogBikeIV = (ImageView) ll.findViewById(R.id.myBikeIVmyBikeDialog);
+
 		titleTV.setText(mbb.getContent());
 		shareTV.setText(mbb.getShareType());
 		ownerTV.setText(mbb.getWriter());
@@ -234,6 +247,8 @@ public class DialogManager {
 
 		String lati = mbb.getLati();
 		String longi = mbb.getLongi();
+		
+//		Log.e(TAG)
 
 		detailLocTV.setText(mlm.getDetailLocationByCoordinate(lati, longi));
 
@@ -245,7 +260,7 @@ public class DialogManager {
 	}
 
 	public AlertDialog getShareBikeDialog(final MyBikeBoard mbb,
-			final Handler mHandler) {
+			final Handler mHandler, final int index) {
 
 		/*
 		 * define view
@@ -261,20 +276,16 @@ public class DialogManager {
 				.findViewById(R.id.ownerTVshareBikeDialog);
 		TextView detailLocTV = (TextView) ll
 				.findViewById(R.id.detailLocationTVshareBikeDialog);
-		// Button likeButton =
-		// (Button)ll.findViewById(R.id.likeBtnshareBikeDialog);
+
 		final TextView likeTV = (TextView) ll
 				.findViewById(R.id.likeCountTVshareBikeDialog);
 
 		final TextView commentTV = (TextView) ll
 				.findViewById(R.id.commentCountshareBikeDialog);
+		dialogBikeIV = (ImageView) ll
+				.findViewById(R.id.shareBikeIVshareBikeDialog);
 
 		final ArrayList<String> commentAL = new ArrayList<String>();
-		final ArrayAdapter<String> commentAA = new ArrayAdapter<String>(
-				context, android.R.layout.simple_list_item_1, commentAL);
-		// ListView commentLV =
-		// (ListView)ll.findViewById(R.id.commentLVshareBikeDialog);
-		// commentLV.setAdapter(commentAA);
 
 		titleTV.setText(mbb.getContent());
 		shareTV.setText(mbb.getShareType());
@@ -288,7 +299,8 @@ public class DialogManager {
 		if (mbb.getReplies() == null) {
 			commentTV.setText(0 + "");
 		} else {
-			commentTV.setText(mbb.getReplies().size() + "");
+//			commentTV.setText(mbb.getReplies().size() + "");
+			commentTV.setText(2 + "");
 		}
 
 		boolean likeFlag = false;
@@ -309,7 +321,6 @@ public class DialogManager {
 						int likeNum = mbb.getLikeCount() + 1;
 						String likeString = likeNum + "";
 						likeTV.setText(likeString);
-						// }
 
 					}
 				});
@@ -340,10 +351,28 @@ public class DialogManager {
 
 					}
 				});
+		ll.findViewById(R.id.sharebikedialogFacebookBtn).setOnClickListener(
+				new android.view.View.OnClickListener() {
 
-		// builder�� view ���̱�
+					@Override
+					public void onClick(View arg0) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(context,
+								WebViewActivity.class);
+						intent.putExtra("fid", mbb.getWriter());
+						context.startActivity(intent);
+					}
+				});
 		builder.setView(ll).setTitle("자전거의 세부내용입니다.")
-				.setPositiveButton("거래요청", null).setNegativeButton("취소", null);
+				.setPositiveButton("거래요청", new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+						Variable.MY_SELECTED_BIKE = index;
+
+					}
+				}).setNegativeButton("취소", null);
 		ad = builder.create();
 		return ad;
 
@@ -355,15 +384,36 @@ public class DialogManager {
 
 		ImageView iv = (ImageView) ll.findViewById(R.id.BikeIVcommentDialog);
 		ListView lv = (ListView) ll.findViewById(R.id.commentLVcommentDialog);
-		EditText et = (EditText) ll.findViewById(R.id.commentETcommentDialog);
+		final EditText et = (EditText) ll.findViewById(R.id.commentETcommentDialog);
 		Button btn = (Button) ll.findViewById(R.id.commentBtncommentDialog);
+		
+		final ArrayList<String> al = new ArrayList<String>();
+		final ArrayAdapter<String> aa = new ArrayAdapter<String>(context, R.layout.mysimplelist, al);
+		
+		al.add("song.11 : 안녕하세요 너무 이뻐요(2012.11.25 13시 15분)");
+		al.add("jo.11 : 안녕하세요 너무 이뻐요(2012.11.25 13시 40분)");
+		lv.setAdapter(aa);
+		
+		
+		btn.setOnClickListener(new android.view.View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				String content = et.getText().toString();
+				if(content.equals("")) {
+					return;
+				}
+				
+			al.add("doo kim.54 : " + content + "(방금)");
+			aa.notifyDataSetChanged();
+				
+			}
+		});
 
-		ArrayList<String> al = new ArrayList<String>();
-		ArrayAdapter<String> aa = new ArrayAdapter<String>(context,
-				android.R.layout.simple_list_item_1, al);
+		
 
 		if (mbb.getReplies() != null) {
-
+			Log.e(TAG + " getCommentDialog","reply != null");
 			for (int i = 0; i < mbb.getReplies().size(); i++) {
 				Iterator<Reply> replies = mbb.getReplies().iterator();
 				while (replies.hasNext()) {
@@ -375,9 +425,11 @@ public class DialogManager {
 				}
 			}
 
+		}else {
+			Log.e(TAG + " getCommentDialog","reply == null");
 		}
 
-		lv.setAdapter(aa);
+		
 
 		Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
 		iv.setImageBitmap(bm);
@@ -387,11 +439,6 @@ public class DialogManager {
 		return ad;
 
 	}
-
-	// private AlertDialog getFilterDialog(final MyBikeBoard mbb) {
-	//
-	// return
-	// }
 
 	public AlertDialog getFilterDialog(final ArrayList<MyBikeBoard> mal,
 			final MyDynamicListAdapter sbla) {
@@ -454,95 +501,164 @@ public class DialogManager {
 
 	}
 
-	public void setMyBikeImgDialog(final MyBikeBoard mbb) {
+	public void setDownloadedIV(MyBikeBoard mbb) {
 
-		ImageView iv = (ImageView) ll.findViewById(R.id.myBikeIVmyBikeDialog);
-		// Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
-		// iv.setImageBitmap(bm);
-		iv.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
+		dialogBikeIV.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
 
 	}
 
-	public void setshareBikeImgDialog(final MyBikeBoard mbb) {
+	public AlertDialog getSetTimeDialog(final WorkVectors wv,
+			final TextView timeTV) {
 
-		ImageView iv = (ImageView) ll
-				.findViewById(R.id.shareBikeIVshareBikeDialog);
-		// Bitmap bm = BitmapFactory.decodeFile(mbb.getStrBikeImagePath());
-		// iv.setImageBitmap(bm);
-		iv.setImageURI(Uri.parse(mbb.getStrBikeImagePath()));
-
-	}
-
-//	public AlertDialog getMapDialog(String lati, String longi) {
-//		ll = (LinearLayout) View.inflate(context, R.layout.mapdialog, null);
-//		ImageView iv = (ImageView) ll.findViewById(R.id.mapDialogMV);
-//		ad = builder.create();
-//		return ad;
-//	}
-
-	public AlertDialog getSetTimeDialog(final WorkVectors wv, final TextView timeTV) {
-		
 		ll = (LinearLayout) View.inflate(context, R.layout.timedialog, null);
-		DatePicker dp = (DatePicker)ll.findViewById(R.id.datePicker1);
-		TimePicker tp = (TimePicker)ll.findViewById(R.id.timePicker1);
+		DatePicker dp = (DatePicker) ll.findViewById(R.id.datePicker1);
+		TimePicker tp = (TimePicker) ll.findViewById(R.id.timePicker1);
 
 		wv.put(WorkVectors.COURSE_YEAR, dp.getYear());
 		wv.put(WorkVectors.COURSE_MONTH, dp.getMonth() + 1);
 		wv.put(WorkVectors.COURSE_DAY, dp.getDayOfMonth());
-//		wv.put(key, value);
-		
+		// wv.put(key, value);
+
 		wv.put(WorkVectors.COURSE_HOUR, tp.getCurrentHour());
 		wv.put(WorkVectors.COURSE_MINUTE, tp.getCurrentMinute());
-		
-		Log.e(TAG + " getSetTimeDialog", "연월일 : " + dp.getYear() + " " + dp.getMonth() + " " + dp.getDayOfMonth());
-		Log.e(TAG + " getSetTimeDialog", "시간 : " + tp.getCurrentHour() + " " + tp.getCurrentMinute());
-		final String date = dp.getYear() + "년  " + dp.getMonth() + "월 " + dp.getDayOfMonth() + "일 " + tp.getCurrentHour() + "시 " + tp.getCurrentMinute() + "분 ";
-		
-		
-		builder.setView(ll).setTitle("세부 시간을 입력해주세요.").setPositiveButton("확인", new OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				wv.put(WorkVectors.COURSE_DATE, date);
-				timeTV.setText("코스 시간 : " + date);
-				
-				
-			}
-		});
+
+		Log.e(TAG + " getSetTimeDialog",
+				"연월일 : " + dp.getYear() + " " + (dp.getMonth() +1) + " "
+						+ dp.getDayOfMonth());
+		Log.e(TAG + " getSetTimeDialog", "시간 : " + tp.getCurrentHour() + " "
+				+ tp.getCurrentMinute());
+		final String date = dp.getYear() + "년  " + dp.getMonth() + "월 "
+				+ dp.getDayOfMonth() + "일 " + tp.getCurrentHour() + "시 "
+				+ tp.getCurrentMinute() + "분 ";
+
+		builder.setView(ll).setTitle("세부 시간을 입력해주세요.")
+				.setPositiveButton("확인", new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						wv.put(WorkVectors.COURSE_DATE, date);
+						timeTV.setText("코스 시간 : " + date);
+
+					}
+				});
 		ad = builder.create();
 		return ad;
 
 	}
-	
-public AlertDialog getCourseDetailDialog(MyCourseOverlayItem mcoi) {
-	
-	MyLocationManager mlm = new MyLocationManager(context);
+
+	public AlertDialog getDealListDialog(final MyBikeBoard mbb) {
+
+		ll = (LinearLayout) View.inflate(context, R.layout.mydealdialog, null);
+		TextView titleTV = (TextView) ll
+				.findViewById(R.id.myDealDialogBiketitleTV);
+		TextView shareTypeTV = (TextView) ll
+				.findViewById(R.id.myDealDialogBikeShareTypeTV);
+		TextView locationTV = (TextView) ll
+				.findViewById(R.id.myDealDialogDetailLocationTV);
+		TextView ownerTV = (TextView) ll.findViewById(R.id.myDealDialogOwnerTV);
 		
-		ll = (LinearLayout) View.inflate(context, R.layout.coursedetaildialog, null);		
-		TextView contentTV = (TextView) ll.findViewById(R.id.courseDetailDialogContentTV);
-		TextView routeTV = (TextView) ll.findViewById(R.id.courseDetailDialogRouteTV);
-		TextView timeTV = (TextView) ll.findViewById(R.id.courseDetailDialogTimeTV);
+		final TextView gradeTV = (TextView) ll.findViewById(R.id.mydealdialogGradeTV);
 		
-		String sLoc = mlm.getDetailLocationByCoordinate(mcoi.getsGeo());
-		String eLoc = mlm.getDetailLocationByCoordinate(mcoi.geteGeo());
-		contentTV.setText(mcoi.getTitle());
-		routeTV.setText(sLoc + "->" + eLoc);
-		timeTV.setText(mcoi.getTime());
+		dialogBikeIV = (ImageView)ll.findViewById(R.id.myDealDialogBikeImageIV);
+
+		titleTV.setText(mbb.getContent());
+		shareTypeTV.setText(mbb.getShareType());
+
+		String lati = mbb.getLati();
+		String longi = mbb.getLongi();
 		
-		
-		
-		
-		
-		
-		builder.setView(ll);
-		
+		Log.e(TAG + " getDealListDialog", "lati = " + lati);
+		Log.e(TAG + " getDealListDialog", "longi = " + longi);
+
+		locationTV.setText(mlm.getDetailLocationByCoordinate(lati, longi));
+		ownerTV.setText(mbb.getWriter());
+
+		final ImageView start1IV = (ImageView) ll
+				.findViewById(R.id.mydealdialogstart1IV);
+		final ImageView start2IV = (ImageView) ll
+				.findViewById(R.id.mydealdialogstart2IV);
+		final ImageView start3IV = (ImageView) ll
+				.findViewById(R.id.mydealdialogstart3IV);
+		final ImageView start4IV = (ImageView) ll
+				.findViewById(R.id.mydealdialogstart4IV);
+		final ImageView start5IV = (ImageView) ll
+				.findViewById(R.id.mydealdialogstart5IV);
+		// android.view.View.OnClickListener()
+		start1IV.setOnClickListener(new android.view.View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				start1IV.setBackgroundResource(R.drawable.start_on);
+				start2IV.setBackgroundResource(R.drawable.start_off);
+				start3IV.setBackgroundResource(R.drawable.start_off);
+				start4IV.setBackgroundResource(R.drawable.start_off);
+				start5IV.setBackgroundResource(R.drawable.start_off);
+				gradeTV.setText("1.0");
+			}
+		});
+
+		start2IV.setOnClickListener(new android.view.View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				start1IV.setBackgroundResource(R.drawable.start_on);
+				start2IV.setBackgroundResource(R.drawable.start_on);
+				start3IV.setBackgroundResource(R.drawable.start_off);
+				start4IV.setBackgroundResource(R.drawable.start_off);
+				start5IV.setBackgroundResource(R.drawable.start_off);
+				gradeTV.setText("2.0");
+			}
+		});
+
+		start3IV.setOnClickListener(new android.view.View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				start1IV.setBackgroundResource(R.drawable.start_on);
+				start2IV.setBackgroundResource(R.drawable.start_on);
+				start3IV.setBackgroundResource(R.drawable.start_on);
+				start4IV.setBackgroundResource(R.drawable.start_off);
+				start5IV.setBackgroundResource(R.drawable.start_off);
+				gradeTV.setText("3.0");
+			}
+		});
+
+		start4IV.setOnClickListener(new android.view.View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				start1IV.setBackgroundResource(R.drawable.start_on);
+				start2IV.setBackgroundResource(R.drawable.start_on);
+				start3IV.setBackgroundResource(R.drawable.start_on);
+				start4IV.setBackgroundResource(R.drawable.start_on);
+				start5IV.setBackgroundResource(R.drawable.start_off);
+				gradeTV.setText("4.0");
+			}
+		});
+
+		start5IV.setOnClickListener(new android.view.View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				start1IV.setBackgroundResource(R.drawable.start_on);
+				start2IV.setBackgroundResource(R.drawable.start_on);
+				start3IV.setBackgroundResource(R.drawable.start_on);
+				start4IV.setBackgroundResource(R.drawable.start_on);
+				start5IV.setBackgroundResource(R.drawable.start_on);
+				gradeTV.setText("5.0");
+			}
+		});
+		builder.setView(ll).setTitle("거래평가를 해주세요.")
+				.setPositiveButton("거래완료", null)
+				.setNegativeButton("거래취소", null);
+
 		ad = builder.create();
-		
-		 LayoutParams params = ad.getWindow().getAttributes(); 
-	        params.x = 300;
-	        params.y = 500;
-	        ad.getWindow().setAttributes(params);
 		return ad;
 
 	}

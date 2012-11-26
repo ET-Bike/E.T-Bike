@@ -18,6 +18,10 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.swmaestro.etbike.utils.location.MyLocationManager;
 
+/*
+ * 
+ */
+
 public class MyMapMarker extends ItemizedOverlay {
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
@@ -25,9 +29,11 @@ public class MyMapMarker extends ItemizedOverlay {
 	private int color;
 	String TAG = "MyMapMarker";
 	Intent intent;
+	Drawable defDraw;
 
 	public MyMapMarker(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
+		
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,12 +41,14 @@ public class MyMapMarker extends ItemizedOverlay {
 		this(defaultMarker);
 		this.context = context;
 		this.intent = intent;
+		this.defDraw = defaultMarker;
 
 	}
 	
 	public MyMapMarker(Drawable defaultMarker, Context context) {
 		this(defaultMarker);
 		this.context = context;
+		this.defDraw = defaultMarker;
 
 	}
 
@@ -60,9 +68,18 @@ public class MyMapMarker extends ItemizedOverlay {
 	public void addOverlay(OverlayItem item, Drawable draw, int color) {
 
 		setColor(color);
-		item.setMarker(draw);
+		if(draw == null) {
+			item.setMarker(defDraw);
+		}else {
+			item.setMarker(draw);
+		}
+		
 		mOverlays.add(item);
 		populate();
+	}
+	
+	public void clear() {
+		mOverlays.clear();
 	}
 
 	@Override

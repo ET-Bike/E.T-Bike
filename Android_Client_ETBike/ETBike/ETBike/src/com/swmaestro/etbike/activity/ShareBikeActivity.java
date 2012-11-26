@@ -17,16 +17,20 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.paran.animation.demo.app.animation.PathButton;
+import com.paran.animation.demo.app.animation.PathButtonAnimation;
 import com.swmaestro.etbike.activity.dialog.DialogManager;
 import com.swmaestro.etbike.activity.listview.MyDynamicListAdapter;
 import com.swmaestro.etbike.network.NetworkManager;
-import com.swmaestro.etbike.serverobject.MyBikeBoard;
+import com.swmaestro.etbike.network.object.MyBikeBoard;
 import com.swmaestro.object.WorkVectors;
 
 public class ShareBikeActivity extends TabActivity {
@@ -41,6 +45,11 @@ public class ShareBikeActivity extends TabActivity {
 	ListView shareBikeListLV;
 
 	Context context;
+	
+	private ArrayList<PathButton> buttons;
+	private Button plus_button;
+	private ImageView plus;
+	PathButtonAnimation pathButtonAnimation;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,6 +90,36 @@ public class ShareBikeActivity extends TabActivity {
 
 		shareBikeListLV = (ListView) findViewById(R.id.shareBikeLV);
 		shareBikeListLV.setAdapter(mdla);
+		
+		wv.put(WorkVectors.MY_BIKE_LIST, "ArrayList<MyBikeBoard>",shareBikeListAL);
+		new NetworkManager(wv, mHandler,NetworkManager.COMM_GET_SHRE_BIKE_LIST_INFOS).start();
+		changeTabColor(mTab, 0, 3,"#efefef" , "#5f4444");
+		
+		/*
+		 * set plus Button
+		 */
+		
+		plus_button = (Button) findViewById(R.id.sharebike_plus_button);
+		plus = (ImageView) findViewById(R.id.sharebike_plus);
+		buttons = new ArrayList<PathButton>();		
+
+		PathButton button = (PathButton) findViewById(R.id.sharebike_GoToHomePathBtn);		
+		buttons.add(button);
+
+		button = (PathButton) findViewById(R.id.sharebike_SceneWithBikePathBtn);		
+		buttons.add(button);
+
+		button = (PathButton) findViewById(R.id.sharebike_RideWithMePathBtn);		
+		buttons.add(button);
+		
+		button = (PathButton) findViewById(R.id.sharebike_ShareYourBikePathBtn);
+		buttons.add(button);
+		
+		
+		pathButtonAnimation = new PathButtonAnimation(buttons, this, plus_button, plus);
+		findViewById(R.id.sharebike_viewGroup).setOnTouchListener(pathButtonAnimation.myTouchListener);
+		
+
 
 		findViewById(R.id.addBikeBtnsharebike).setOnClickListener(
 				new OnClickListener() {
@@ -93,48 +132,22 @@ public class ShareBikeActivity extends TabActivity {
 					}
 				});
 
-		findViewById(R.id.filterBikesharebike).setOnClickListener(
-				new OnClickListener() {
-					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
-						dm.getFilterDialog(shareBikeListAL, mdla).show();
-
-					}
-				});
-
 		mTab.setOnTabChangedListener(new OnTabChangeListener() {
 
 			public void onTabChanged(String tabId) {
 				// TODO Auto-generated method stub
 
 				if (tabId.equals("viewByList")) {
-					wv.put(WorkVectors.MY_BIKE_LIST, "ArrayList<MyBikeBoard>",
-							shareBikeListAL);
-					new NetworkManager(wv, mHandler,
-							NetworkManager.COMM_GET_SHRE_BIKE_LIST_INFOS)
-							.start();
-					mTab.getTabWidget().getChildAt(0)
-							.setBackgroundColor(Color.parseColor("#5f4444"));
-					mTab.getTabWidget().getChildAt(1)
-							.setBackgroundColor(Color.parseColor("#efefef"));
-					mTab.getTabWidget().getChildAt(2)
-							.setBackgroundColor(Color.parseColor("#efefef"));
+					wv.put(WorkVectors.MY_BIKE_LIST, "ArrayList<MyBikeBoard>",shareBikeListAL);
+					new NetworkManager(wv, mHandler,NetworkManager.COMM_GET_SHRE_BIKE_LIST_INFOS).start();
+					changeTabColor(mTab, 0, 3,"#efefef" , "#5f4444");
 				} else if (tabId.equals("viewByMap")) {
 					startActivity(new Intent(context,
 							FindLocationActivity.class));
-					mTab.getTabWidget().getChildAt(0)
-							.setBackgroundColor(Color.parseColor("#efefef"));
-					mTab.getTabWidget().getChildAt(1)
-							.setBackgroundColor(Color.parseColor("#5f4444"));
-					mTab.getTabWidget().getChildAt(2)
-							.setBackgroundColor(Color.parseColor("#efefef"));
+					changeTabColor(mTab, 1, 3,"#efefef" , "#5f4444");
 				} else if (tabId.equals("viewBySearch")) {
-					mTab.getTabWidget().getChildAt(0)
-							.setBackgroundColor(Color.parseColor("#efefef"));
-					mTab.getTabWidget().getChildAt(1)
-							.setBackgroundColor(Color.parseColor("#efefef"));
-					mTab.getTabWidget().getChildAt(2)
-							.setBackgroundColor(Color.parseColor("#5f4444"));
+					mTab.getTabWidget().getChildAt(0);
+					changeTabColor(mTab, 2, 3,"#efefef" , "#5f4444");
 
 				}
 			}
@@ -147,7 +160,7 @@ public class ShareBikeActivity extends TabActivity {
 					long arg3) {
 				// TODO Auto-generated method stub
 				wv.put(WorkVectors.SELECTED_MY_BIKE, "MyBikeBoard",	shareBikeListAL.get(position));
-				dm.getShareBikeDialog(shareBikeListAL.get(position), mHandler).show();
+				dm.getShareBikeDialog(shareBikeListAL.get(position), mHandler, position).show();
 				new NetworkManager(wv, mHandler,NetworkManager.COMM_GET_MY_BIKE_IMG).start();
 			}
 		});
@@ -161,11 +174,29 @@ public class ShareBikeActivity extends TabActivity {
 						.show();
 				mdla.notifyDataSetChanged();
 			} else if (msg.what == NetworkManager.COMM_GET_MY_BIKE_IMG) {
-
 				MyBikeBoard mbb = (MyBikeBoard) wv	.getData(WorkVectors.SELECTED_MY_BIKE);
-				dm.setshareBikeImgDialog(mbb);
+				dm.setDownloadedIV(mbb);
 			}
 		}
 	};
+	
+	private void changeTabColor(TabHost mTab, int tabPosition, int tabSize,
+			String defTabColorRGB, String chagingTabColorRGB) {
+
+		for (int i = 0; i < tabSize; i++) {
+			if (tabPosition == i) {
+				mTab.getTabWidget()
+						.getChildAt(i)
+						.setBackgroundColor(
+								Color.parseColor(chagingTabColorRGB));
+
+			} else {
+				mTab.getTabWidget().getChildAt(i)
+						.setBackgroundColor(Color.parseColor(defTabColorRGB));
+			}
+
+		}
+
+	}
 
 }

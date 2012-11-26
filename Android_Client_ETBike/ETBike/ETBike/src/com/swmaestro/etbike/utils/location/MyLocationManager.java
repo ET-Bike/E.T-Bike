@@ -5,7 +5,6 @@ package com.swmaestro.etbike.utils.location;
 import java.util.ArrayList;
 
 import com.google.android.maps.GeoPoint;
-import com.swmaestro.etbike.activity.listview.object.LocationItem;
 
 import android.content.Context;
 import android.location.LocationManager;
@@ -25,6 +24,10 @@ public class MyLocationManager {
 		gpsProvider = new GPSProvider(lm);
 		geoPrivider = new GeoProvider(context);
 		
+	}
+	
+	public GeoPoint getCurGeoPoint() {
+		return geoPrivider.getGeoPoint(gpsProvider.getDLatitude(), gpsProvider.getDLongitude());
 	}
 	
 	public double getMyDLatitude() {

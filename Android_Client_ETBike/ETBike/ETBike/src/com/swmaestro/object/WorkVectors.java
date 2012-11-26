@@ -11,10 +11,12 @@ public class WorkVectors {
 		Object data;
 
 		public Entry(String key, String type, Object data) {
+			
 			this.key = key;
 			this.type = type;
 			this.data = data;
 		}
+		
 	}
 
 	// public static String KEY_TIME;

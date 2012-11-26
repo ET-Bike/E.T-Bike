@@ -4,11 +4,11 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="14"
         android:targetSdkVersion="15" />
 
     <application
-        android:icon="@drawable/icon"
+        android:icon="@drawable/etbike_logo"
         android:label="@string/app_name"
         android:theme="@style/customTheme" >
         <activity android:name=".LoadingActivity" >
@@ -30,9 +30,13 @@
         <!-- CourseViewActivity -->
         <activity android:name=".CourseViewActivity" >
         </activity>
-        <activity 
-            android:theme="@android:style/Theme.Dialog"
-            android:name=".MapDialogActivity" >
+        <activity android:name=".RideWithMeActivity" >
+        </activity>
+        <activity android:name=".WebViewActivity" >
+        </activity>
+        <activity
+            android:name=".MapDialogActivity"
+            android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity android:name=".LoginActivity" >
             <intent-filter>
@@ -41,6 +45,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name="com.swmaestro.etbike.push.PushService" >
+        </service>
+
+        <receiver android:name="com.swmaestro.etbike.push.PushMessageReceiver" >
+            <intent-filter>
+                <action android:name="com.momotime.infrastructure.pushservice.message" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.swmaestro.etbike.push.PushServiceRestarter" >
+            <intent-filter>
+                <action android:name="com.momotime.infrastructure.pushservice.restart" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <uses-library android:name="com.google.android.maps" />
     </application>
@@ -52,6 +73,7 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" >
     </uses-permission>
     <uses-permission android:name="android.permission.READ_OWNER_DATA" >

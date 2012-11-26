@@ -1,45 +1,44 @@
-package com.swmaestro.etbike.serverobject;
+package com.swmaestro.etbike.network.object;
 
 import java.util.Date;
 
-
-public class Reply{
+public class Reply {
 
 	private String message;
 	private String writer;
 	private MyBikeBoard board;
-	private Date updatedTime;
-	
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	public String getWriter() {
-		return writer;
-	}
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-	public MyBikeBoard getBoard() {
-		return board;
-	}
-	public void setBoard(MyBikeBoard board) {
-		this.board = board;
-	}
-	public Date getUpdatedTime() {
+	private String updatedTime;
+
+	public String getUpdatedTime() {
 		return updatedTime;
 	}
-	public void setUpdatedTime(Date updatedTime) {
+
+	public void setUpdatedTime(String updatedTime) {
 		this.updatedTime = updatedTime;
 	}
 
-//	public String getUpdatedTimestamp(){
-//		Date date = getUpdatedTime();
-//		return date != null ?
-//				TimeUtils.getTimeStamp(date.getTime())
-//				: "";
-//	}
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getWriter() {
+		return writer;
+	}
+
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+
+	public MyBikeBoard getBoard() {
+		return board;
+	}
+
+	public void setBoard(MyBikeBoard board) {
+		this.board = board;
+	}
 
 }
